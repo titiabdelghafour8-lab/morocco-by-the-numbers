@@ -21,7 +21,8 @@ from mbn.sources.store import DatasetStore
 @dataclass(frozen=True)
 class Page:
     name: str
-    """Short name, also the nav label key."""
+    label: str
+    """Link text in the page nav."""
     html: str
     """Output file at the site root."""
     data_file: Path
@@ -32,12 +33,17 @@ class Page:
     """CKAN dataset-name patterns this page needs."""
 
 
+def nav(current: str) -> str:
+    return site.nav_html([(p.label, p.html) for p in PAGES], current)
+
+
 FINDINGS_PAGE = Page(
     name="findings",
+    label="Findings",
     html="index.html",
     data_file=DATA_DIR / "morocco_by_the_numbers.json",
     build=lambda st, updated: findings_build.build(st, updated),
-    render=site.render_findings,
+    render=lambda data: site.render_findings(data, nav=nav("index.html")),
     claims=lambda: all_claims("index"),
     datasets=tuple(watch_patterns()),
 )

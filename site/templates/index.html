@@ -1,79 +1,9 @@
 <title>Morocco by the Numbers</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
-<style>
-/* Layout: single 760px reading column; sticky chapter bar; one finding + one chart per chapter */
-:root {
-  --bg: #fcfcfb; --fg: #0b0b0b; --muted: #52514e; --faint: #8a8984; --line: #e6e5e1; --grid: #efeeea;
-  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --tip: #ffffff;
-  --display: "Archivo", "Segoe UI", system-ui, sans-serif;
-  --body: "Inter", "Segoe UI", system-ui, sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
-}
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #1a1a19; --fg: #f0efec; --muted: #c3c2b7; --faint: #8f8e87; --line: #33332f; --grid: #262624;
-  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --tip: #242422; color-scheme: dark } }
-:root[data-theme="dark"] {
-  --bg: #1a1a19; --fg: #f0efec; --muted: #c3c2b7; --faint: #8f8e87; --line: #33332f; --grid: #262624;
-  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --tip: #242422; color-scheme: dark }
+<link rel="stylesheet" href="site/assets/site.css">
 
-* { box-sizing: border-box }
-body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body) }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg) }
-.wrap { max-width: 760px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
-
-header.intro .wrap { padding-block: 48px 28px; display: grid; gap: 10px }
-h1 { font: 700 clamp(30px, 6vw, 44px)/1.05 var(--display); letter-spacing: -.01em; margin: 0; text-wrap: balance }
-.sub { color: var(--muted); font-size: 16px; margin: 0; max-width: 60ch }
-
-nav.chapters { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-block: 1px solid var(--line) }
-nav.chapters .wrap { display: flex; gap: 2px; overflow-x: auto; padding-block: 8px; scrollbar-width: none }
-nav.chapters a { flex: none; color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; padding: 5px 10px; border-radius: 6px }
-nav.chapters a:hover { color: var(--fg); background: var(--grid) }
-nav.chapters a.on { color: var(--fg); background: var(--grid) }
-.theme-toggle { margin-left: auto; flex: none; position: sticky; right: 0; z-index: 1; box-shadow: -10px 0 8px var(--bg); display: inline-grid; place-items: center; width: 34px; height: 30px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--muted); cursor: pointer }
-.theme-toggle:hover { color: var(--fg); background: var(--grid) }
-.theme-toggle:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px }
-.theme-toggle .i-sun { display: none }
-.theme-toggle.is-dark .i-sun { display: block }
-.theme-toggle.is-dark .i-moon { display: none }
-a:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px }
-
-main .wrap { display: grid; gap: 0 }
-section.ch { padding-block: 44px; border-bottom: 1px solid var(--line); display: grid; gap: 14px; scroll-margin-top: 56px }
-section.ch:last-child { border-bottom: 0 }
-.group { scroll-margin-top: 48px }
-.group-head { padding-block: 40px 0 }
-.gh { font: 700 13px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--s1); margin: 0; padding-bottom: 10px; border-bottom: 2px solid var(--s1) }
-.about h3 { font: 600 16px var(--display); margin: 10px 0 0 }
-.about ul { margin: 0; padding-left: 20px; color: var(--muted); display: grid; gap: 6px; max-width: 62ch }
-.about a, .about code { color: var(--fg) }
-.topic { font: 500 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--faint) }
-h2 { font: 600 clamp(21px, 3.4vw, 26px)/1.2 var(--display); margin: 0; text-wrap: balance }
-.ch p { margin: 0; max-width: 62ch; color: var(--muted) }
-.ch p b { color: var(--fg); font-weight: 600 }
-.chart-title { font: 600 14px var(--body); margin: 10px 0 0 }
-.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--muted) }
-.legend span { display: inline-flex; align-items: center; gap: 6px }
-.legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block }
-.chart { width: 100%; min-width: 0; position: relative }
-.chart svg { display: block; width: 100%; height: auto; overflow: visible }
-.chart text { font-family: var(--mono); font-size: 11px; fill: var(--faint) }
-.chart text.lbl { fill: var(--muted); font-family: var(--body); font-size: 12px }
-.chart text.val { fill: var(--fg); font-size: 11px }
-.source { font-size: 12px; color: var(--faint) }
-.source a { color: var(--muted) }
-.note { font-size: 13px; color: var(--muted); max-width: 62ch }
-
-#tip { position: fixed; pointer-events: none; z-index: 20; background: var(--tip); color: var(--fg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12px; line-height: 1.5; box-shadow: 0 4px 14px rgb(0 0 0 / .12); min-width: 120px }
-#tip b { font: 600 12px var(--body); display: block; margin-bottom: 2px }
-#tip .r { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-variant-numeric: tabular-nums }
-#tip .r i { width: 8px; height: 8px; border-radius: 2px }
-#tip .r em { font-style: normal; color: var(--muted); font-family: var(--body); margin-right: auto; padding-right: 10px }
-footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
-@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth } }
-</style>
-
+<!--NAV-->
 <header class="intro"><div class="wrap">
   <h1>Morocco by the Numbers</h1>
   <p class="sub">Twenty-one findings from the government's own open data, grouped into land and water, work, the economy, daily life and the state.</p>
@@ -319,155 +249,9 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
 <footer><div class="wrap">Built by <a href="https://github.com/titiabdelghafour8-lab" style="color:inherit">titiabdelghafour8-lab</a>. All figures come from data.gov.ma open data (ODbL licence), last updated <span class="updated">23 November 2026</span>. Hover or tap a chart for exact values.</div></footer>
 <div id="tip" hidden></div>
 
+<script src="site/assets/charts.js"></script>
 <script>
 const DATA = /*DATA*/;
-const NS = "http://www.w3.org/2000/svg";
-const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-const fmt = (n, d = 0) => n.toLocaleString("en", { minimumFractionDigits: d, maximumFractionDigits: d });
-const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-const tip = document.getElementById("tip");
-
-function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
-function showTip(evt, title, rows) {
-  tip.innerHTML = `<b>${title}</b>` + rows.map(r => `<div class="r">${r.c ? `<i style="background:${r.c}"></i>` : ""}<em>${r.n}</em>${r.v}</div>`).join("");
-  tip.hidden = false;
-  const p = evt.touches ? evt.touches[0] : evt, w = tip.offsetWidth, h = tip.offsetHeight;
-  let x = p.clientX + 14, y = p.clientY - h - 10;
-  if (x + w > innerWidth - 8) x = p.clientX - w - 14;
-  if (y < 8) y = p.clientY + 16;
-  tip.style.left = x + "px"; tip.style.top = y + "px";
-}
-const hideTip = () => { tip.hidden = true; };
-function niceTicks(min, max, n = 4) {
-  const span = max - min, step0 = span / n, mag = 10 ** Math.floor(Math.log10(step0));
-  const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= step0);
-  const ticks = [], hi = Math.ceil(max / step - 1e-9) * step; for (let v = Math.floor(min / step + 1e-9) * step; v <= hi + 1e-9; v += step) ticks.push(+v.toFixed(6));
-  return ticks;
-}
-function frame(id, h, m) {
-  const box = document.getElementById(id); box.innerHTML = "";
-  const W = Math.max(280, box.clientWidth), H = h;
-  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img" }, box);
-  return { box, svg, W, H, x0: m.l, x1: W - m.r, y0: H - m.b, y1: m.t };
-}
-function yAxis(f, ticks, ys, yFmt) {
-  ticks.forEach(t => {
-    el("line", { x1: f.x0, x2: f.x1, y1: ys(t), y2: ys(t), stroke: t === 0 ? css("--faint") : css("--grid"), "stroke-width": 1 }, f.svg);
-    el("text", { x: f.x0 - 8, y: ys(t) + 4, "text-anchor": "end" }, f.svg).textContent = yFmt(t);
-  });
-}
-
-/* Line chart: o.series [{name, color, data:[[x,y]]}] */
-function lineChart(id, o) {
-  const narrow = document.getElementById(id).clientWidth < 520;
-  const f = frame(id, narrow ? 230 : 270, { l: 40, r: o.endLabels && !narrow ? 70 : 14, t: 12, b: 26 });
-  const all = o.series.flatMap(s => s.data);
-  const xmin = Math.min(...all.map(d => d[0])), xmax = Math.max(...all.map(d => d[0]));
-  let ymin = o.yMin ?? Math.min(0, ...all.map(d => d[1])), ymax = o.yMax ?? Math.max(...all.map(d => d[1]));
-  const ticks = niceTicks(ymin, ymax); ymin = Math.min(ymin, ticks[0]); ymax = Math.max(ymax, ticks[ticks.length - 1]);
-  const xs = x => f.x0 + (x - xmin) / (xmax - xmin) * (f.x1 - f.x0), ys = y => f.y0 - (y - ymin) / (ymax - ymin) * (f.y0 - f.y1);
-  yAxis(f, ticks, ys, o.yFmt);
-  o.xTicks.filter((t, i) => !narrow || i % 2 === 0).forEach(t => { el("text", { x: xs(t), y: f.H - 6, "text-anchor": "middle" }, f.svg).textContent = Math.floor(t); });
-  o.series.forEach(s => {
-    const d = s.data.map((p, i) => (i ? "L" : "M") + xs(p[0]).toFixed(1) + "," + ys(p[1]).toFixed(1)).join("");
-    if (o.area) el("path", { d: d + `L${xs(s.data.at(-1)[0])},${ys(Math.max(ymin, 0))}L${xs(s.data[0][0])},${ys(Math.max(ymin, 0))}Z`, fill: s.color, "fill-opacity": .12 }, f.svg);
-    el("path", { d, fill: "none", stroke: s.color, "stroke-width": 2, "stroke-linejoin": "round" }, f.svg);
-    const last = s.data.at(-1);
-    el("circle", { cx: xs(last[0]), cy: ys(last[1]), r: 4, fill: s.color, stroke: css("--bg"), "stroke-width": 2 }, f.svg);
-    if (o.endLabels && !narrow) el("text", { x: xs(last[0]) + 8, y: ys(last[1]) + 4 + (s.dy || 0), class: "val" }, f.svg).textContent = o.yFmt(last[1]) + (o.unit || "");
-  });
-  if (o.breakAt) { el("line", { x1: xs(o.breakAt), x2: xs(o.breakAt), y1: f.y1, y2: f.y0, stroke: css("--faint"), "stroke-dasharray": "3 4" }, f.svg); el("text", { x: xs(o.breakAt) - 6, y: f.y1 + 10, "text-anchor": "end" }, f.svg).textContent = "new survey method →"; }
-  const cross = el("line", { y1: f.y1, y2: f.y0, stroke: css("--faint"), "stroke-width": 1, visibility: "hidden" }, f.svg);
-  const dots = o.series.map(s => el("circle", { r: 4.5, fill: s.color, stroke: css("--bg"), "stroke-width": 2, visibility: "hidden" }, f.svg));
-  const hit = el("rect", { x: f.x0, y: f.y1, width: f.x1 - f.x0, height: f.y0 - f.y1, fill: "transparent" }, f.svg);
-  const move = evt => {
-    const r = f.svg.getBoundingClientRect(), p = evt.touches ? evt.touches[0] : evt;
-    const x = xmin + ((p.clientX - r.left) * f.W / r.width - f.x0) / (f.x1 - f.x0) * (xmax - xmin);
-    const base = o.series[0].data; let best = base[0];
-    base.forEach(d => { if (Math.abs(d[0] - x) < Math.abs(best[0] - x)) best = d; });
-    cross.setAttribute("x1", xs(best[0])); cross.setAttribute("x2", xs(best[0])); cross.setAttribute("visibility", "visible");
-    const rows = o.series.map((s, i) => {
-      const pt = s.data.find(d => Math.abs(d[0] - best[0]) < 1e-6);
-      if (pt) { dots[i].setAttribute("cx", xs(pt[0])); dots[i].setAttribute("cy", ys(pt[1])); dots[i].setAttribute("visibility", "visible"); }
-      else dots[i].setAttribute("visibility", "hidden");
-      return { c: s.color, n: s.name, v: pt ? o.yFmt(pt[1], true) + (o.unit || "") : "–" };
-    });
-    showTip(evt, o.xFmt(best[0]), rows);
-  };
-  const leave = () => { cross.setAttribute("visibility", "hidden"); dots.forEach(d => d.setAttribute("visibility", "hidden")); hideTip(); };
-  hit.addEventListener("mousemove", move); hit.addEventListener("touchstart", move, { passive: true }); hit.addEventListener("touchmove", move, { passive: true });
-  hit.addEventListener("mouseleave", leave); hit.addEventListener("touchend", leave);
-}
-
-/* Column chart: o.data [[label, value, color, extraRows]] */
-function columnChart(id, o) {
-  const narrow = document.getElementById(id).clientWidth < 520;
-  const f = frame(id, o.h || (narrow ? 210 : 240), { l: 44, r: 8, t: 18, b: 24 });
-  const vals = o.data.map(d => d[1]); const ticks = niceTicks(0, Math.max(...vals)); const ymax = ticks.at(-1);
-  const ys = y => f.y0 - y / ymax * (f.y0 - f.y1);
-  yAxis(f, ticks, ys, o.yFmt);
-  const n = o.data.length, slot = (f.x1 - f.x0) / n, gap = Math.max(2, Math.min(slot * .3, 14)), bw = slot - gap;
-  const labelEvery = Math.ceil(n / (narrow ? 7 : 14));
-  const iMax = vals.indexOf(Math.max(...vals));
-  o.data.forEach((d, i) => {
-    const x = f.x0 + i * slot + gap / 2, y = ys(d[1]), h = Math.max(f.y0 - y, d[1] > 0 ? 1 : 0), r = Math.min(4, bw / 2, h);
-    el("path", { d: `M${x},${f.y0}V${y + r}Q${x},${y} ${x + r},${y}H${x + bw - r}Q${x + bw},${y} ${x + bw},${y + r}V${f.y0}Z`, fill: d[2] }, f.svg);
-    if ((n - 1 - i) % labelEvery === 0) el("text", { x: x + bw / 2, y: f.H - 6, "text-anchor": "middle" }, f.svg).textContent = d[0];
-    if (o.labelValues && (i === iMax || i === n - 1 || i === 0)) el("text", { x: x + bw / 2, y: y - 6, "text-anchor": "middle", class: "val" }, f.svg).textContent = o.yFmt(d[1], true) + (o.unit || "");
-    const hit = el("rect", { x: f.x0 + i * slot, y: f.y1, width: slot, height: f.y0 - f.y1, fill: "transparent" }, f.svg);
-    const show = evt => showTip(evt, o.tipTitle ? o.tipTitle(d) : d[0], [{ c: d[2], n: o.name, v: o.yFmt(d[1], true) + (o.unit || "") }, ...(d[3] || [])]);
-    hit.addEventListener("mousemove", show); hit.addEventListener("touchstart", show, { passive: true });
-    hit.addEventListener("mouseleave", hideTip); hit.addEventListener("touchend", hideTip);
-  });
-}
-
-/* Dot plot for regions: rows [name, total, women] */
-function dotPlot(id, rows) {
-  const narrow = document.getElementById(id).clientWidth < 520;
-  const rowH = 30, lw = narrow ? 128 : 190;
-  const f = frame(id, rows.length * rowH + 30, { l: lw, r: 16, t: 6, b: 24 });
-  const xmax = 60, xs = v => f.x0 + v / xmax * (f.x1 - f.x0);
-  [0, 10, 20, 30, 40, 50, 60].forEach(t => {
-    el("line", { x1: xs(t), x2: xs(t), y1: f.y1, y2: f.y0, stroke: t ? css("--grid") : css("--faint") }, f.svg);
-    el("text", { x: xs(t), y: f.H - 6, "text-anchor": "middle" }, f.svg).textContent = t + "%";
-  });
-  const c1 = css("--s1"), c2 = css("--s2");
-  rows.forEach((r, i) => {
-    const y = f.y1 + i * rowH + rowH / 2;
-    el("text", { x: f.x0 - 10, y: y + 4, "text-anchor": "end", class: "lbl" }, f.svg).textContent = r[0];
-    el("line", { x1: xs(r[1]), x2: xs(r[2]), y1: y, y2: y, stroke: css("--line"), "stroke-width": 3, "stroke-linecap": "round" }, f.svg);
-    el("circle", { cx: xs(r[1]), cy: y, r: 5.5, fill: c1, stroke: css("--bg"), "stroke-width": 2 }, f.svg);
-    el("circle", { cx: xs(r[2]), cy: y, r: 5.5, fill: c2, stroke: css("--bg"), "stroke-width": 2 }, f.svg);
-    const hit = el("rect", { x: 0, y: y - rowH / 2, width: f.W, height: rowH, fill: "transparent" }, f.svg);
-    const show = evt => showTip(evt, r[0] + " · 2025", [{ c: c1, n: "Everyone", v: fmt(r[1], 1) + "%" }, { c: c2, n: "Women", v: fmt(r[2], 1) + "%" }, { n: "Everyone, 2015", v: fmt(r[3], 1) + "%" }]);
-    hit.addEventListener("mousemove", show); hit.addEventListener("touchstart", show, { passive: true });
-    hit.addEventListener("mouseleave", hideTip); hit.addEventListener("touchend", hideTip);
-  });
-}
-
-
-/* Horizontal bars: rows [label, value] */
-function hbar(id, rows, o) {
-  const narrow = document.getElementById(id).clientWidth < 520;
-  const rowH = 28, lw = narrow ? 150 : 250;
-  const f = frame(id, rows.length * rowH + 8, { l: lw, r: 64, t: 4, b: 4 });
-  const max = Math.max(...rows.map(r => r[1])), xs = v => f.x0 + v / max * (f.x1 - f.x0), c = css("--s1");
-  rows.forEach((r, i) => {
-    const y = f.y1 + i * rowH, h = rowH - 10, w = Math.max(2, xs(r[1]) - f.x0), rr = Math.min(4, w / 2);
-    const maxc = narrow ? 19 : 42; el("text", { x: f.x0 - 10, y: y + h / 2 + 4, "text-anchor": "end", class: "lbl" }, f.svg).textContent = r[0].length > maxc ? r[0].slice(0, maxc - 1) + "…" : r[0];
-    el("path", { d: `M${f.x0},${y}H${f.x0 + w - rr}Q${f.x0 + w},${y} ${f.x0 + w},${y + rr}V${y + h - rr}Q${f.x0 + w},${y + h} ${f.x0 + w - rr},${y + h}H${f.x0}Z`, fill: c }, f.svg);
-    el("text", { x: f.x0 + w + 6, y: y + h / 2 + 4, class: "val" }, f.svg).textContent = o.fmt(r[1]);
-    const hit = el("rect", { x: 0, y, width: f.W, height: rowH, fill: "transparent" }, f.svg);
-    const show = evt => showTip(evt, r[0], [{ c, n: o.name, v: o.fmt(r[1], true) }]);
-    hit.addEventListener("mousemove", show); hit.addEventListener("touchstart", show, { passive: true });
-    hit.addEventListener("mouseleave", hideTip); hit.addEventListener("touchend", hideTip);
-  });
-}
-
-const qLabel = x => `Q${Math.round((x % 1) * 4) + 1} ${Math.floor(x)}`;
-const mLabel = x => `${MONTHS[Math.round((x % 1) * 12)]} ${Math.floor(x)}`;
-const pct = (v, exact) => fmt(v, exact ? 1 : 0) + "%";
-const range = (a, b, s) => { const r = []; for (let v = a; v <= b; v += s) r.push(v); return r; };
 const REGION_SHORT = {};
 const REGION_NAMES = { "Casablanca-settat": "Casablanca-Settat", "Marrakech-safi": "Marrakech-Safi", "Régions du Sud": "Southern regions" };
 
@@ -498,41 +282,12 @@ function renderAll() {
 }
 
 // Sources and province note
-document.querySelectorAll(".source[data-src]").forEach(s => {
-  s.innerHTML = "Source: " + s.dataset.src.split(",").map(k => { const m = DATA.src[k]; return `<a href="${m.url}" target="_blank" rel="noopener">${m.title}</a> (${m.org})`; }).join(" · ");
-});
+renderSources(DATA);
 const pTop = DATA.prov_top[0], pBot = DATA.prov_bottom.at(-1);
 document.getElementById("prov-note").innerHTML = `By province, the spread is wider still: <b>${pTop[0]}</b> ${fmt(pTop[1], 1)}% against <b>${pBot[0]}</b> ${fmt(pBot[1], 1)}% in 2025. Provincial rates come from a sample survey, so they can move a lot from one year to the next.`;
 
-if (DATA.updated) { const u = new Date(DATA.updated + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }); document.querySelectorAll(".updated").forEach(e => e.textContent = u); }
-renderAll();
-let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(renderAll, 150); });
-matchMedia("(prefers-color-scheme: dark)").addEventListener("change", renderAll);
-new MutationObserver(renderAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-
-// Light/dark switch: follows the device setting until the reader picks one
-const themeBtn = document.getElementById("theme-toggle");
-const isDark = () => { const s = document.documentElement.dataset.theme; return s ? s === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; };
-function syncThemeButton() {
-  const dark = isDark(), label = dark ? "Switch to light mode" : "Switch to dark mode";
-  themeBtn.classList.toggle("is-dark", dark);
-  themeBtn.setAttribute("aria-label", label); themeBtn.title = label;
-}
-try { const saved = localStorage.getItem("theme"); if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved; } catch (e) {}
-themeBtn.addEventListener("click", () => {
-  const next = isDark() ? "light" : "dark";
-  document.documentElement.dataset.theme = next;
-  try { localStorage.setItem("theme", next); } catch (e) {}
-  syncThemeButton();
-});
-matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncThemeButton);
-new MutationObserver(syncThemeButton).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-syncThemeButton();
-
-// Highlight the chapter in view
-const links = [...document.querySelectorAll("nav.chapters a")];
-const io = new IntersectionObserver(es => es.forEach(e => {
-  if (e.isIntersecting) links.forEach(a => { const on = a.getAttribute("href") === "#" + e.target.id; a.classList.toggle("on", on); if (on) a.parentElement.scrollTo({ left: a.offsetLeft - 24, behavior: "smooth" }); });
-}), { rootMargin: "-30% 0px -65% 0px" });
-document.querySelectorAll(".group").forEach(s => io.observe(s));
+renderUpdated(DATA.updated);
+onRedraw(renderAll);
+initThemeSwitch();
+highlightChapters();
 </script>

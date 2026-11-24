@@ -22,10 +22,18 @@ def read_template(name: str, templates: Path = TEMPLATES_DIR) -> str:
     return (templates / name).read_text(encoding="utf-8")
 
 
-def render_findings(data: dict[str, Any], template: str | None = None) -> str:
+def nav_html(links: list[tuple[str, str]], current: str) -> str:
+    """Links between the site's pages; empty while the site has a single page."""
+    if len(links) < 2:
+        return ""
+    items = "".join(f'<a href="{href}"{' aria-current="page"' if href == current else ""}>{label}</a>' for label, href in links)
+    return f'<nav class="site" aria-label="Pages"><div class="wrap">{items}</div></nav>'
+
+
+def render_findings(data: dict[str, Any], template: str | None = None, nav: str = "") -> str:
     """The findings page (index.html): the data is embedded so the page works offline."""
     page = template if template is not None else read_template("index.html")
-    return FINDINGS_HEAD + page.replace("/*DATA*/", to_min_json(data))
+    return FINDINGS_HEAD + page.replace("<!--NAV-->", nav).replace("/*DATA*/", to_min_json(data))
 
 
 def chart_ids(html: str) -> list[str]:
