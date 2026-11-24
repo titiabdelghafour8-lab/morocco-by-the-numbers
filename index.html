@@ -69,7 +69,7 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
 
 <header class="intro"><div class="wrap">
   <h1>Morocco by the Numbers</h1>
-  <p class="sub">Ten findings from the government's own open data: water, work, prices, health, connectivity, roads, courts and integrity.</p>
+  <p class="sub">Eleven findings from the government's own open data: water, work, prices, health, connectivity, roads, courts and integrity.</p>
 </div></header>
 
 <nav class="chapters" aria-label="Chapters"><div class="wrap">
@@ -81,7 +81,7 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
 <section class="ch" id="water">
   <span class="topic">Water</span>
   <h2>The Souss river has almost stopped flowing</h2>
-  <p>Average flow at Aït Melloul fell from <b>6.6 m³/s</b> in 1971–1999 to <b>1.4 m³/s</b> since 2015, and was close to zero in 2022–2024. Rainfall at the upstream Youssef Ben Tachfine dam is down about a fifth over the same period.</p>
+  <p>Average flow at Aït Melloul fell from <b>6.6 m³/s</b> in 1971–1999 to <b>1.4 m³/s</b> since 2015, and was close to zero in 2022–2024. Rainfall at the upstream Youssef Ben Tachfine dam fell by about a fifth, while flow fell by four-fifths, so dams and irrigation pumping upstream likely explain much of the drop.</p>
   <div class="chart-title">Oued Souss, mean annual flow at Aït Melloul (m³/s), by hydrological year</div>
   <div class="chart" id="c-flow"></div>
   <span class="source" data-src="flow,rain"></span>
@@ -89,9 +89,9 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
 
 <section class="ch" id="harvest">
   <span class="topic">Agriculture</span>
-  <h2>A dry year cuts the cereal harvest by two-thirds</h2>
-  <p>Good years bring in around <b>10 million tonnes</b> of cereals. In 2016, 2020 and 2022 the harvest fell to about <b>3.3–3.5 million</b>. Five of the last twelve seasons were dry.</p>
-  <div class="legend"><span><i style="background:var(--s1)"></i>Normal season</span><span><i style="background:var(--s2)"></i>Dry season (under 6 Mt)</span></div>
+  <h2>A drought year can cut the cereal harvest by two-thirds</h2>
+  <p>Good years bring in around <b>10 million tonnes</b> of cereals. In 2016, 2020 and 2022 the harvest fell to about <b>3.3–3.5 million</b>. Five of the last twelve harvests came in under 6 million tonnes.</p>
+  <div class="legend"><span><i style="background:var(--s1)"></i>Normal harvest</span><span><i style="background:var(--s2)"></i>Poor harvest (under 6 Mt)</span></div>
   <div class="chart" id="c-cereals"></div>
   <span class="source" data-src="cereals"></span>
 </section>
@@ -99,7 +99,8 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
 <section class="ch" id="youth">
   <span class="topic">Jobs</span>
   <h2>More than a third of young people looking for work can't find it</h2>
-  <p>Unemployment among 15–24-year-olds went from <b>16%</b> in 2006 to <b>37%</b> at the end of 2025. For young women it is <b>53%</b>. The national rate rose from 9.6% to 12.9%.</p>
+  <p>Unemployment among 15–24-year-olds rose from <b>27%</b> in 2017 to <b>37%</b> in 2025 (yearly averages). For young women it went from 35% to <b>53%</b>. The national rate rose from 10.3% to 13.0%.</p>
+  <p class="note">The survey method changed in 2017, which shows as a jump in the chart. Compare years on the same side of the dashed line.</p>
   <div class="legend"><span><i style="background:var(--s2)"></i>Women 15–24</span><span><i style="background:var(--s1)"></i>All 15–24</span><span><i style="background:var(--s3)"></i>Everyone 15+</span></div>
   <div class="chart" id="c-youth"></div>
   <span class="source" data-src="u_age"></span>
@@ -128,6 +129,7 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <span class="topic">Prices</span>
   <h2>Food inflation peaked at 21%. Food prices are now falling</h2>
   <p>Year-on-year food inflation reached <b>20.8%</b> in February 2023. By August 2026 food was <b>4.2% cheaper</b> than a year earlier. Even so, meat costs <b>41% more</b> than in 2017.</p>
+  <p class="note">Rates are calculated year on year from HCP's published price index and may differ by a few tenths from HCP's announced figures.</p>
   <div class="legend"><span><i style="background:var(--s2)"></i>Food and drinks</span><span><i style="background:var(--s1)"></i>All items</span></div>
   <div class="chart" id="c-prices"></div>
   <span class="source" data-src="cpi"></span>
@@ -136,7 +138,7 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
 <section class="ch" id="health">
   <span class="topic">Health</span>
   <h2>Health insurance went from 1 in 5 Moroccans to 3 in 4</h2>
-  <p>Mandatory health insurance (AMO) covered <b>19.7%</b> of the population in 2012 and <b>77.1%</b> in 2024. Most of the jump came in 2023–2024, after people on the RAMED medical-aid scheme were moved into AMO.</p>
+  <p>Mandatory health insurance (AMO) covered <b>19.7%</b> of the population in 2012 and <b>77.1%</b> in 2024. Most of the jump came in 2023–2024, after people on the RAMED medical-aid scheme were moved into AMO at the end of 2022.</p>
   <div class="chart" id="c-amo"></div>
   <span class="source" data-src="amo"></span>
 </section>
@@ -162,7 +164,7 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
 <section class="ch" id="courts">
   <span class="topic">Justice</span>
   <h2>Appeal courts receive 63% more cases than in 2021</h2>
-  <p>Ordinary appeal courts registered <b>437,000</b> new cases in 2025, up from 269,000 in 2021. Across all courts, 4.1 million cases came in and 4.2 million were judged, so the system as a whole is keeping pace.</p>
+  <p>Ordinary appeal courts registered <b>437,000</b> new cases in 2025, up from 269,000 in 2021. Across all courts, 4.1 million cases came in and 4.2 million were judged, so the system as a whole is keeping pace. Most of the appeal increase came in 2023 alone (+42%), which may reflect a change in how cases are counted rather than demand.</p>
   <div class="chart-title">New cases registered at ordinary appeal courts</div>
   <div class="chart" id="c-courts"></div>
   <span class="source" data-src="courts"></span>
@@ -238,6 +240,7 @@ function lineChart(id, o) {
     el("circle", { cx: xs(last[0]), cy: ys(last[1]), r: 4, fill: s.color, stroke: css("--bg"), "stroke-width": 2 }, f.svg);
     if (o.endLabels && !narrow) el("text", { x: xs(last[0]) + 8, y: ys(last[1]) + 4 + (s.dy || 0), class: "val" }, f.svg).textContent = o.yFmt(last[1]) + (o.unit || "");
   });
+  if (o.breakAt) { el("line", { x1: xs(o.breakAt), x2: xs(o.breakAt), y1: f.y1, y2: f.y0, stroke: css("--faint"), "stroke-dasharray": "3 4" }, f.svg); el("text", { x: xs(o.breakAt) - 6, y: f.y1 + 10, "text-anchor": "end" }, f.svg).textContent = "new survey method →"; }
   const cross = el("line", { y1: f.y1, y2: f.y0, stroke: css("--faint"), "stroke-width": 1, visibility: "hidden" }, f.svg);
   const dots = o.series.map(s => el("circle", { r: 4.5, fill: s.color, stroke: css("--bg"), "stroke-width": 2, visibility: "hidden" }, f.svg));
   const hit = el("rect", { x: f.x0, y: f.y1, width: f.x1 - f.x0, height: f.y0 - f.y1, fill: "transparent" }, f.svg);
@@ -316,8 +319,8 @@ function renderAll() {
   const s1 = css("--s1"), s2 = css("--s2"), s3 = css("--s3");
   columnChart("c-flow", { name: "Mean flow", data: DATA.flow.map(d => [d[0], d[1], s1]), yFmt: (v, e) => fmt(v, e ? 2 : 0), unit: " m³/s", tipTitle: d => `${d[0] - 1}–${d[0]}` });
   columnChart("c-cereals", { name: "Harvest", data: DATA.cereals.map(d => [d[0], d[1], d[1] < 6 ? s2 : s1]), yFmt: (v, e) => fmt(v, e ? 1 : 0), unit: " Mt", labelValues: true, tipTitle: d => `${d[0] - 1}/${d[0]} season` });
-  lineChart("c-youth", { series: [{ name: "Women 15–24", color: s2, data: DATA.u_youth_w }, { name: "All 15–24", color: s1, data: DATA.u_youth }, { name: "Everyone 15+", color: s3, data: DATA.u_total }], yFmt: pct, xFmt: qLabel, xTicks: range(2006, 2026, 2), endLabels: true });
-  lineChart("c-degrees", { series: [{ name: "Higher education", color: s2, data: DATA.u_high }, { name: "Secondary level", color: s1, data: DATA.u_mid }, { name: "No diploma", color: s3, data: DATA.u_none }], yFmt: pct, xFmt: qLabel, xTicks: range(2006, 2026, 2), endLabels: true });
+  lineChart("c-youth", { series: [{ name: "Women 15–24", color: s2, data: DATA.u_youth_w }, { name: "All 15–24", color: s1, data: DATA.u_youth }, { name: "Everyone 15+", color: s3, data: DATA.u_total }], yFmt: pct, xFmt: qLabel, xTicks: range(2006, 2026, 2), endLabels: true, breakAt: 2017 });
+  lineChart("c-degrees", { series: [{ name: "Higher education", color: s2, data: DATA.u_high }, { name: "Secondary level", color: s1, data: DATA.u_mid }, { name: "No diploma", color: s3, data: DATA.u_none }], yFmt: pct, xFmt: qLabel, xTicks: range(2006, 2026, 2), endLabels: true, breakAt: 2017 });
   dotPlot("c-regions", DATA.region.map(r => [REGION_NAMES[r[0]] || r[0], r[1], r[3], r[2]]).sort((a, b) => b[1] - a[1]));
   lineChart("c-prices", { series: [{ name: "Food and drinks", color: s2, data: DATA.infl_food }, { name: "All items", color: s1, data: DATA.infl }], yFmt: (v, e) => (v > 0 ? "+" : "") + fmt(v, e ? 1 : 0) + "%", xFmt: mLabel, xTicks: range(2019, 2026, 1), endLabels: true });
   columnChart("c-amo", { name: "Population covered", data: DATA.amo.map(d => [d[0], d[1], s1]), yFmt: pct, labelValues: true });
