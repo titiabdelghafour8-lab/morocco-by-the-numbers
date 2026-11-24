@@ -80,7 +80,7 @@ Each script reads the previous step's output. Files in italics are temporary and
 ```mermaid
 flowchart TB
     portal["<b>data.gov.ma</b><br/>[External]"]
-    list[/"datasets.txt<br/>46 watched datasets"/]
+    list[/"datasets.txt<br/>54 watched datasets"/]
     state[/"data/sources_state.json<br/>last-modified times"/]
 
     check["<b>00_check_updates</b><br/>anything changed?"]
@@ -97,7 +97,7 @@ flowchart TB
     render["<b>05_render</b><br/>insert data into template"]
     page[/"index.html"/]
     cmp["<b>06_compare</b><br/>which figures moved?"]
-    claims["<b>07_check_claims</b><br/>29 quoted numbers vs data"]
+    claims["<b>07_check_claims</b><br/>44 quoted numbers vs data"]
 
     list --> check
     state --> check
@@ -163,13 +163,13 @@ sequenceDiagram
     participant I as Issues
     participant W as GitHub Pages
 
-    A->>P: last-modified time of the 46 watched datasets
+    A->>P: last-modified time of the 54 watched datasets
     alt nothing changed, or a review is already open
         A-->>A: stop (a few seconds)
     else a dataset changed
         A->>P: download watched datasets (~790 files)
         A->>S: extract, build, pack, render
-        S->>S: every chart present? figures moved? 29 claims hold?
+        S->>S: every chart present? figures moved? 44 claims hold?
         alt every quoted number still holds
             S->>R: commit index.html + data
             R->>W: publish (about a minute)

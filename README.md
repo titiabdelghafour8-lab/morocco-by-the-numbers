@@ -20,7 +20,7 @@ Every chart links to the dataset it comes from. The About section at the bottom 
 
 ```
 data.gov.ma  ->  download  ->  extract  ->  build  ->  pack  ->  render  ->  check
- (46 datasets)    raw files     clean       chart      one data    index.html  quoted numbers
+ (54 datasets)    raw files     clean       chart      one data    index.html  quoted numbers
                                 tables      series     file                    vs data
 ```
 
@@ -62,7 +62,7 @@ python scripts/03_build.py datasets
 python scripts/03b_build_more.py
 python scripts/04_pack.py datasets
 python scripts/05_render.py
-python scripts/07_check_claims.py          # should end with "29/29 claims hold"
+python scripts/07_check_claims.py          # should end with "44/44 claims hold"
 ```
 
 Leave out `scripts/datasets.txt` to download the whole portal (about 800 MB). The downloader skips files it already has, so re-running it only fetches what changed. Intermediate files (`raw*.json`, `site_data*.json`, `data.min.json`) are temporary and ignored by git.
