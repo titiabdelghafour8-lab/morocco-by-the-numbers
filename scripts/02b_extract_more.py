@@ -47,25 +47,31 @@ o["funds"] = sorted(funds); o["funds_files"] = len(g("ammc/stat-hebdo-opcvm-*/*.
 # Startups (company-level, aggregated by city and sector only)
 df = pd.read_excel(g("agence-de-developpement-du-digital/donnees-sur-les-startups/bdd-startups-add_2024.xlsx")[0])
 df.columns = [c.strip() for c in df.columns]
+# the database merges four overlapping lists: keep one row per company name
+df = df.loc[~df["Raison social"].astype(str).str.strip().str.lower().duplicated()]
 city = df["City"].astype(str).str.strip().str.lower().str.replace("é", "e")
 o["startup_n"] = len(df)
 o["startup_city"] = city.value_counts().head(12).to_dict()
 o["startup_sector"] = df["Main sector"].astype(str).str.strip().value_counts().head(12).to_dict()
 
 # Parliament questions, aggregated by ministry and year (no names kept)
-ministries, years, kinds = {}, {}, {}
+ministries, years, kinds, seen = {}, {}, {}, set()
 for f in g("parlement/liste-des-questions-*/*.xlsx"):
     kind = "oral" if "orales" in f else "written"
     x = pd.read_excel(f); cols = [str(k).strip().lower() for k in x.columns]
     if any("minist" in k for k in cols):
         x.columns = cols; m = next(k for k in cols if "minist" in k); dcol = next(k for k in cols if "date" in k)
+        ncol = next((k for k in cols if "num" in k), cols[0])
     else:  # one file ships without a header row
-        x = pd.read_excel(f, header=None); m, dcol = 6, 2
-    for v in x[m].tolist():
+        x = pd.read_excel(f, header=None); m, dcol, ncol = 6, 2, 0
+    for n, d, v in zip(x[ncol], x[dcol], x[m]):
+        key = (kind, str(n).strip(), str(d)[:10])
+        if key in seen: continue  # several files overlap the same sessions
+        seen.add(key)
         k = str(v).strip(); ministries[k] = ministries.get(k, 0) + 1
-    for y in pd.to_datetime(x[dcol], errors="coerce").dt.year.dropna().astype(int):
-        years[str(y)] = years.get(str(y), 0) + 1
-    kinds[kind] = kinds.get(kind, 0) + len(x)
+        dt = pd.to_datetime(d, errors="coerce")
+        if pd.notna(dt): years[str(dt.year)] = years.get(str(dt.year), 0) + 1
+        kinds[kind] = kinds.get(kind, 0) + 1
 o["parl_n"] = kinds; o["parl_years"] = years; o["parl_ministries"] = ministries
 json.dump(o, open("raw2.json", "w", encoding="utf-8"), ensure_ascii=False)
 for k, v in o.items():

@@ -30,18 +30,21 @@ python scripts/03_build.py datasets           # -> site_data.json
 python scripts/03b_build_more.py              # -> site_data2.json
 python scripts/04_pack.py datasets            # -> data.min.json and data/morocco_by_the_numbers.json
 python scripts/05_render.py                   # -> index.html
+python scripts/07_check_claims.py             # every number quoted in the text still matches the data
 ```
 
 Run the steps from the repository root. The downloader skips files it already has.
 
 ## Monthly refresh
 
-`.github/workflows/refresh.yml` runs on the 3rd of each month (or on demand from the Actions tab). It downloads the portal, rebuilds every figure and compares them with the published ones. It never changes the live site. If anything changed, it pushes a `data-refresh-YYYY-MM` branch and opens an issue listing what moved, so the headline text can be checked before merging.
+`.github/workflows/refresh.yml` runs on the 3rd of each month (or on demand from the Actions tab). It downloads the portal, rebuilds every figure and compares them with the published ones. It never changes the live site. If anything changed, it runs the claims check, pushes a `data-refresh-YYYY-MM` branch and opens an issue listing what moved, so the headline text can be checked before merging.
 
 ## Known caveats
 
 - HCP changed its employment survey method in 2017; the job charts mark the break.
 - Inflation and growth rates are calculated from published indices and may differ by a few tenths from official announcements.
+- The startup database merges four overlapping lists and parliamentary files overlap; both are deduplicated.
+- Food inflation (Feb 2023) and GDP (Q2 2020) differ between HCP's first announcements and the revised series on the portal; the page gives both.
 - Public-service counts are facilities, not beds or staff, and exclude private clinics.
 - Parliamentary questions are grouped into policy areas by keyword because ministry names changed in 2021.
 

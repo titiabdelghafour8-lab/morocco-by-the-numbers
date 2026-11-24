@@ -17,16 +17,21 @@ KEYS = {"tanger": "Tanger-Tétouan-Al Hoceïma", "oriental": "Oriental", "fes": 
 def region(v):
     s = unicodedata.normalize("NFKD", str(v)).encode("ascii", "ignore").decode().lower()
     return next((r for k, r in KEYS.items() if k in s), None)
-def count(path, col_hint):
+def count(path, col_hint, keep=None):
     df = pd.read_excel(path, header=None)
     hdr = next(i for i in range(15) if any(str(c).strip().lower() in col_hint for c in df.iloc[i]))
     col = next(j for j, c in enumerate(df.iloc[hdr]) if str(c).strip().lower() in col_hint)
-    regs = df.iloc[hdr + 1:, col].map(region)
+    body = df.iloc[hdr + 1:]
+    if keep:  # filter on the "Catégorie" column
+        cat = next(j for j, c in enumerate(df.iloc[hdr]) if str(c).strip().lower().startswith("cat"))
+        body = body[body[cat].astype(str).str.strip().isin(keep)]
+    regs = body[col].map(region)
     return regs.value_counts().to_dict(), int(regs.isna().sum())
 f = lambda p: glob.glob(os.path.join(D, p))[0]
 out = {"pop": POP}
 out["hospitals"], out["hospitals_unmatched"] = count(f("ministere-de-la-sante/la-liste-des-hopitaux/liste-des-hopitaux-2025.xlsx"), {"région", "region"})
-out["primary_care"], out["primary_care_unmatched"] = count(f("ministere-de-la-sante/repartition-des-etablissements-de-soins-de-sante-primaire*/essp-2025.xlsx"), {"région", "region"})
+out["primary_care"], out["primary_care_unmatched"] = count(f("ministere-de-la-sante/repartition-des-etablissements-de-soins-de-sante-primaire*/essp-2025.xlsx"), {"région", "region"},
+    keep={"CSU-1", "CSU-2", "CSR-1", "CSR-2", "DR"})  # health centres and rural dispensaries; excludes labs and specialist centres
 for k, p in [("schools_primary", "liste-des-etablissements-publics-primaire/*2026*"), ("schools_middle", "liste-de-etablissements-publics-collegial/*2026*"),
              ("schools_high", "liste-des-etablissements-publics-qualifi*/*2026*")]:
     out[k], out[k + "_unmatched"] = count(f("ministere-de-l-education-nationale-et-de-la-formation-professionnelle/" + p), {"ll_reg", "region"})

@@ -5260,90 +5260,90 @@
  "startup_city": [
   [
    "casablanca",
-   554
+   421
   ],
   [
    "rabat",
-   163
+   127
   ],
   [
    "marrakech",
-   57
+   46
   ],
   [
    "tanger",
-   47
-  ],
-  [
-   "agadir",
    38
   ],
   [
+   "agadir",
+   26
+  ],
+  [
    "paris",
-   19
+   15
   ]
  ],
- "startup_n": 1028,
+ "startup_n": 802,
  "parl_themes": [
   [
    "Education and research",
-   9448
+   9295
   ],
   [
    "Infrastructure, transport and water",
-   9285
+   9091
   ],
   [
    "Economy and finance",
-   7753
+   7667
   ],
   [
    "Health and social protection",
-   7529
+   7352
   ],
   [
    "Interior",
-   7340
+   7180
   ],
   [
    "Agriculture, fisheries, water and forests",
-   5483
+   5377
   ],
   [
    "Youth, culture and sport",
-   3866
+   3778
   ],
   [
    "Energy and environment",
-   2815
+   2748
   ],
   [
    "Head of government",
-   2413
+   2392
   ],
   [
    "Housing and planning",
-   2229
+   2195
   ],
   [
    "Social affairs and family",
-   2131
+   2105
   ],
   [
    "Foreign affairs and Moroccans abroad",
-   1634
-  ],
-  [
-   "Employment and skills",
-   1412
+   1613
   ],
   [
    "Justice",
-   1397
+   1377
+  ],
+  [
+   "Employment and skills",
+   1373
   ],
   [
    "Islamic affairs",
-   1248
+   1232
   ],
   [
    "Industry and trade",
@@ -5351,95 +5351,95 @@
   ],
   [
    "Tourism and crafts",
-   46
+   45
   ]
  ],
- "parl_total": 70053,
+ "parl_total": 67114,
  "parl_n": {
-  "written": 41451,
-  "oral": 28602
+  "written": 40226,
+  "oral": 26888
  },
  "services": [
   [
    "Guelmim-Oued Noun",
-   23.0,
+   22.3,
    11.1,
    39.4,
    448685
   ],
   [
    "Drâa-Tafilalet",
-   16.3,
+   15.9,
    7.2,
    36.4,
    1655623
   ],
   [
    "Béni Mellal-Khénifra",
-   12.0,
+   11.4,
    4.8,
    23.4,
    2525801
   ],
   [
-   "Oriental",
-   11.1,
-   8.7,
-   27.5,
-   2294665
-  ],
-  [
    "Souss-Massa",
-   10.9,
+   10.5,
    4.3,
    23.5,
    3020431
   ],
   [
+   "Oriental",
+   10.4,
+   8.7,
+   27.5,
+   2294665
+  ],
+  [
    "Laâyoune-Sakia El Hamra",
-   10.6,
+   9.8,
    13.3,
    20.4,
    451028
   ],
   [
    "Fès-Meknès",
-   10.1,
+   9.6,
    4.9,
    23.2,
    4467911
   ],
   [
    "Marrakech-Safi",
-   9.7,
+   9.3,
    4.3,
    24.0,
    4892393
   ],
   [
    "Dakhla-Oued Ed-Dahab",
-   8.6,
+   7.3,
    4.5,
    11.8,
    219965
   ],
   [
    "Tanger-Tétouan-Al Hoceïma",
-   7.4,
+   7.0,
    6.0,
    22.1,
    4030222
   ],
   [
    "Rabat-Salé-Kénitra",
-   5.7,
+   5.3,
    4.1,
    16.2,
    5132639
   ],
   [
    "Casablanca-Settat",
-   5.3,
+   4.9,
    3.5,
    15.7,
    7688967
@@ -5447,7 +5447,7 @@
  ],
  "services_totals": {
   "hospitals": 184,
-  "primary_care": 3248,
+  "primary_care": 3086,
   "schools_primary": 7963,
   "schools_middle": 2401,
   "schools_high": 1653
