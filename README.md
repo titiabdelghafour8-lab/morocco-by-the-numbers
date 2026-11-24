@@ -52,7 +52,7 @@ You need Python 3.12 or later. Run everything from the repository root:
 ```bash
 pip install -r requirements.txt
 
-python scripts/01_download.py datasets scripts/datasets.txt   # about 600 files
+python scripts/01_download.py datasets scripts/datasets.txt   # about 790 files, 90 MB
 python scripts/02_extract.py datasets
 python scripts/02b_extract_more.py datasets
 python scripts/02c_extract_services.py datasets
