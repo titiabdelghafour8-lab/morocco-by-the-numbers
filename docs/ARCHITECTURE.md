@@ -4,7 +4,7 @@ These diagrams follow the [C4 model](https://c4model.com): each level zooms into
 
 1. **System context**: who uses the site and which outside systems it depends on.
 2. **Containers**: the pieces the project is made of and how data moves between them.
-3. **Components**: the scripts inside the data pipeline, and the parts of the web page.
+3. **Components**: the layers of the `mbn` package, and the parts of the web pages.
 4. **Weekly sync**: what happens, step by step, when the scheduled job runs.
 
 Key: blue boxes are part of this project; grey boxes are outside it.
@@ -47,95 +47,113 @@ flowchart TB
     subgraph gh["GitHub"]
         direction TB
         sync["<b>Data sync job</b><br/>[GitHub Actions, weekly]<br/>.github/workflows/sync.yml"]
-        pipeline["<b>Data pipeline</b><br/>[Python scripts]<br/>scripts/00–07"]
-        repo["<b>Repository, main branch</b><br/>[Git]<br/>template, scripts, data/*.json, index.html"]
+        ci["<b>CI</b><br/>[GitHub Actions, every pull request]<br/>.github/workflows/ci.yml"]
+        pipeline["<b>mbn package and CLI</b><br/>[Python 3.12]<br/>src/mbn"]
+        prs["<b>Pull requests</b><br/>data-sync and feature branches"]
+        repo["<b>Repository, main branch</b><br/>[Git]<br/>templates, assets, data/*.json, pages"]
         issues["<b>data-review issues</b><br/>[GitHub Issues]<br/>Updates waiting for a text review"]
-        pages["<b>Website</b><br/>[GitHub Pages]<br/>Serves index.html"]
+        pages["<b>Website</b><br/>[GitHub Pages]<br/>Serves the HTML pages and data files"]
     end
 
-    browser["<b>Web page</b><br/>[HTML, CSS, JavaScript in the reader's browser]<br/>Draws SVG charts from embedded data"]
+    browser["<b>Web pages</b><br/>[HTML, CSS, JavaScript in the reader's browser]<br/>Draw SVG charts with the shared charts.js"]
 
     sync -- "runs every Monday" --> pipeline
     pipeline -- "1. any dataset changed? 2. download changed datasets" --> portal
-    pipeline -- "rebuilt index.html and data, if every quoted number still holds" --> repo
+    pipeline -- "rebuilt pages and data, if every quoted number still holds" --> prs
     pipeline -- "review branch + issue, if a quoted number no longer holds" --> issues
-    maintainer -- "fixes the text, merges the branch" --> repo
+    prs -- "checked by" --> ci
+    maintainer -- "merges green pull requests" --> repo
+    prs --> repo
     issues -. "notifies" .-> maintainer
-    repo -- "every push to main publishes" --> pages
-    pages -- "sends index.html" --> browser
+    repo -- "every merge to main publishes" --> pages
+    pages -- "sends pages, assets and data files" --> browser
     reader -- "reads, hovers, switches theme" --> browser
 
     classDef person fill:#08427b,stroke:#052e56,color:#fff
     classDef internal fill:#1168bd,stroke:#0b4884,color:#fff
     classDef external fill:#999,stroke:#6b6b6b,color:#fff
     class reader,maintainer person
-    class sync,pipeline,repo,issues,pages,browser internal
+    class sync,ci,pipeline,prs,repo,issues,pages,browser internal
     class portal external
 ```
 
-## 3a. Components: the data pipeline
+## 3a. Components: the mbn package
 
-Each script reads the previous step's output. Files in italics are temporary and not committed.
+Each layer depends only on the layers above it in this list. Parsers and analyses are pure functions (no network, no disk writes), so they are fast to test; all input and output lives in `sources` and `publish`.
 
 ```mermaid
 flowchart TB
     portal["<b>data.gov.ma</b><br/>[External]"]
-    list[/"datasets.txt<br/>54 watched datasets"/]
-    state[/"data/sources_state.json<br/>last-modified times"/]
+    cli["<b>cli.py</b><br/>mbn check · watchlist · download · build<br/>render · claims · verify · charts"]
 
-    check["<b>00_check_updates</b><br/>anything changed?"]
-    dl["<b>01_download</b><br/>fetch watched datasets"]
-    raw[("<i>datasets/</i><br/>original xlsx, xls, csv")]
-    ex1["<b>02_extract</b><br/>water, jobs, prices, health,<br/>internet, roads, courts, integrity"]
-    ex2["<b>02b_extract_more</b><br/>growth, credit, funds, pensions,<br/>startups, parliament (deduplicated)"]
-    ex3["<b>02c_extract_services</b><br/>health centres and schools<br/>+ census population"]
-    b1["<b>03_build</b><br/>chart series"]
-    b2["<b>03b_build_more</b><br/>chart series"]
-    pack["<b>04_pack</b><br/>merge + source links"]
-    data[/"data/morocco_by_the_numbers.json<br/>(ODbL)"/]
-    tpl[/"template.html<br/>text, layout, chart code"/]
-    render["<b>05_render</b><br/>insert data into template"]
-    page[/"index.html"/]
-    cmp["<b>06_compare</b><br/>which figures moved?"]
-    claims["<b>07_check_claims</b><br/>44 quoted numbers vs data"]
+    subgraph sources["sources (I/O)"]
+        ckan["<b>ckan.py</b><br/>search, retries, change detection"]
+        files["<b>files.py</b><br/>download with resume, long paths"]
+        store["<b>store.py</b><br/>find files and dataset metadata"]
+        pop["<b>population.py</b><br/>HCP 2024 census (versioned constant)"]
+    end
+    subgraph parsers["parsers (pure)"]
+        prs["hcp · abh · parliament · facilities · others<br/>file -> table"]
+    end
+    subgraph model["model"]
+        schemas["<b>schemas.py</b><br/>pandera contracts"]
+        claimm["<b>claims.py</b><br/>Claim(text, value, expected, tolerance)"]
+    end
+    subgraph analyses["analyses (pure)"]
+        an["<b>findings.py</b> and one module per project page<br/>tables -> chart series"]
+    end
+    subgraph findings["findings"]
+        reg["<b>registry.py</b><br/>21 findings: datasets, sources, claims"]
+        pagesm["<b>pages.py</b><br/>every page: data file, builder, renderer, claims"]
+        build["<b>build.py</b> and one builder per page<br/>store -> parsers -> analyses"]
+    end
+    subgraph publish["publish (I/O)"]
+        export["<b>data_export.py</b><br/>ODbL JSON and CSV"]
+        site["<b>site.py</b><br/>templates -> pages, page nav"]
+        claims["<b>claims.py, compare.py, review.py</b><br/>claims report, changed series,<br/>publish-or-review decision"]
+    end
 
-    list --> check
-    state --> check
-    portal --> check
-    check -- "changed" --> dl
-    list --> dl
-    portal --> dl
-    dl --> raw
-    raw --> ex1 --> b1 --> pack
-    raw --> ex2 --> b2 --> pack
-    raw --> ex3 --> pack
-    pack --> data
-    data --> render
-    tpl --> render
-    render --> page
-    data --> cmp
-    data --> claims
+    cli --> pagesm
+    cli --> ckan
+    cli --> files
+    ckan --> portal
+    files --> portal
+    pagesm --> build
+    pagesm --> reg
+    build --> store
+    build --> prs
+    build --> an
+    build --> pop
+    prs --> schemas
+    reg --> claimm
+    cli --> export
+    cli --> site
+    cli --> claims
 
     classDef internal fill:#1168bd,stroke:#0b4884,color:#fff
-    classDef store fill:#dbe8f6,stroke:#1168bd,color:#0b2540
     classDef external fill:#999,stroke:#6b6b6b,color:#fff
-    class check,dl,ex1,ex2,ex3,b1,b2,pack,render,cmp,claims internal
-    class list,state,raw,data,tpl,page store
+    class cli,ckan,files,store,pop,prs,schemas,claimm,an,reg,pagesm,build,export,site,claims internal
     class portal external
 ```
 
-## 3b. Components: the web page
+Design rules:
 
-`index.html` is self-contained apart from Google Fonts. Everything below runs in the reader's browser.
+- **Adding a finding means adding one entry to the registry** (and a parser or analysis if the file is new). A new page is one entry in `pages.py`. The watch list (`data/datasets.txt`), the claims check, the page checks and the browser tests all read these lists; CI fails if the watch list is out of date.
+- **Schemas at the boundaries.** pandera checks parser outputs (question files, daily series, price indices): types, ranges, no duplicates.
+- **Nothing changes a published number silently.** The golden tests rebuild the data file and the page and compare them with snapshots taken before the refactor, and CI fails if a committed page is stale.
+
+## 3b. Components: the web pages
+
+Each page is a static HTML file at the site root. Pages share `site/assets/site.css` (tokens, light/dark theme) and `site/assets/charts.js` (chart library and helpers). The findings page embeds its data; other pages load theirs from `data/` with `fetch()`.
 
 ```mermaid
 flowchart TB
-    data[/"DATA<br/>embedded JSON: series + source links"/]
-    sections["<b>Sections and text</b><br/>Land and water · Work · Economy · Living · State · About"]
-    charts["<b>Chart functions</b><br/>lineChart · columnChart · dotPlot · hbar<br/>draw SVG at the current width"]
+    data[/"Data<br/>embedded JSON or data/*.json: series + source links"/]
+    sections["<b>Sections and text</b><br/>one template per page in site/templates"]
+    charts["<b>charts.js</b><br/>lineChart · columnChart · dotPlot · hbar<br/>draw SVG at the current width"]
     tip["<b>Tooltip</b><br/>exact values on hover or tap"]
     sources["<b>Source links</b><br/>dataset title + publisher under each chart"]
-    nav["<b>Section bar</b><br/>highlights the section in view"]
+    nav["<b>Page nav and section bar</b><br/>links between pages; highlights the section in view"]
     theme["<b>Theme switch</b><br/>light or dark, remembered in the browser"]
 
     data --> charts
@@ -158,25 +176,28 @@ sequenceDiagram
     autonumber
     participant A as GitHub Actions<br/>(Mondays 06:23 UTC)
     participant P as data.gov.ma
-    participant S as Pipeline scripts
-    participant R as Repository (main)
+    participant M as mbn CLI
+    participant B as Pull request
+    participant C as CI
     participant I as Issues
-    participant W as GitHub Pages
 
-    A->>P: last-modified time of the 54 watched datasets
-    alt nothing changed, or a review is already open
+    A->>M: mbn check
+    M->>P: last-modified time of the watched datasets
+    alt nothing changed, or a sync PR or review issue is already open
         A-->>A: stop (a few seconds)
     else a dataset changed
-        A->>P: download watched datasets (~790 files)
-        A->>S: extract, build, pack, render
-        S->>S: every chart present? figures moved? 44 claims hold?
+        M->>P: mbn download (watched datasets only)
+        A->>M: mbn build, render, charts
+        A->>M: mbn verify: figures moved? every claim holds?
         alt every quoted number still holds
-            S->>R: commit index.html + data
-            R->>W: publish (about a minute)
+            A->>B: open "Sync data from data.gov.ma" (label data-sync)
+            A->>C: start CI on the branch
+            C-->>B: lint, types, tests, browser checks
+            Note over B,C: Maintainer merges when green;<br/>GitHub Pages publishes within a minute
         else a quoted number no longer holds
-            S->>R: push data-review-YYYYMMDD branch
-            S->>I: open "New data needs a text review"
-            Note over I,R: Maintainer updates the text,<br/>merges the branch, closes the issue
+            A->>B: push data-review-YYYYMMDD branch
+            A->>I: open "New data needs a text review"
+            Note over I,B: Maintainer updates the text,<br/>opens a pull request, closes the issue
         end
     end
 ```
