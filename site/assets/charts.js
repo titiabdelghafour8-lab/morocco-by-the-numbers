@@ -248,3 +248,52 @@ function segmented(id, onChange) {
     onChange(b.dataset.v);
   }));
 }
+
+/* Horizontal bars around zero: rows [label, value]; positive in --s2 (adds), negative in --s1 (takes away). */
+function divBars(id, rows, o) {
+  const narrow = document.getElementById(id).clientWidth < 520;
+  const rowH = 26, lw = narrow ? 130 : 210;
+  const f = frame(id, rows.length * rowH + 26, { l: lw, r: 16, t: 4, b: 22 });
+  const lim = Math.max(...rows.map(r => Math.abs(r[1]))) * 1.15 || 1;
+  const xs = v => f.x0 + (v + lim) / (2 * lim) * (f.x1 - f.x0), pos = css("--s2"), neg = css("--s1");
+  niceTicks(-lim, lim, 4).filter(t => Math.abs(t) <= lim).forEach(t => {
+    el("line", { x1: xs(t), x2: xs(t), y1: f.y1, y2: f.y0, stroke: t === 0 ? css("--faint") : css("--grid") }, f.svg);
+    el("text", { x: xs(t), y: f.H - 6, "text-anchor": "middle" }, f.svg).textContent = (t > 0 ? "+" : "") + fmt(t, Math.abs(lim) < 2 ? 1 : 0);
+  });
+  rows.forEach((r, i) => {
+    const y = f.y1 + i * rowH + 4, h = rowH - 10, x0 = xs(0), x1 = xs(r[1]), c = r[1] >= 0 ? pos : neg;
+    const maxc = narrow ? 17 : 34;
+    el("text", { x: f.x0 - 10, y: y + h / 2 + 4, "text-anchor": "end", class: "lbl" }, f.svg).textContent = r[0].length > maxc ? r[0].slice(0, maxc - 1) + "…" : r[0];
+    el("rect", { x: Math.min(x0, x1), y, width: Math.max(1, Math.abs(x1 - x0)), height: h, rx: 2, fill: c }, f.svg);
+    const hit = el("rect", { x: 0, y: y - 4, width: f.W, height: rowH, fill: "transparent" }, f.svg);
+    const show = evt => showTip(evt, r[0], [{ c, n: o.name, v: o.fmt(r[1]) }, ...(r[2] || [])]);
+    hit.addEventListener("mousemove", show); hit.addEventListener("touchstart", show, { passive: true });
+    hit.addEventListener("mouseleave", hideTip); hit.addEventListener("touchend", hideTip);
+  });
+}
+
+/* Heatmap: o.rows [label], o.cols [short label], o.values [[v]]; diverging colours around zero. */
+function heatmap(id, o) {
+  const narrow = document.getElementById(id).clientWidth < 520;
+  const lw = narrow ? 78 : 110, top = narrow ? 70 : 96, cell = 22;
+  const f = frame(id, top + o.rows.length * cell + 4, { l: lw, r: 18, t: top, b: 4 });
+  const cw = (f.x1 - f.x0) / o.cols.length, lim = o.limit || Math.max(...o.values.flat().filter(v => v !== null).map(Math.abs));
+  const pos = css("--s2"), neg = css("--s1"), bg = css("--bg");
+  o.cols.forEach((c, j) => {
+    const x = f.x0 + j * cw + cw / 2;
+    el("text", { x, y: top - 6, transform: `rotate(-55 ${x} ${top - 6})`, class: "lbl", "font-size": narrow ? 10 : 11 }, f.svg).textContent = c;
+  });
+  o.rows.forEach((r, i) => {
+    const y = f.y1 + i * cell;
+    el("text", { x: f.x0 - 8, y: y + cell / 2 + 4, "text-anchor": "end", class: "lbl", "font-size": narrow ? 11 : 12 }, f.svg).textContent = r;
+    o.values[i].forEach((v, j) => {
+      const x = f.x0 + j * cw;
+      const a = v === null ? 0 : Math.min(1, Math.abs(v) / lim);
+      el("rect", { x: x + 1, y: y + 1, width: cw - 2, height: cell - 2, rx: 2, fill: v === null ? css("--grid") : (v >= 0 ? pos : neg), "fill-opacity": v === null ? 1 : .12 + .88 * a }, f.svg);
+      const hit = el("rect", { x, y, width: cw, height: cell, fill: "transparent" }, f.svg);
+      const show = evt => showTip(evt, `${r} · ${o.fullCols ? o.fullCols[j] : o.cols[j]}`, [{ c: v >= 0 ? pos : neg, n: o.name, v: v === null ? "–" : o.fmt(v) }]);
+      hit.addEventListener("mousemove", show); hit.addEventListener("touchstart", show, { passive: true });
+      hit.addEventListener("mouseleave", hideTip); hit.addEventListener("touchend", hideTip);
+    });
+  });
+}

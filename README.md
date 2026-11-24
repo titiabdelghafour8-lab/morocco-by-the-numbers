@@ -19,6 +19,7 @@ Twenty-one findings about Morocco, drawn from the government's open data portal 
 | Page | Question | Data |
 |---|---|---|
 | [Water](https://titiabdelghafour8-lab.github.io/morocco-by-the-numbers/water.html) | How dry is the Souss now compared with the last 57 years, and does less rain explain the river's collapse? Drought index (SPI) since 1969, rainfall trend, rain-only model of the river. | Daily rain and river flow, Souss-Massa river basin agency |
+| [Prices](https://titiabdelghafour8-lab.github.io/morocco-by-the-numbers/prices.html) | What is getting more expensive, where, and is it speeding up? Headline, food and 3-month annualised inflation, what drove it, the biggest movers, a city × spending-group heatmap, and a 3-month forecast shown only if it beats a naive benchmark. Refreshes monthly through the weekly sync. | HCP monthly consumer price index, 18 cities |
 
 Every chart links to the dataset it comes from. The About section at the bottom of the site explains sources, licence, personal data and the corrections made during the data audit.
 
