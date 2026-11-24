@@ -19,6 +19,17 @@ dependencies = [
 [project.scripts]
 mbn = "mbn.cli:main"
 
+[project.optional-dependencies]
+topics = [
+    "bertopic==0.17.4",
+    "camel-tools==1.6.0",
+    "hdbscan==0.8.44",
+    "sentence-transformers==6.3.0",
+    "torch==2.15.0",
+    "transformers==5.24.1",
+    "umap-learn==0.6.0",
+]
+
 [dependency-groups]
 dev = [
     "pytest>=8",
@@ -56,7 +67,7 @@ files = ["src/mbn"]
 plugins = ["pandera.mypy"]
 
 [[tool.mypy.overrides]]
-module = ["openpyxl.*", "xlrd.*", "pymannkendall.*", "pyhomogeneity.*", "climate_indices.*", "statsmodels.*", "scipy.*"]
+module = ["openpyxl.*", "xlrd.*", "pymannkendall.*", "pyhomogeneity.*", "climate_indices.*", "statsmodels.*", "scipy.*", "sklearn.*", "bertopic.*", "hdbscan.*", "umap.*", "sentence_transformers.*", "torch.*", "camel_tools.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

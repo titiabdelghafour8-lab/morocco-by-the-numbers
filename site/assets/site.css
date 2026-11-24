@@ -95,3 +95,18 @@ table.mini td.n { text-align: right; font-family: var(--mono) }
 .swatches span { display: inline-flex; align-items: center; gap: 6px }
 .swatches i { width: 10px; height: 10px; border-radius: 2px; display: inline-block }
 .sub b { color: var(--fg); font-weight: 600 }
+
+/* Topic explorer */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px }
+.card { text-align: left; font: inherit; color: inherit; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; cursor: pointer; display: grid; gap: 4px }
+.card:hover { background: var(--grid) }
+.card[aria-pressed="true"] { border-color: var(--s1); box-shadow: 0 0 0 1px var(--s1) inset }
+.card:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px }
+.card .t { font: 600 14px/1.3 var(--display) }
+.card .ar { font-size: 13px; color: var(--muted) }
+.card .m { display: flex; justify-content: space-between; align-items: end; font: 12px var(--mono); color: var(--faint) }
+.detail { border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 10px }
+.detail h3 { font: 600 17px var(--display); margin: 0 }
+.detail .names { font-size: 13px; color: var(--muted) }
+.examples { margin: 0; padding: 0 20px 0 0; display: grid; gap: 6px; font-size: 15px; color: var(--fg) }
+.words { font-size: 13px; color: var(--muted) }

@@ -100,12 +100,13 @@ flowchart TB
         claimm["<b>claims.py</b><br/>Claim(text, value, expected, tolerance)"]
     end
     subgraph analyses["analyses (pure)"]
-        an["<b>findings.py</b> and one module per project page<br/>tables -> chart series"]
+        an["<b>findings.py · water.py · prices.py<br/>arabic.py · parliament_topics.py</b><br/>tables -> chart series"]
     end
     subgraph findings["findings"]
         reg["<b>registry.py</b><br/>21 findings: datasets, sources, claims"]
         pagesm["<b>pages.py</b><br/>every page: data file, builder, renderer, claims"]
-        build["<b>build.py</b> and one builder per page<br/>store -> parsers -> analyses"]
+        build["<b>build.py · water_page · prices_page · parliament_page</b><br/>store -> parsers -> analyses"]
+        topicm["<b>parliament_model.py</b> (offline, mbn topics)<br/>CAMeL-BERT + BERTopic -> topics per question"]
     end
     subgraph publish["publish (I/O)"]
         export["<b>data_export.py</b><br/>ODbL JSON and CSV"]
@@ -124,6 +125,8 @@ flowchart TB
     build --> prs
     build --> an
     build --> pop
+    cli --> topicm
+    topicm --> prs
     prs --> schemas
     reg --> claimm
     cli --> export
@@ -132,7 +135,7 @@ flowchart TB
 
     classDef internal fill:#1168bd,stroke:#0b4884,color:#fff
     classDef external fill:#999,stroke:#6b6b6b,color:#fff
-    class cli,ckan,files,store,pop,prs,schemas,claimm,an,reg,pagesm,build,export,site,claims internal
+    class cli,ckan,files,store,pop,prs,schemas,claimm,an,reg,pagesm,build,topicm,export,site,claims internal
     class portal external
 ```
 
@@ -140,11 +143,13 @@ Design rules:
 
 - **Adding a finding means adding one entry to the registry** (and a parser or analysis if the file is new). A new page is one entry in `pages.py`. The watch list (`data/datasets.txt`), the claims check, the page checks and the browser tests all read these lists; CI fails if the watch list is out of date.
 - **Schemas at the boundaries.** pandera checks parser outputs (question files, daily series, price indices): types, ranges, no duplicates.
+- **Heavy models run offline.** The parliament topic model (PyTorch, CAMeL-BERT, BERTopic) is an optional extra run with `mbn topics`. It commits its outputs (topic per question, topic keywords and samples), and the page builds from those plus a reviewed labels file whose fingerprint must match the model. The weekly sync and CI never download a model.
+- **Pages that refresh themselves** (Prices) write their numbers from the data; their claims guard history, method integrity and rules (for example, a forecast is shown only if it beats the naive benchmark), so a normal month publishes without review.
 - **Nothing changes a published number silently.** The golden tests rebuild the data file and the page and compare them with snapshots taken before the refactor, and CI fails if a committed page is stale.
 
 ## 3b. Components: the web pages
 
-Each page is a static HTML file at the site root. Pages share `site/assets/site.css` (tokens, light/dark theme) and `site/assets/charts.js` (chart library and helpers). The findings page embeds its data; other pages load theirs from `data/` with `fetch()`.
+Four pages: Findings (`index.html`), Water, Prices and Parliament. Each page is a static HTML file at the site root. Pages share `site/assets/site.css` (tokens, light/dark theme) and `site/assets/charts.js` (chart library and helpers). The findings page embeds its data; other pages load theirs from `data/` with `fetch()`.
 
 ```mermaid
 flowchart TB

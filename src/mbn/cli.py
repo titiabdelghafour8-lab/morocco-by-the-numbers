@@ -119,6 +119,17 @@ def cmd_charts(args: argparse.Namespace) -> int:
     return 1 if bad else 0
 
 
+def cmd_topics(args: argparse.Namespace) -> int:
+    """Fit the parliament topic model offline (needs `uv sync --extra topics`)."""
+    from mbn.findings import parliament_model
+
+    cache = Path(args.cache) if args.cache else None
+    res = parliament_model.run(DatasetStore(args.datasets), cache=cache)
+    print(f"{res['n_topics']} topics over {res['documents']} questions; fingerprint {res['fingerprint']}")
+    print("Now read data/parliament/topic_model.json, update data/parliament/topic_labels.json and its fingerprint.")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="mbn", description=__doc__)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -148,6 +159,10 @@ def main(argv: list[str] | None = None) -> int:
     s.add_argument("--summary", default="summary.md")
     s.add_argument("--claims", default="claims.txt")
     s.set_defaults(fn=cmd_verify)
+    s = sub.add_parser("topics", help="fit the parliament topic model offline (topics extra)")
+    s.add_argument("datasets", nargs="?", default=str(DEFAULT_DATASETS))
+    s.add_argument("--cache", help="where to keep the embeddings between runs (not published)")
+    s.set_defaults(fn=cmd_topics)
     s = sub.add_parser("charts", help="check every page has all its charts")
     s.set_defaults(fn=cmd_charts)
     args = ap.parse_args(argv)

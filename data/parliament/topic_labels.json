@@ -1,0 +1,228 @@
+{
+ "fingerprint": "7f32f79e733662cb",
+ "reviewed_by": "Named by Claude (Opus 5.5) after reading each topic's keywords and samples on 2026-11-24; awaiting the maintainer's review in the pull request.",
+ "hidden_words": [
+  "الاشتراكي",
+  "بالفريق",
+  "الفريق",
+  "النواب",
+  "البرلمانين",
+  "الجواب",
+  "اسئله",
+  "سؤالي",
+  "السيد",
+  "جوابكم"
+ ],
+ "topics": {
+  "0": {
+   "en": "Local requests, by place (mixed)",
+   "fr": "Demandes locales, par lieu (mixte)",
+   "ar": "مطالب محلية حسب المكان (مختلط)",
+   "kind": "mixed",
+   "note": "Questions about a named commune or province on many subjects; grouped by place more than by theme."
+  },
+  "1": {
+   "en": "Public services and sector policy (general)",
+   "fr": "Services publics et politiques sectorielles (général)",
+   "ar": "الخدمات العمومية والسياسات القطاعية (عام)",
+   "kind": "mixed",
+   "note": "Broad questions on health, universities, social protection and strategies."
+  },
+  "2": {
+   "en": "Moroccans abroad, rural areas and Amazigh",
+   "fr": "Marocains du monde, monde rural et amazigh",
+   "ar": "مغاربة العالم والعالم القروي والأمازيغية",
+   "kind": "theme",
+   "note": ""
+  },
+  "3": {
+   "en": "Teachers' and civil servants' careers",
+   "fr": "Carrières des enseignants et fonctionnaires",
+   "ar": "وضعية الأطر والأساتذة والموظفين",
+   "kind": "theme",
+   "note": ""
+  },
+  "4": {
+   "en": "Roads",
+   "fr": "Routes",
+   "ar": "الطرق",
+   "kind": "theme",
+   "note": ""
+  },
+  "5": {
+   "en": "COVID-19",
+   "fr": "Covid-19",
+   "ar": "جائحة كورونا",
+   "kind": "theme",
+   "note": ""
+  },
+  "6": {
+   "en": "Water resources, irrigation and energy",
+   "fr": "Ressources en eau, irrigation et énergie",
+   "ar": "الموارد المائية والسقي والطاقة",
+   "kind": "theme",
+   "note": ""
+  },
+  "7": {
+   "en": "Local building projects",
+   "fr": "Projets d'équipement locaux",
+   "ar": "مشاريع التجهيز المحلية",
+   "kind": "mixed",
+   "note": "Hospitals, youth centres and works in named towns."
+  },
+  "8": {
+   "en": "Disability, children and older people",
+   "fr": "Handicap, enfance et personnes âgées",
+   "ar": "الإعاقة والطفولة والمسنون",
+   "kind": "theme",
+   "note": ""
+  },
+  "9": {
+   "en": "Vocational training and employment",
+   "fr": "Formation professionnelle et emploi",
+   "ar": "التكوين المهني والتشغيل",
+   "kind": "theme",
+   "note": ""
+  },
+  "10": {
+   "en": "Violence, drugs and begging",
+   "fr": "Violence, drogue et mendicité",
+   "ar": "العنف والمخدرات والتسول",
+   "kind": "theme",
+   "note": ""
+  },
+  "11": {
+   "en": "Food prices and market controls",
+   "fr": "Prix alimentaires et contrôle des marchés",
+   "ar": "أسعار المواد الغذائية ومراقبة الأسواق",
+   "kind": "theme",
+   "note": ""
+  },
+  "12": {
+   "en": "Drinking water in rural areas",
+   "fr": "Eau potable en milieu rural",
+   "ar": "الماء الصالح للشرب بالعالم القروي",
+   "kind": "theme",
+   "note": ""
+  },
+  "13": {
+   "en": "Taxes and public finance",
+   "fr": "Impôts et finances publiques",
+   "ar": "الضرائب والمالية العامة",
+   "kind": "theme",
+   "note": ""
+  },
+  "14": {
+   "en": "Investment and support to sectors",
+   "fr": "Investissement et soutien aux secteurs",
+   "ar": "الاستثمار ودعم القطاعات",
+   "kind": "theme",
+   "note": ""
+  },
+  "15": {
+   "en": "Requests from Kelaa des Sraghna, Rhamna and nearby",
+   "fr": "Demandes de Kelaâ des Sraghna, Rhamna et environs",
+   "ar": "مطالب قلعة السراغنة والرحامنة ونواحيهما",
+   "kind": "mixed",
+   "note": "Local requests from a few provinces."
+  },
+  "16": {
+   "en": "Planned projects by province (standard questions)",
+   "fr": "Projets prévus par province (questions types)",
+   "ar": "المشاريع المقرر إنجازها حسب الإقليم",
+   "kind": "procedural",
+   "note": "A series of identically worded questions sent to many ministries."
+  },
+  "17": {
+   "en": "Awrach and Forsa jobs programmes",
+   "fr": "Programmes Awrach et Forsa",
+   "ar": "برنامجا أوراش وفرصة",
+   "kind": "theme",
+   "note": ""
+  },
+  "18": {
+   "en": "Ministry records by region (standard questions)",
+   "fr": "Bilans des ministères par région (questions types)",
+   "ar": "حصيلة الوزارات حسب الجهة",
+   "kind": "procedural",
+   "note": "A series of identically worded questions."
+  },
+  "19": {
+   "en": "Price rises: fuel, meat, feed and flour",
+   "fr": "Hausse des prix : carburants, viande, fourrage, farine",
+   "ar": "ارتفاع أسعار المحروقات واللحوم والأعلاف",
+   "kind": "theme",
+   "note": ""
+  },
+  "20": {
+   "en": "Water and power cuts",
+   "fr": "Coupures d'eau et d'électricité",
+   "ar": "انقطاعات الماء والكهرباء",
+   "kind": "theme",
+   "note": ""
+  },
+  "21": {
+   "en": "Cultural heritage",
+   "fr": "Patrimoine culturel",
+   "ar": "التراث الثقافي",
+   "kind": "theme",
+   "note": ""
+  },
+  "22": {
+   "en": "Imams and religious staff",
+   "fr": "Imams et personnel religieux",
+   "ar": "الأئمة والقيمون الدينيون",
+   "kind": "theme",
+   "note": ""
+  },
+  "23": {
+   "en": "Restrictions on unions, associations and the press",
+   "fr": "Restrictions visant syndicats, associations et presse",
+   "ar": "التضييق على النقابات والجمعيات والصحافة",
+   "kind": "theme",
+   "note": ""
+  },
+  "24": {
+   "en": "Football",
+   "fr": "Football",
+   "ar": "كرة القدم",
+   "kind": "theme",
+   "note": ""
+  },
+  "25": {
+   "en": "Delayed hospitals, stadiums and cultural centres",
+   "fr": "Hôpitaux, stades et centres culturels en retard",
+   "ar": "تعثر أشغال المستشفيات والملاعب والمراكز الثقافية",
+   "kind": "theme",
+   "note": ""
+  },
+  "26": {
+   "en": "Reminders of unanswered questions",
+   "fr": "Rappels de questions sans réponse",
+   "ar": "تذكير بأسئلة كتابية",
+   "kind": "procedural",
+   "note": "Members reminding a minister of an earlier written question."
+  },
+  "27": {
+   "en": "Moroccan seasonal workers in Spain",
+   "fr": "Travailleuses saisonnières marocaines en Espagne",
+   "ar": "العاملات المغربيات بحقول الفراولة بإسبانيا",
+   "kind": "theme",
+   "note": ""
+  },
+  "28": {
+   "en": "Buildings at risk of collapse",
+   "fr": "Bâtiments menaçant ruine",
+   "ar": "المباني الآيلة للسقوط",
+   "kind": "theme",
+   "note": ""
+  },
+  "29": {
+   "en": "Start of the school and university year",
+   "fr": "Rentrée scolaire et universitaire",
+   "ar": "الدخول المدرسي والجامعي",
+   "kind": "theme",
+   "note": ""
+  }
+ }
+}

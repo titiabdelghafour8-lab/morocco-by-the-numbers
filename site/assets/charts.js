@@ -297,3 +297,13 @@ function heatmap(id, o) {
     });
   });
 }
+
+/* Tiny line for cards: data [values], drawn into a fixed 120 x 32 box. */
+function sparkline(box, values, color) {
+  box.innerHTML = "";
+  const W = 120, H = 32, max = Math.max(...values), min = Math.min(...values), span = max - min || 1;
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, width: W, height: H, "aria-hidden": "true" }, box);
+  const x = i => 2 + i * (W - 4) / Math.max(1, values.length - 1), y = v => H - 3 - (v - min) / span * (H - 6);
+  el("path", { d: values.map((v, i) => (i ? "L" : "M") + x(i).toFixed(1) + "," + y(v).toFixed(1)).join(""), fill: "none", stroke: color, "stroke-width": 1.8, "stroke-linejoin": "round" }, svg);
+  el("circle", { cx: x(values.length - 1), cy: y(values.at(-1)), r: 2.5, fill: color }, svg);
+}

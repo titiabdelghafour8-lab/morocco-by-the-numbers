@@ -12,7 +12,7 @@ from typing import Any
 
 from mbn.config import DATA_DIR
 from mbn.findings import build as findings_build
-from mbn.findings import prices_page, water_page
+from mbn.findings import parliament_page, prices_page, water_page
 from mbn.findings.registry import all_claims, watch_patterns
 from mbn.model.claims import Claim
 from mbn.publish import site
@@ -71,7 +71,18 @@ PRICES_PAGE = Page(
     datasets=prices_page.DATASETS,
 )
 
-PAGES: tuple[Page, ...] = (FINDINGS_PAGE, WATER_PAGE, PRICES_PAGE)
+PARLIAMENT_PAGE = Page(
+    name="parliament",
+    label="Parliament",
+    html="parliament.html",
+    data_file=parliament_page.DATA_FILE,
+    build=parliament_page.build,
+    render=lambda data: parliament_page.render(data, nav=nav("parliament.html")),
+    claims=lambda: list(parliament_page.CLAIMS),
+    datasets=parliament_page.DATASETS,
+)
+
+PAGES: tuple[Page, ...] = (FINDINGS_PAGE, WATER_PAGE, PRICES_PAGE, PARLIAMENT_PAGE)
 
 
 def page(name: str) -> Page:

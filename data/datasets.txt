@@ -36,3 +36,4 @@ pluie-journaliere-de-la-station-abhsmd*
 pluie-journaliere-de-la-station-talaint*
 pluie-journaliere-de-la-station-ait-melloul*
 debit-moyen-journalier-de-la-station-talaint*
+liste-des-depute*

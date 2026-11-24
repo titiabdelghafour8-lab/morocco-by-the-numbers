@@ -20,6 +20,7 @@ Twenty-one findings about Morocco, drawn from the government's open data portal 
 |---|---|---|
 | [Water](https://titiabdelghafour8-lab.github.io/morocco-by-the-numbers/water.html) | How dry is the Souss now compared with the last 57 years, and does less rain explain the river's collapse? Drought index (SPI) since 1969, rainfall trend, rain-only model of the river. | Daily rain and river flow, Souss-Massa river basin agency |
 | [Prices](https://titiabdelghafour8-lab.github.io/morocco-by-the-numbers/prices.html) | What is getting more expensive, where, and is it speeding up? Headline, food and 3-month annualised inflation, what drove it, the biggest movers, a city × spending-group heatmap, and a 3-month forecast shown only if it beats a naive benchmark. Refreshes monthly through the weekly sync. | HCP monthly consumer price index, 18 cities |
+| [Parliament](https://titiabdelghafour8-lab.github.io/morocco-by-the-numbers/parliament.html) | What do MPs ask the government about, and how has that changed? A topic explorer over about 67,000 questions (Arabic topic model, reviewed topic names in Arabic, French and English) and the topics rising and falling. By topic and year only: no names. | House of Representatives written and oral questions |
 
 Every chart links to the dataset it comes from. The About section at the bottom of the site explains sources, licence, personal data and the corrections made during the data audit.
 
@@ -79,6 +80,17 @@ uv run playwright install chromium               # once
 uv run pytest tests/e2e                          # every page in a browser, desktop and phone
 uv run ruff check src tests && uv run mypy       # lint and types
 ```
+
+### The parliament topic model (offline)
+
+The topic model needs an Arabic language model (CAMeL-BERT, about 0.44 GB from Hugging Face) and PyTorch, so it runs offline, not in CI or the weekly sync:
+
+```bash
+uv sync --extra topics
+uv run mbn topics datasets --cache .cache/embeddings.npy   # 20-40 minutes on a laptop CPU
+```
+
+It writes `data/parliament/topic_model.json` and `data/parliament/assignments.csv` (question number, kind, date and topic: no names, no text). Topic names live in `data/parliament/topic_labels.json`. If a rerun changes the topics, `mbn build` stops until someone reads the new topics, updates the names and the file's `fingerprint`, and reviews the change in a pull request.
 
 Set `MBN_DATASETS` to the downloaded `datasets` folder to also run the slow golden test that rebuilds the data file from the original spreadsheets and compares it byte for byte. CI runs everything except that test on every pull request, and requires at least 90% coverage of `parsers` and `analyses`.
 

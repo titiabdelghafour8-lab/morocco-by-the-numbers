@@ -23,6 +23,12 @@ def _find(cols: list[str], *needles: str) -> str | None:
     return next((k for k in cols if any(n in k for n in needles)), None)
 
 
+def _text(frame: pd.DataFrame, col: Any, n: int) -> list[str]:
+    if col is None or col not in frame.columns:
+        return [""] * n
+    return ["" if pd.isna(v) else str(v).strip() for v in frame[col]]
+
+
 def read_questions(path: str) -> pd.DataFrame:
     """One question file -> columns kind, number (text), date_key (text), date (raw), ministry, subject, text.
 
@@ -37,12 +43,12 @@ def read_questions(path: str) -> pd.DataFrame:
         dcol = next(k for k in cols if "date" in k)
         ncol = next((k for k in cols if "num" in k), cols[0])
         subj = _find(cols, "موضوع", "objet", "sujet")
-        text = _find(cols, "نص", "texte", "contenu")
+        text = _find(cols, "نص", "texte", "contenu", "question")
         frame = x
     else:  # one file ships without a header row
         frame = pd.read_excel(path, header=None)
         m, dcol, ncol = 6, 2, 0  # type: ignore[assignment]
-        subj = text = None
+        subj, text = 7, 8  # type: ignore[assignment]
     n = len(frame)
     return pd.DataFrame(
         {
@@ -51,8 +57,8 @@ def read_questions(path: str) -> pd.DataFrame:
             "date_key": [str(v)[:10] for v in frame[dcol]],
             "date": pd.Series(list(frame[dcol]), dtype=object).values,
             "ministry": [str(v).strip() for v in frame[m]],
-            "subject": frame[subj].astype(str).values if subj is not None else [""] * n,
-            "text": frame[text].astype(str).values if text is not None else [""] * n,
+            "subject": _text(frame, subj, n),
+            "text": _text(frame, text, n),
         }
     )
 
@@ -86,3 +92,21 @@ def counts(df: pd.DataFrame) -> tuple[dict[str, int], dict[str, int], dict[str, 
 
 def frame_dates(df: pd.DataFrame) -> Any:
     return pd.to_datetime(df["date"], errors="coerce")
+
+
+def member_names(paths: list[str]) -> list[str]:
+    """Members' names from the portal's member lists, in both word orders.
+
+    Used only to screen published outputs for names; never written anywhere.
+    """
+    names: set[str] = set()
+    for p in paths:
+        df = pd.read_excel(p)
+        cols = [c for c in df.columns if "الاسم" in str(c) or "nom" in str(c).lower()]
+        for c in cols:
+            for v in df[c].dropna().astype(str):
+                v = " ".join(v.split())
+                if len(v.split()) >= 2:
+                    names.add(v)
+                    names.add(" ".join(reversed(v.split())))
+    return sorted(names)
