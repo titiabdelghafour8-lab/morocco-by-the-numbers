@@ -1,6 +1,7 @@
 """Download every dataset from data.gov.ma (CKAN) into <out>/<organization>/<dataset>/.
 
-Usage: python -I download_datagovma.py <out_dir>
+Usage: python scripts/01_download.py <out_dir> [patterns.txt]
+With a patterns file (one fnmatch pattern per line), only matching datasets are downloaded.
 Re-running is safe: files already downloaded (non-empty) are skipped.
 """
 import csv
@@ -87,6 +88,10 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     print("Fetching catalog...", flush=True)
     datasets = fetch_catalog()
+    if len(sys.argv) > 2:
+        import fnmatch
+        pats = [l.strip() for l in open(sys.argv[2], encoding="utf-8") if l.strip() and not l.startswith("#")]
+        datasets = [d for d in datasets if any(fnmatch.fnmatch(d["name"], p) for p in pats)]
     print(f"{len(datasets)} datasets", flush=True)
     with open(os.path.join(OUT, "_catalog.json"), "w", encoding="utf-8") as f:
         json.dump(datasets, f, ensure_ascii=False, indent=1)

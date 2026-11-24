@@ -253,7 +253,7 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <div class="group-head"><h2 class="gh">About this page</h2></div>
   <section class="ch about">
     <h3>Where the numbers come from</h3>
-    <p>Every figure comes from <a href="https://www.data.gov.ma" target="_blank" rel="noopener">data.gov.ma</a>, Morocco's official open-data portal, downloaded on 23 November 2026. The one exception is regional population, taken from HCP's published 2024 census results to compute per-resident rates. Each chart links to the dataset it uses. The scripts that turn the original spreadsheets into these charts are public in the <a href="https://github.com/titiabdelghafour8-lab/morocco-by-the-numbers" target="_blank" rel="noopener">GitHub repository</a>, so every number can be checked and rebuilt.</p>
+    <p>Every figure comes from <a href="https://www.data.gov.ma" target="_blank" rel="noopener">data.gov.ma</a>, Morocco's official open-data portal, last updated on <span class="updated">23 November 2026</span>. The one exception is regional population, taken from HCP's published 2024 census results to compute per-resident rates. Each chart links to the dataset it uses. The scripts that turn the original spreadsheets into these charts are public in the <a href="https://github.com/titiabdelghafour8-lab/morocco-by-the-numbers" target="_blank" rel="noopener">GitHub repository</a>, so every number can be checked and rebuilt.</p>
     <h3>Licence</h3>
     <p>The data is published under the <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">Open Database License (ODbL)</a>. The processed figures behind this page are shared under the same licence in the repository's <code>data</code> folder. The page and scripts are under the MIT licence. Please credit data.gov.ma and the original publisher when you reuse the data.</p>
     <h3>Personal data</h3>
@@ -280,7 +280,7 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
 </div>
 
 </div></main>
-<footer><div class="wrap">Built by <a href="https://github.com/titiabdelghafour8-lab" style="color:inherit">titiabdelghafour8-lab</a>. All figures come from data.gov.ma open data (ODbL licence), downloaded 23 November 2026. Hover or tap a chart for exact values.</div></footer>
+<footer><div class="wrap">Built by <a href="https://github.com/titiabdelghafour8-lab" style="color:inherit">titiabdelghafour8-lab</a>. All figures come from data.gov.ma open data (ODbL licence), last updated <span class="updated">23 November 2026</span>. Hover or tap a chart for exact values.</div></footer>
 <div id="tip" hidden></div>
 
 <script>
@@ -464,6 +464,7 @@ document.querySelectorAll(".source[data-src]").forEach(s => {
 const pTop = DATA.prov_top[0], pBot = DATA.prov_bottom.at(-1);
 document.getElementById("prov-note").innerHTML = `By province, the spread is wider still: <b>${pTop[0]}</b> ${fmt(pTop[1], 1)}% against <b>${pBot[0]}</b> ${fmt(pBot[1], 1)}% in 2025. Provincial rates come from a sample survey, so they can move a lot from one year to the next.`;
 
+if (DATA.updated) { const u = new Date(DATA.updated + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }); document.querySelectorAll(".updated").forEach(e => e.textContent = u); }
 renderAll();
 let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(renderAll, 150); });
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", renderAll);

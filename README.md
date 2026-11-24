@@ -22,7 +22,7 @@ Some portal datasets name individuals (members of parliament, startup founders).
 
 ```bash
 pip install -r requirements.txt
-python scripts/01_download.py datasets        # whole portal, ~800 MB
+python scripts/01_download.py datasets scripts/datasets.txt   # only the datasets the site uses (omit the list to fetch the whole portal, ~800 MB)
 python scripts/02_extract.py datasets         # water, jobs, prices, health, internet, roads, courts, integrity -> raw.json
 python scripts/02b_extract_more.py datasets   # growth, credit, funds, pensions, startups, parliament -> raw2.json
 python scripts/02c_extract_services.py datasets  # health centres, hospitals, schools by region -> raw3.json
@@ -35,9 +35,17 @@ python scripts/07_check_claims.py             # every number quoted in the text 
 
 Run the steps from the repository root. The downloader skips files it already has.
 
-## Monthly refresh
+## Automatic data sync
 
-`.github/workflows/refresh.yml` runs on the 3rd of each month (or on demand from the Actions tab). It downloads the portal, rebuilds every figure and compares them with the published ones. It never changes the live site. If anything changed, it runs the claims check, pushes a `data-refresh-YYYY-MM` branch and opens an issue listing what moved, so the headline text can be checked before merging.
+`.github/workflows/sync.yml` runs every hour (and on demand from the Actions tab):
+
+1. `scripts/00_check_updates.py` asks data.gov.ma for the last-modified time of the datasets listed in `scripts/datasets.txt`. This takes a few API calls and stops here if nothing changed.
+2. If something changed, it downloads only those datasets, rebuilds every figure and checks that every chart is on the page.
+3. `scripts/07_check_claims.py` checks the numbers quoted in the text against the new data.
+   - All quoted numbers still hold: the new figures are published straight to the live site.
+   - A quoted number no longer holds: the job pushes a `data-review-YYYYMMDD` branch and opens an issue labelled `data-review` listing what changed. The live site keeps the reviewed version until the text is updated and the branch merged.
+
+The portal has no notification feed, so changes reach the site within about an hour of being published there.
 
 ## Known caveats
 

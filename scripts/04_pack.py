@@ -46,6 +46,8 @@ out["services_totals"] = {k: sum(s3[k].values()) for k in ["hospitals", "primary
 out["src"].update({"primary_care": src("ministere-de-la-sante/repartition-des-etablissements-de-soins-de-sante-primaire*"),
                    "hospitals": src("ministere-de-la-sante/la-liste-des-hopitaux"),
                    "schools": src("ministere-de-l-education-nationale-et-de-la-formation-professionnelle/liste-des-etablissements-publics-primaire")})
+import datetime
+out["updated"] = os.environ.get("DATA_DATE") or datetime.date.today().isoformat()
 os.makedirs("data", exist_ok=True)
 json.dump(out, open("data/morocco_by_the_numbers.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 js = json.dumps(out, ensure_ascii=False, separators=(",", ":"))

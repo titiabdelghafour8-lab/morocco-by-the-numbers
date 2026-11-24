@@ -6,7 +6,7 @@ import json, sys
 old, new = (json.load(open(p, encoding="utf-8")) for p in sys.argv[1:3])
 lines = []
 for k, v in new.items():
-    if k == "src" or old.get(k) == v:
+    if k in ("src", "updated") or old.get(k) == v:
         continue
     if isinstance(v, list) and v and isinstance(old.get(k), list) and old[k]:
         lines.append(f"- **{k}**: last point {old[k][-1]} → {v[-1]} ({len(v) - len(old[k]):+d} points)")
