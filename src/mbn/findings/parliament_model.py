@@ -83,13 +83,13 @@ def fit_topics(docs: list[str], emb: np.ndarray, seed: int = SEED, n_topics: int
     from bertopic import BERTopic
     from hdbscan import HDBSCAN
     from sklearn.feature_extraction.text import CountVectorizer
-    from umap import UMAP  # type: ignore[attr-defined]
+    from umap import UMAP  # type: ignore[attr-defined,unused-ignore]
 
     _seed(seed)
     # c-TF-IDF runs on one joined document per topic, so a word only needs to occur in one topic
     vec = CountVectorizer(tokenizer=arabic.tokens, lowercase=False, min_df=1, token_pattern=None)
     model = BERTopic(
-        umap_model=UMAP(  # type: ignore[no-untyped-call]
+        umap_model=UMAP(  # type: ignore[no-untyped-call,unused-ignore]
             n_neighbors=15, n_components=5, min_dist=0.0, metric="cosine", random_state=seed, n_jobs=1
         ),
         hdbscan_model=HDBSCAN(min_cluster_size=MIN_CLUSTER, min_samples=10, prediction_data=True),
