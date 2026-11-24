@@ -26,3 +26,9 @@ liste-des-etablissements-publics-primaire
 liste-de-etablissements-publics-collegial
 liste-des-etablissements-publics-qualifiants
 indice-de-perception-de-la-corruption*
+ressources-des-regimes-amo*
+depenses-des-regimes-amo*
+cotisations-des-regimes-de-retraite*
+prestations-des-regimes-de-retraite*
+reserves-des-regimes-de-retraite*
+statistiques-des-immatriculations-et-permis-de-conduire-delivres*

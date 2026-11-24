@@ -1,4 +1,5 @@
 {
+ "cotisations-des-regimes-de-retraite": "2026-08-24T17:15:54",
  "creances-sur-l-economie-dec-2001-a-sept-2023": "2026-11-02T08:52:40",
  "data_i3287": "2026-10-30T10:55:08",
  "data_i4166": "2026-10-30T10:55:18",
@@ -7,6 +8,7 @@
  "data_i4276": "2026-10-30T10:55:36",
  "data_imt_txch_02": "2026-10-30T10:55:39",
  "debit-moyen-journalier-de-la-station-ait-melloul-1970-2024": "2025-04-17T09:13:15",
+ "depenses-des-regimes-amo": "2026-08-27T15:19:01",
  "donnees-sur-les-startups": "2025-01-03T08:08:26",
  "evolution-des-affaires-au-cours-du-quinquennat-2017-2021": "2022-03-22T10:02:48",
  "evolution-des-affaires-au-cours-du-quinquennat-2018-2022": "2026-07-07T09:40:44",
@@ -26,9 +28,12 @@
  "parc-de-l-internet-2006-2022": "2026-11-13T15:34:38",
  "parc-de-la-telephonie-mobile-2006-2022": "2026-11-13T15:38:03",
  "pluie-journaliere-du-barrage-y-b-tachfine-1967-2024": "2025-04-17T14:26:01",
+ "prestations-des-regimes-de-retraite": "2026-08-24T17:17:36",
  "production-vegetale-2010-2022": "2023-07-18T12:03:39",
  "rapport-demographique-des-regimes-de-base": "2026-08-24T17:14:11",
  "repartition-des-etablissements-de-soins-de-sante-primaire-par-categorie-2020": "2026-10-29T16:52:48",
+ "reserves-des-regimes-de-retraite": "2026-08-24T17:19:03",
+ "ressources-des-regimes-amo": "2026-08-24T15:49:57",
  "stat-hebdo-opcvm-2016": "2025-01-16T08:15:51",
  "stat-hebdo-opcvm-2017": "2025-01-16T08:16:10",
  "stat-hebdo-opcvm-2018": "2025-01-16T08:16:29",
@@ -44,5 +49,8 @@
  "statistiques-des-accidents-de-la-circulation-routiere-2023": "2025-05-26T10:16:56",
  "statistiques-des-accidents-de-la-circulation-routiere-2024": "2025-09-26T09:50:01",
  "statistiques-des-accidents-de-la-circulation-routiere-de-l-annee-2022": "2025-05-26T10:16:38",
+ "statistiques-des-immatriculations-et-permis-de-conduire-delivres-2021": "2025-05-26T10:18:17",
+ "statistiques-des-immatriculations-et-permis-de-conduire-delivres-2022": "2025-05-26T10:18:32",
+ "statistiques-des-immatriculations-et-permis-de-conduire-delivres-2023": "2025-05-26T10:18:57",
  "taux-de-couverture-de-la-population-marocaine-par-l-amo": "2026-08-24T15:45:36"
 }

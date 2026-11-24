@@ -28,7 +28,7 @@ out = {
   "corr": src("l-instance-nationale*/indice-de-perception*"),
  }}
 s2 = json.load(open("site_data2.json", encoding="utf-8"))
-for k in ["gdp_growth", "credit", "funds", "pension_ratio", "startup_city", "startup_n", "parl_themes", "parl_total", "parl_n"]:
+for k in ["gdp_growth", "credit", "funds", "pension_ratio", "startup_city", "startup_n", "parl_themes", "parl_total", "parl_n", "amo_finance", "pension_money", "vehicles"]:
     out[k] = s2[k]
 out["credit"] = [[round(x, 3), v] for x, v in out["credit"]]; out["funds"] = [[round(x, 3), v] for x, v in out["funds"]]
 out["src"].update({
@@ -38,6 +38,12 @@ out["src"].update({
   "startups": src("agence-de-developpement-du-digital/donnees-sur-les-startups"),
   "pensions": src("autorite-de-controle-des-assurances-et-de-la-prevoyance-sociale/rapport-demographique*"),
   "parliament": src("parlement/liste-des-questions-ecrites-de-la-session-d-avril"),
+  "amo_in": src("autorite-de-controle-des-assurances-et-de-la-prevoyance-sociale/ressources-des-regimes-amo"),
+  "amo_out": src("autorite-de-controle-des-assurances-et-de-la-prevoyance-sociale/depenses-des-regimes-amo"),
+  "pen_in": src("autorite-de-controle-des-assurances-et-de-la-prevoyance-sociale/cotisations-des-regimes-de-retraite"),
+  "pen_out": src("autorite-de-controle-des-assurances-et-de-la-prevoyance-sociale/prestations-des-regimes-de-retraite"),
+  "pen_res": src("autorite-de-controle-des-assurances-et-de-la-prevoyance-sociale/reserves-des-regimes-de-retraite"),
+  "vehicles": sorted(glob.glob(os.path.join(D, "narsa/statistiques-des-immatriculations-et-permis-de-conduire-delivres*")))[-1:] and src(os.path.relpath(sorted(glob.glob(os.path.join(D, "narsa/statistiques-des-immatriculations-et-permis-de-conduire-delivres*")))[-1], D)),
 })
 s3 = json.load(open("raw3.json", encoding="utf-8")); P = s3["pop"]
 out["services"] = sorted([[r, round(s3["primary_care"].get(r, 0) / P[r] * 1e5, 1), round(s3["hospitals"].get(r, 0) / P[r] * 1e6, 1),

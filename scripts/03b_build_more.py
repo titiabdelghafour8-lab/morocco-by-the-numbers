@@ -33,6 +33,10 @@ for name, n in r["parl_ministries"].items():
     else: unmapped += n
 o["parl_n"] = r["parl_n"]; o["parl_total"] = sum(r["parl_ministries"].values()); o["parl_unmapped"] = unmapped
 o["parl_years"] = r["parl_years"]; o["parl_themes"] = [[t, n] for t, n in cnt.most_common()]
+pairs = lambda d: sorted([int(k), round(v / 1000, 2)] for k, v in d.items())  # million -> billion dirhams
+o["amo_finance"] = {k: pairs(v) for k, v in r["amo_finance"].items()}
+o["pension_money"] = {k: pairs(v) for k, v in r["pension_money"].items()}
+o["vehicles"] = {k: sorted([int(y), round(v)] for y, v in d.items()) for k, d in r["vehicles"].items()}
 json.dump(o, open("site_data2.json", "w", encoding="utf-8"), ensure_ascii=False)
 print("parliament", o["parl_total"], o["parl_n"], "unmapped", unmapped, o["parl_themes"][:6])
 print("funds", o["funds"][0], o["funds"][-1]); print("pension", o["pension_ratio"][-1]); print("startups", o["startup_city"])

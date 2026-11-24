@@ -44,6 +44,33 @@ for f in g("ammc/stat-hebdo-opcvm-*/*.xls*"):
     if tot: funds.append([d, round(tot / 1e9, 1)])
 o["funds"] = sorted(funds); o["funds_files"] = len(g("ammc/stat-hebdo-opcvm-*/*.xls*"))
 
+# ACAPS year-by-row tables: {row label: {year: value}} in million dirhams
+def acaps(pattern):
+    df = pd.read_excel(g("autorite-de-controle-des-assurances-et-de-la-prevoyance-sociale/" + pattern)[0], header=None)
+    years = [int(y) if pd.notna(y) else None for y in df.iloc[0, 1:]]
+    out = {}
+    for _, r in df.iloc[1:].iterrows():
+        lab = str(r.iloc[0]).strip()
+        if lab and lab != "nan":
+            out[lab] = {y: float(v) for y, v in zip(years, r.iloc[1:]) if y and pd.notna(v) and isinstance(v, (int, float))}
+    return out
+amo_in, amo_out = acaps("ressources-des-regimes-amo/*.xlsx"), acaps("depenses-des-regimes-amo/*.xlsx")
+o["amo_finance"] = {"resources": amo_in["TOTAL"], "expenses": amo_out["TOTAL"],
+                    "contributions": amo_in["Cotisations"], "benefits_paid": amo_out["Prestations et frais payés"]}
+o["pension_money"] = {"contributions": acaps("cotisations-des-regimes-de-retraite/*.xlsx")["Régimes de base"],
+                      "benefits": acaps("prestations-des-regimes-de-retraite/*.xlsx")["Régimes de base"],
+                      "reserves": acaps("reserves-des-regimes-de-retraite/*.xlsx")["Régimes de base"]}
+
+# Vehicles in circulation (NARSA, latest yearly file, sheet "3-4")
+vf = sorted(g("narsa/statistiques-des-immatriculations-et-permis-de-conduire-delivres*/*.xls*"))[-1]
+df = pd.read_excel(vf, sheet_name="3-4", header=None)
+hdr = next(i for i in range(len(df)) if str(df.iloc[i, 0]).strip().startswith("Au 31"))
+yrs = [int(float(y)) for y in df.iloc[hdr, 1:7] if pd.notna(y)]
+veh = {}
+for _, r in df.iloc[hdr + 1: hdr + 5].iterrows():
+    veh[str(r.iloc[0]).strip()] = {y: float(v) for y, v in zip(yrs, r.iloc[1:1 + len(yrs)])}
+o["vehicles"] = veh
+
 # Startups (company-level, aggregated by city and sector only)
 df = pd.read_excel(g("agence-de-developpement-du-digital/donnees-sur-les-startups/bdd-startups-add_2024.xlsx")[0])
 df.columns = [c.strip() for c in df.columns]

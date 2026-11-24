@@ -54,6 +54,25 @@ claim("Health centres per 100k, Casablanca-Settat", svc["Casablanca-Settat"][1],
 claim("Health centres per 100k, Guelmim-Oued Noun", svc["Guelmim-Oued Noun"][1], 22, 0.5)
 claim("Health centres and dispensaries (total)", d["services_totals"]["primary_care"], 3086, 0)
 
+af = {k: dict(v) for k, v in d["amo_finance"].items()}
+claim("AMO benefits paid 2012 (bn)", af["benefits_paid"][2012], 5.1, 0.05)
+claim("AMO benefits paid 2024 (bn)", af["benefits_paid"][2024], 27.2, 0.05)
+claim("AMO income 2024 (bn)", af["resources"][2024], 46.1, 0.05)
+claim("AMO spending 2024 (bn)", af["expenses"][2024], 40.9, 0.05)
+claim("Years AMO spending exceeded income", sum(af["expenses"][y] > af["resources"][y] for y in af["resources"]), 1, 0)
+pm = {k: dict(v) for k, v in d["pension_money"].items()}
+claim("Pension contributions 2024 (bn)", pm["contributions"][2024], 73.0, 0.05)
+claim("Pensions paid 2024 (bn)", pm["benefits"][2024], 78.7, 0.05)
+claim("First year of a run of deficits to today", min(y for y in pm["benefits"] if all(pm["benefits"][z] > pm["contributions"][z] for z in pm["benefits"] if z >= y)), 2017, 0)
+claim("Pension reserves peak (bn)", max(pm["reserves"].values()), 270.9, 0.05)
+claim("Pension reserves 2024 (bn)", pm["reserves"][2024], 264.9, 0.05)
+vh = {k: dict(v) for k, v in d["vehicles"].items()}
+claim("Vehicles 2023 (millions)", vh["Total"][2023] / 1e6, 4.5, 0.05)
+claim("Vehicles 2012 (millions)", vh["Total"][2012] / 1e6, 3.1, 0.05)
+claim("Motorcycles 2023", vh["Motocyclettes"][2023], 312000, 500)
+claim("Deaths per 10,000 vehicles 2021", roads[2021][1] / vh["Total"][2021] * 1e4, 9.1, 0.05)
+claim("Deaths per 10,000 vehicles 2023", roads[2023][1] / vh["Total"][2023] * 1e4, 8.5, 0.05)
+
 failed = results.count(False)
 print(f"\n{len(results) - failed}/{len(results)} claims hold")
 sys.exit(1 if failed else 0)

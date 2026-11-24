@@ -76,7 +76,7 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
 
 <header class="intro"><div class="wrap">
   <h1>Morocco by the Numbers</h1>
-  <p class="sub">Eighteen findings from the government's own open data, grouped into land and water, work, the economy, daily life and the state.</p>
+  <p class="sub">Twenty-one findings from the government's own open data, grouped into land and water, work, the economy, daily life and the state.</p>
 </div></header>
 
 <nav class="chapters" aria-label="Sections"><div class="wrap">
@@ -194,6 +194,15 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <div class="chart" id="c-amo"></div>
   <span class="source" data-src="amo"></span>
 </section>
+<section class="ch" id="amo-money">
+  <span class="topic">Health insurance</span>
+  <h2>Health insurance pays out five times more than in 2012, and still takes in more than it spends</h2>
+  <p>The mandatory health insurance schemes (AMO) paid <b>27.2 billion</b> dirhams in benefits in 2024, against 5.1 billion in 2012. Their total income was <b>46.1 billion</b> and their total spending <b>40.9 billion</b>. 2021 is the only year in which spending was higher than income.</p>
+  <div class="legend"><span><i style="background:var(--s1)"></i>Income</span><span><i style="background:var(--s2)"></i>Spending</span></div>
+  <div class="chart" id="c-amo-money"></div>
+  <p class="note">Income includes contributions plus investment and other revenue; spending includes benefits, running costs and provisions. Billions of dirhams, current prices.</p>
+  <span class="source" data-src="amo_in,amo_out"></span>
+</section>
 <section class="ch" id="services">
   <span class="topic">Public services</span>
   <h2>Casablanca-Settat has the fewest public health centres per resident</h2>
@@ -212,6 +221,15 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <div class="chart" id="c-pensions"></div>
   <span class="source" data-src="pensions"></span>
 </section>
+<section class="ch" id="pension-money">
+  <span class="topic">Pensions</span>
+  <h2>Since 2017, the basic pension schemes have paid out more than they collect</h2>
+  <p>In 2024 the basic schemes collected <b>73.0 billion</b> dirhams in contributions and paid <b>78.7 billion</b> in pensions. Their reserves peaked at 270.9 billion in 2021 and stood at <b>264.9 billion</b> in 2024.</p>
+  <div class="legend"><span><i style="background:var(--s1)"></i>Contributions collected</span><span><i style="background:var(--s2)"></i>Pensions paid</span></div>
+  <div class="chart" id="c-pension-money"></div>
+  <p class="note">The basic schemes are the mandatory public and private pension schemes, added together. Reserves also earn investment income, which is not shown here. Billions of dirhams, current prices.</p>
+  <span class="source" data-src="pen_in,pen_out,pen_res"></span>
+</section>
 <section class="ch" id="internet">
   <span class="topic">Connectivity</span>
   <h2>There are now more internet subscriptions than people</h2>
@@ -227,6 +245,14 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <div class="chart-title">People killed on Moroccan roads</div>
   <div class="chart" id="c-roads"></div>
   <span class="source" data-src="roads"></span>
+</section>
+<section class="ch" id="vehicles">
+  <span class="topic">Road safety</span>
+  <h2>Vehicles are multiplying faster than road deaths</h2>
+  <p>There were <b>4.5 million</b> vehicles on Moroccan roads at the end of 2023, up from 3.1 million in 2012. Motorcycles grew almost ninefold, from 36,000 to <b>312,000</b>. Deaths per 10,000 vehicles fell from <b>9.1</b> in 2021 to <b>8.5</b> in 2023.</p>
+  <div class="chart-title">Vehicles in circulation at the end of each year, millions</div>
+  <div class="chart" id="c-vehicles"></div>
+  <span class="source" data-src="vehicles,roads"></span>
 </section>
 </div>
 
@@ -464,6 +490,10 @@ function renderAll() {
   hbar("c-startups", DATA.startup_city.map(r => [r[0].replace(/\b\w/g, ch => ch.toUpperCase()), r[1]]), { name: "Startups", fmt: v => fmt(v) });
   columnChart("c-pensions", { name: "Contributors per pensioner", data: DATA.pension_ratio.map(d => [d[0], d[1], s1]), yFmt: (v, e) => fmt(v, e ? 2 : 0), labelValues: true, h: 220 });
   hbar("c-services", DATA.services.map(r => [REGION_SHORT[r[0]] || r[0], r[1]]), { name: "Centres and dispensaries per 100,000 people", fmt: (v, e) => fmt(v, 1) });
+  const pair = s => s.map(d => [d[0], d[1]]);
+  lineChart("c-amo-money", { series: [{ name: "Income", color: s1, data: pair(DATA.amo_finance.resources) }, { name: "Spending", color: s2, data: pair(DATA.amo_finance.expenses), dy: 12 }], yFmt: (v, e) => fmt(v, e ? 1 : 0), unit: " bn", xFmt: x => String(x), xTicks: range(2012, 2024, 2), endLabels: true });
+  lineChart("c-pension-money", { series: [{ name: "Pensions paid", color: s2, data: pair(DATA.pension_money.benefits) }, { name: "Contributions collected", color: s1, data: pair(DATA.pension_money.contributions), dy: 12 }], yFmt: (v, e) => fmt(v, e ? 1 : 0), unit: " bn", xFmt: x => String(x), xTicks: range(2012, 2024, 2), endLabels: true, yMin: 0 });
+  columnChart("c-vehicles", { name: "Vehicles", data: DATA.vehicles["Total"].filter(d => d[0] >= 2019).map(d => [d[0], d[1] / 1e6, s1, [{ n: "Cars", v: fmt(DATA.vehicles["Voitures de tourisme"].find(x => x[0] === d[0])[1]) }, { n: "Utility vehicles", v: fmt(DATA.vehicles["Véhicules utilitaires"].find(x => x[0] === d[0])[1]) }, { n: "Motorcycles", v: fmt(DATA.vehicles["Motocyclettes"].find(x => x[0] === d[0])[1]) }]]), yFmt: (v, e) => fmt(v, e ? 2 : 1), unit: " m", labelValues: true, h: 220 });
   hbar("c-parl", DATA.parl_themes.slice(0, 10), { name: "Questions", fmt: v => fmt(v) });
 }
 

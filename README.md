@@ -1,6 +1,6 @@
 # Morocco by the Numbers
 
-Eighteen findings about Morocco, drawn from the government's open data portal [data.gov.ma](https://www.data.gov.ma) and checked against the original files.
+Twenty-one findings about Morocco, drawn from the government's open data portal [data.gov.ma](https://www.data.gov.ma) and checked against the original files.
 
 **Live site:** https://titiabdelghafour8-lab.github.io/morocco-by-the-numbers/
 
@@ -11,7 +11,7 @@ Eighteen findings about Morocco, drawn from the government's open data portal [d
 | Land and water | The Souss river has almost stopped flowing · A drought year can cut the cereal harvest by two-thirds |
 | Work | Youth unemployment at 37% · Graduates six times more likely to be unemployed than people with no diploma · Unemployment by region and province |
 | Economy | GDP growth · Bank lending at its fastest since 2010 · Food inflation · Investment funds up 77% since 2020 · Startups concentrated in Casablanca and Rabat |
-| Living | Health insurance coverage · Public health centres per resident · Pension contributors per pensioner · Internet subscriptions · Road deaths |
+| Living | Health insurance coverage and finances · Public health centres per resident · Pension contributors per pensioner · Pension schemes paying out more than they collect · Internet subscriptions · Road deaths · Vehicles on the road |
 | State | Appeal court caseload · Corruption Perceptions Index · Parliamentary questions by policy area |
 
 Every chart links to the dataset it comes from. The About section at the bottom of the site explains sources, licence, personal data and the corrections made during the data audit.
