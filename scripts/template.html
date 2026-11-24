@@ -70,7 +70,7 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
 
 <header class="intro"><div class="wrap">
   <h1>Morocco by the Numbers</h1>
-  <p class="sub">Seventeen findings from the government's own open data, grouped into land and water, work, the economy, daily life and the state.</p>
+  <p class="sub">Eighteen findings from the government's own open data, grouped into land and water, work, the economy, daily life and the state.</p>
 </div></header>
 
 <nav class="chapters" aria-label="Sections"><div class="wrap">
@@ -183,6 +183,16 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <div class="chart" id="c-amo"></div>
   <span class="source" data-src="amo"></span>
 </section>
+<section class="ch" id="services">
+  <span class="topic">Public services</span>
+  <h2>Casablanca-Settat has the fewest public health centres per resident</h2>
+  <p>Morocco has <b>3,248</b> public primary-care centres and <b>184</b> public hospitals. Per 100,000 people, Guelmim-Oued Noun has <b>23</b> centres; Casablanca-Settat, home to one Moroccan in five, has <b>5.3</b>. Hospitals follow the same pattern: <b>3.5</b> per million people in Casablanca-Settat against <b>13.3</b> in Laâyoune-Sakia El Hamra.</p>
+  <div class="chart-title">Public primary-care centres per 100,000 people, 2025</div>
+  <div class="chart" id="c-services"></div>
+  <p class="note">These are counts of facilities, not of beds, staff or opening hours. City facilities tend to be larger, and private clinics, which are concentrated in big cities, are not included. Public schools show the same pattern. Population is from HCP's 2024 census.</p>
+  <span class="source" data-src="primary_care,hospitals,schools"></span>
+  <span class="source">Population: <a href="https://www.hcp.ma/Population-legale-du-Royaume-du-Maroc-repartie-par-regions-provinces-et-prefectures-et-communes-selon-les-resultats-du_a3974.html" target="_blank" rel="noopener">Population légale, RGPH 2024</a> (HCP)</span>
+</section>
 <section class="ch" id="pensions">
   <span class="topic">Pensions</span>
   <h2>Fewer workers now pay in for each pensioner</h2>
@@ -242,7 +252,7 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <div class="group-head"><h2 class="gh">About this page</h2></div>
   <section class="ch about">
     <h3>Where the numbers come from</h3>
-    <p>Every figure comes from <a href="https://www.data.gov.ma" target="_blank" rel="noopener">data.gov.ma</a>, Morocco's official open-data portal, downloaded on 23 November 2026. Each chart links to the dataset it uses. The scripts that turn the original spreadsheets into these charts are public in the <a href="https://github.com/titiabdelghafour8-lab/morocco-by-the-numbers" target="_blank" rel="noopener">GitHub repository</a>, so every number can be checked and rebuilt.</p>
+    <p>Every figure comes from <a href="https://www.data.gov.ma" target="_blank" rel="noopener">data.gov.ma</a>, Morocco's official open-data portal, downloaded on 23 November 2026. The one exception is regional population, taken from HCP's published 2024 census results to compute per-resident rates. Each chart links to the dataset it uses. The scripts that turn the original spreadsheets into these charts are public in the <a href="https://github.com/titiabdelghafour8-lab/morocco-by-the-numbers" target="_blank" rel="noopener">GitHub repository</a>, so every number can be checked and rebuilt.</p>
     <h3>Licence</h3>
     <p>The data is published under the <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">Open Database License (ODbL)</a>. The processed figures behind this page are shared under the same licence in the repository's <code>data</code> folder. The page and scripts are under the MIT licence. Please credit data.gov.ma and the original publisher when you reuse the data.</p>
     <h3>Personal data</h3>
@@ -398,7 +408,7 @@ function hbar(id, rows, o) {
   const max = Math.max(...rows.map(r => r[1])), xs = v => f.x0 + v / max * (f.x1 - f.x0), c = css("--s1");
   rows.forEach((r, i) => {
     const y = f.y1 + i * rowH, h = rowH - 10, w = Math.max(2, xs(r[1]) - f.x0), rr = Math.min(4, w / 2);
-    el("text", { x: f.x0 - 10, y: y + h / 2 + 4, "text-anchor": "end", class: "lbl" }, f.svg).textContent = r[0];
+    const maxc = narrow ? 19 : 42; el("text", { x: f.x0 - 10, y: y + h / 2 + 4, "text-anchor": "end", class: "lbl" }, f.svg).textContent = r[0].length > maxc ? r[0].slice(0, maxc - 1) + "…" : r[0];
     el("path", { d: `M${f.x0},${y}H${f.x0 + w - rr}Q${f.x0 + w},${y} ${f.x0 + w},${y + rr}V${y + h - rr}Q${f.x0 + w},${y + h} ${f.x0 + w - rr},${y + h}H${f.x0}Z`, fill: c }, f.svg);
     el("text", { x: f.x0 + w + 6, y: y + h / 2 + 4, class: "val" }, f.svg).textContent = o.fmt(r[1]);
     const hit = el("rect", { x: 0, y, width: f.W, height: rowH, fill: "transparent" }, f.svg);
@@ -412,6 +422,7 @@ const qLabel = x => `Q${Math.round((x % 1) * 4) + 1} ${Math.floor(x)}`;
 const mLabel = x => `${MONTHS[Math.round((x % 1) * 12)]} ${Math.floor(x)}`;
 const pct = (v, exact) => fmt(v, exact ? 1 : 0) + "%";
 const range = (a, b, s) => { const r = []; for (let v = a; v <= b; v += s) r.push(v); return r; };
+const REGION_SHORT = {};
 const REGION_NAMES = { "Casablanca-settat": "Casablanca-Settat", "Marrakech-safi": "Marrakech-Safi", "Régions du Sud": "Southern regions" };
 
 function renderAll() {
@@ -432,11 +443,12 @@ function renderAll() {
   lineChart("c-funds", { series: [{ name: "Net assets", color: s1, data: DATA.funds }], yFmt: (v, e) => fmt(v, e ? 1 : 0), unit: " bn", xFmt: mLabel, xTicks: range(2020, 2026, 1), area: true, endLabels: true });
   hbar("c-startups", DATA.startup_city.map(r => [r[0].replace(/\b\w/g, ch => ch.toUpperCase()), r[1]]), { name: "Startups", fmt: v => fmt(v) });
   columnChart("c-pensions", { name: "Contributors per pensioner", data: DATA.pension_ratio.map(d => [d[0], d[1], s1]), yFmt: (v, e) => fmt(v, e ? 2 : 0), labelValues: true, h: 220 });
+  hbar("c-services", DATA.services.map(r => [REGION_SHORT[r[0]] || r[0], r[1]]), { name: "Centres per 100,000 people", fmt: (v, e) => fmt(v, 1) });
   hbar("c-parl", DATA.parl_themes.slice(0, 10), { name: "Questions", fmt: v => fmt(v) });
 }
 
 // Sources and province note
-document.querySelectorAll(".source").forEach(s => {
+document.querySelectorAll(".source[data-src]").forEach(s => {
   s.innerHTML = "Source: " + s.dataset.src.split(",").map(k => { const m = DATA.src[k]; return `<a href="${m.url}" target="_blank" rel="noopener">${m.title}</a> (${m.org})`; }).join(" · ");
 });
 const pTop = DATA.prov_top[0], pBot = DATA.prov_bottom.at(-1);

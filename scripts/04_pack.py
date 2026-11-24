@@ -39,6 +39,13 @@ out["src"].update({
   "pensions": src("autorite-de-controle-des-assurances-et-de-la-prevoyance-sociale/rapport-demographique*"),
   "parliament": src("parlement/liste-des-questions-ecrites-de-la-session-d-avril"),
 })
+s3 = json.load(open("raw3.json", encoding="utf-8")); P = s3["pop"]
+out["services"] = sorted([[r, round(s3["primary_care"].get(r, 0) / P[r] * 1e5, 1), round(s3["hospitals"].get(r, 0) / P[r] * 1e6, 1),
+                           round(s3["schools_primary"].get(r, 0) / P[r] * 1e5, 1), P[r]] for r in P], key=lambda x: -x[1])
+out["services_totals"] = {k: sum(s3[k].values()) for k in ["hospitals", "primary_care", "schools_primary", "schools_middle", "schools_high"]}
+out["src"].update({"primary_care": src("ministere-de-la-sante/repartition-des-etablissements-de-soins-de-sante-primaire*"),
+                   "hospitals": src("ministere-de-la-sante/la-liste-des-hopitaux"),
+                   "schools": src("ministere-de-l-education-nationale-et-de-la-formation-professionnelle/liste-des-etablissements-publics-primaire")})
 os.makedirs("data", exist_ok=True)
 json.dump(out, open("data/morocco_by_the_numbers.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 js = json.dumps(out, ensure_ascii=False, separators=(",", ":"))
