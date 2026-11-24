@@ -36,6 +36,12 @@ a:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px }
 main .wrap { display: grid; gap: 0 }
 section.ch { padding-block: 44px; border-bottom: 1px solid var(--line); display: grid; gap: 14px; scroll-margin-top: 56px }
 section.ch:last-child { border-bottom: 0 }
+.group { scroll-margin-top: 48px }
+.group-head { padding-block: 40px 0 }
+.gh { font: 700 13px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--s1); margin: 0; padding-bottom: 10px; border-bottom: 2px solid var(--s1) }
+.about h3 { font: 600 16px var(--display); margin: 10px 0 0 }
+.about ul { margin: 0; padding-left: 20px; color: var(--muted); display: grid; gap: 6px; max-width: 62ch }
+.about a, .about code { color: var(--fg) }
 .topic { font: 500 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--faint) }
 h2 { font: 600 clamp(21px, 3.4vw, 26px)/1.2 var(--display); margin: 0; text-wrap: balance }
 .ch p { margin: 0; max-width: 62ch; color: var(--muted) }
@@ -64,15 +70,17 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
 
 <header class="intro"><div class="wrap">
   <h1>Morocco by the Numbers</h1>
-  <p class="sub">Eleven findings from the government's own open data: water, work, prices, health, connectivity, roads, courts and integrity.</p>
+  <p class="sub">Seventeen findings from the government's own open data, grouped into land and water, work, the economy, daily life and the state.</p>
 </div></header>
 
-<nav class="chapters" aria-label="Chapters"><div class="wrap">
-  <a href="#water">Water</a><a href="#harvest">Harvest</a><a href="#youth">Youth jobs</a><a href="#degrees">Degrees</a><a href="#regions">Regions</a><a href="#prices">Prices</a><a href="#health">Health cover</a><a href="#internet">Internet</a><a href="#roads">Roads</a><a href="#courts">Courts</a><a href="#integrity">Integrity</a>
+<nav class="chapters" aria-label="Sections"><div class="wrap">
+  <a href="#land">Land and water</a><a href="#work">Work</a><a href="#economy">Economy</a><a href="#living">Living</a><a href="#state">State</a><a href="#about">About</a>
 </div></nav>
 
 <main><div class="wrap">
 
+<div class="group" id="land">
+  <div class="group-head"><h2 class="gh">Land and water</h2></div>
 <section class="ch" id="water">
   <span class="topic">Water</span>
   <h2>The Souss river has almost stopped flowing</h2>
@@ -81,7 +89,6 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <div class="chart" id="c-flow"></div>
   <span class="source" data-src="flow,rain"></span>
 </section>
-
 <section class="ch" id="harvest">
   <span class="topic">Agriculture</span>
   <h2>A drought year can cut the cereal harvest by two-thirds</h2>
@@ -90,7 +97,10 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <div class="chart" id="c-cereals"></div>
   <span class="source" data-src="cereals"></span>
 </section>
+</div>
 
+<div class="group" id="work">
+  <div class="group-head"><h2 class="gh">Work</h2></div>
 <section class="ch" id="youth">
   <span class="topic">Jobs</span>
   <h2>More than a third of young people looking for work can't find it</h2>
@@ -100,7 +110,6 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <div class="chart" id="c-youth"></div>
   <span class="source" data-src="u_age"></span>
 </section>
-
 <section class="ch" id="degrees">
   <span class="topic">Jobs</span>
   <h2>Graduates are six times more likely to be unemployed</h2>
@@ -109,7 +118,6 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <div class="chart" id="c-degrees"></div>
   <span class="source" data-src="u_dip"></span>
 </section>
-
 <section class="ch" id="regions">
   <span class="topic">Regions</span>
   <h2>In the South, more than half of women in the labour force are unemployed</h2>
@@ -119,7 +127,26 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <p class="note" id="prov-note"></p>
   <span class="source" data-src="region,prov"></span>
 </section>
+</div>
 
+<div class="group" id="economy">
+  <div class="group-head"><h2 class="gh">Economy</h2></div>
+<section class="ch" id="gdp">
+  <span class="topic">Growth</span>
+  <h2>The economy is growing 4–5% a year, after a 14% drop in spring 2020</h2>
+  <p>Real GDP fell <b>14.1%</b> year on year in the second quarter of 2020, during the COVID-19 lockdown. Since 2024 growth has held between <b>3.6% and 5.8%</b>; it was <b>4.0%</b> in the second quarter of 2026.</p>
+  <div class="chart-title">Real GDP, change on the same quarter a year earlier (seasonally adjusted, chained prices)</div>
+  <div class="chart" id="c-gdp"></div>
+  <span class="source" data-src="gdp"></span>
+</section>
+<section class="ch" id="credit">
+  <span class="topic">Credit</span>
+  <h2>Bank lending is growing at its fastest pace since 2010</h2>
+  <p>Bank credit to the economy grew <b>11.0%</b> in the year to August 2026, to about <b>1.3 trillion dirhams</b>. Between 2019 and 2025 it grew 4.8% a year on average.</p>
+  <div class="chart-title">Bank credit to the economy, change on a year earlier</div>
+  <div class="chart" id="c-credit"></div>
+  <span class="source" data-src="credit"></span>
+</section>
 <section class="ch" id="prices">
   <span class="topic">Prices</span>
   <h2>Food inflation peaked at 21%. Food prices are now falling</h2>
@@ -129,7 +156,26 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <div class="chart" id="c-prices"></div>
   <span class="source" data-src="cpi"></span>
 </section>
+<section class="ch" id="funds">
+  <span class="topic">Savings</span>
+  <h2>Money held in investment funds has grown 77% since 2020</h2>
+  <p>Net assets of Moroccan mutual funds (OPCVM) rose from <b>469 billion</b> dirhams in January 2020 to <b>833 billion</b> in November 2026.</p>
+  <div class="chart-title">Net assets of mutual funds, billion dirhams (last weekly report of each month)</div>
+  <div class="chart" id="c-funds"></div>
+  <span class="source" data-src="funds"></span>
+</section>
+<section class="ch" id="startups">
+  <span class="topic">Startups</span>
+  <h2>Seven in ten listed startups are in Casablanca or Rabat</h2>
+  <p>Of the <b>1,028</b> startups in the Digital Development Agency's 2024 database, <b>554</b> are in Casablanca and <b>163</b> in Rabat. Every other city has fewer than 60.</p>
+  <div class="chart-title">Startups by city</div>
+  <div class="chart" id="c-startups"></div>
+  <span class="source" data-src="startups"></span>
+</section>
+</div>
 
+<div class="group" id="living">
+  <div class="group-head"><h2 class="gh">Living</h2></div>
 <section class="ch" id="health">
   <span class="topic">Health</span>
   <h2>Health insurance went from 1 in 5 Moroccans to 3 in 4</h2>
@@ -137,7 +183,14 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <div class="chart" id="c-amo"></div>
   <span class="source" data-src="amo"></span>
 </section>
-
+<section class="ch" id="pensions">
+  <span class="topic">Pensions</span>
+  <h2>Fewer workers now pay in for each pensioner</h2>
+  <p>In the basic pension schemes there were <b>6.6</b> contributors for each pensioner in 2012 and <b>4.8</b> in 2024. A falling ratio means each pension is backed by fewer contributions.</p>
+  <div class="chart-title">Contributors per pensioner, basic pension schemes</div>
+  <div class="chart" id="c-pensions"></div>
+  <span class="source" data-src="pensions"></span>
+</section>
 <section class="ch" id="internet">
   <span class="topic">Connectivity</span>
   <h2>There are now more internet subscriptions than people</h2>
@@ -146,7 +199,6 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <div class="chart" id="c-internet"></div>
   <span class="source" data-src="internet,mobile"></span>
 </section>
-
 <section class="ch" id="roads">
   <span class="topic">Road safety</span>
   <h2>Road deaths are climbing: 4,024 in 2024, about 11 a day</h2>
@@ -155,7 +207,10 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <div class="chart" id="c-roads"></div>
   <span class="source" data-src="roads"></span>
 </section>
+</div>
 
+<div class="group" id="state">
+  <div class="group-head"><h2 class="gh">State</h2></div>
 <section class="ch" id="courts">
   <span class="topic">Justice</span>
   <h2>Appeal courts receive 63% more cases than in 2021</h2>
@@ -164,7 +219,6 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <div class="chart" id="c-courts"></div>
   <span class="source" data-src="courts"></span>
 </section>
-
 <section class="ch" id="integrity">
   <span class="topic">Integrity</span>
   <h2>Morocco has dropped 26 places in the corruption ranking since 2018</h2>
@@ -173,6 +227,37 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
   <div class="chart" id="c-corr"></div>
   <span class="source" data-src="corr"></span>
 </section>
+<section class="ch" id="parliament">
+  <span class="topic">Parliament</span>
+  <h2>MPs asked 70,000 questions in seven years. Education, infrastructure and finance top the list</h2>
+  <p>Between 2017 and early 2024, members of the House of Representatives sent <b>41,451 written</b> and <b>28,601 oral</b> questions to the government. Schools and universities drew the most, followed by roads, transport and water.</p>
+  <div class="chart-title">Questions by policy area, 2017–2024</div>
+  <div class="chart" id="c-parl"></div>
+  <p class="note">Ministry names changed with the 2021 government, so questions are grouped into policy areas by the ministry they were addressed to. About 5% could not be grouped.</p>
+  <span class="source" data-src="parliament"></span>
+</section>
+</div>
+
+<div class="group" id="about">
+  <div class="group-head"><h2 class="gh">About this page</h2></div>
+  <section class="ch about">
+    <h3>Where the numbers come from</h3>
+    <p>Every figure comes from <a href="https://www.data.gov.ma" target="_blank" rel="noopener">data.gov.ma</a>, Morocco's official open-data portal, downloaded on 23 November 2026. Each chart links to the dataset it uses. The scripts that turn the original spreadsheets into these charts are public in the <a href="https://github.com/titiabdelghafour8-lab/morocco-by-the-numbers" target="_blank" rel="noopener">GitHub repository</a>, so every number can be checked and rebuilt.</p>
+    <h3>Licence</h3>
+    <p>The data is published under the <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">Open Database License (ODbL)</a>. The processed figures behind this page are shared under the same licence in the repository's <code>data</code> folder. The page and scripts are under the MIT licence. Please credit data.gov.ma and the original publisher when you reuse the data.</p>
+    <h3>Personal data</h3>
+    <p>Some datasets on the portal list individuals by name, such as members of parliament or company founders. This page only shows counts and totals. It does not republish names, contact details or any other information about individuals.</p>
+    <h3>How to read the findings</h3>
+    <ul>
+      <li>The figures describe what the data shows. They do not prove what caused it.</li>
+      <li>Where a series changes method, as HCP's employment survey did in 2017, the chart marks the break.</li>
+      <li>Some rates, such as inflation and growth, are calculated here from published indices and may differ by a few tenths from the official announcements.</li>
+      <li>This is an independent project. It is not produced or endorsed by the Moroccan government or by any publisher of the data.</li>
+    </ul>
+    <h3>Corrections</h3>
+    <p>Found a mistake? Open an issue on <a href="https://github.com/titiabdelghafour8-lab/morocco-by-the-numbers/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+  </section>
+</div>
 
 </div></main>
 <footer><div class="wrap">Built by <a href="https://github.com/titiabdelghafour8-lab" style="color:inherit">titiabdelghafour8-lab</a>. All figures come from data.gov.ma open data (ODbL licence), downloaded 23 November 2026. Hover or tap a chart for exact values.</div></footer>
@@ -304,6 +389,25 @@ function dotPlot(id, rows) {
   });
 }
 
+
+/* Horizontal bars: rows [label, value] */
+function hbar(id, rows, o) {
+  const narrow = document.getElementById(id).clientWidth < 520;
+  const rowH = 28, lw = narrow ? 150 : 250;
+  const f = frame(id, rows.length * rowH + 8, { l: lw, r: 64, t: 4, b: 4 });
+  const max = Math.max(...rows.map(r => r[1])), xs = v => f.x0 + v / max * (f.x1 - f.x0), c = css("--s1");
+  rows.forEach((r, i) => {
+    const y = f.y1 + i * rowH, h = rowH - 10, w = Math.max(2, xs(r[1]) - f.x0), rr = Math.min(4, w / 2);
+    el("text", { x: f.x0 - 10, y: y + h / 2 + 4, "text-anchor": "end", class: "lbl" }, f.svg).textContent = r[0];
+    el("path", { d: `M${f.x0},${y}H${f.x0 + w - rr}Q${f.x0 + w},${y} ${f.x0 + w},${y + rr}V${y + h - rr}Q${f.x0 + w},${y + h} ${f.x0 + w - rr},${y + h}H${f.x0}Z`, fill: c }, f.svg);
+    el("text", { x: f.x0 + w + 6, y: y + h / 2 + 4, class: "val" }, f.svg).textContent = o.fmt(r[1]);
+    const hit = el("rect", { x: 0, y, width: f.W, height: rowH, fill: "transparent" }, f.svg);
+    const show = evt => showTip(evt, r[0], [{ c, n: o.name, v: o.fmt(r[1], true) }]);
+    hit.addEventListener("mousemove", show); hit.addEventListener("touchstart", show, { passive: true });
+    hit.addEventListener("mouseleave", hideTip); hit.addEventListener("touchend", hideTip);
+  });
+}
+
 const qLabel = x => `Q${Math.round((x % 1) * 4) + 1} ${Math.floor(x)}`;
 const mLabel = x => `${MONTHS[Math.round((x % 1) * 12)]} ${Math.floor(x)}`;
 const pct = (v, exact) => fmt(v, exact ? 1 : 0) + "%";
@@ -323,6 +427,12 @@ function renderAll() {
   columnChart("c-roads", { name: "Deaths", data: DATA.roads.map(d => [d[0], d[1], s1, [{ n: "In towns", v: fmt(d[3]) }, { n: "Outside towns", v: fmt(d[4]) }, { n: "Accidents", v: fmt(d[2]) }]]), yFmt: v => fmt(v), labelValues: true, h: 220 });
   columnChart("c-courts", { name: "New cases", data: DATA.appeal.map(d => [d[0], d[1], s1]), yFmt: (v, e) => e ? fmt(v) : fmt(v / 1000) + "k", labelValues: true, h: 220 });
   lineChart("c-corr", { series: [{ name: "Score", color: s1, data: DATA.corr.map(d => [d[0], d[1]]) }], yFmt: v => fmt(v), xFmt: x => { const r = DATA.corr.find(d => d[0] === x); return `${x} · rank ${r[2]}`; }, xTicks: range(2012, 2024, 2), yMin: 30, yMax: 45, endLabels: true });
+  lineChart("c-gdp", { series: [{ name: "Real GDP growth", color: s1, data: DATA.gdp_growth }], yFmt: (v, e) => (v > 0 ? "+" : "") + fmt(v, e ? 1 : 0) + "%", xFmt: qLabel, xTicks: range(2016, 2026, 2), endLabels: true });
+  lineChart("c-credit", { series: [{ name: "Credit growth", color: s1, data: DATA.credit }], yFmt: (v, e) => (v > 0 ? "+" : "") + fmt(v, e ? 1 : 0) + "%", xFmt: mLabel, xTicks: range(2010, 2026, 2), endLabels: true });
+  lineChart("c-funds", { series: [{ name: "Net assets", color: s1, data: DATA.funds }], yFmt: (v, e) => fmt(v, e ? 1 : 0), unit: " bn", xFmt: mLabel, xTicks: range(2020, 2026, 1), area: true, endLabels: true });
+  hbar("c-startups", DATA.startup_city.map(r => [r[0].replace(/\b\w/g, ch => ch.toUpperCase()), r[1]]), { name: "Startups", fmt: v => fmt(v) });
+  columnChart("c-pensions", { name: "Contributors per pensioner", data: DATA.pension_ratio.map(d => [d[0], d[1], s1]), yFmt: (v, e) => fmt(v, e ? 2 : 0), labelValues: true, h: 220 });
+  hbar("c-parl", DATA.parl_themes.slice(0, 10), { name: "Questions", fmt: v => fmt(v) });
 }
 
 // Sources and province note
@@ -341,6 +451,6 @@ new MutationObserver(renderAll).observe(document.documentElement, { attributes: 
 const links = [...document.querySelectorAll("nav.chapters a")];
 const io = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) links.forEach(a => { const on = a.getAttribute("href") === "#" + e.target.id; a.classList.toggle("on", on); if (on) a.parentElement.scrollTo({ left: a.offsetLeft - 24, behavior: "smooth" }); });
-}), { rootMargin: "-45% 0px -50% 0px" });
-document.querySelectorAll("section.ch").forEach(s => io.observe(s));
+}), { rootMargin: "-30% 0px -65% 0px" });
+document.querySelectorAll(".group").forEach(s => io.observe(s));
 </script>

@@ -27,6 +27,20 @@ out = {
   "courts": src("ministere-de-la-justice-et-des-libertes/evolution-des-affaires-au-cours-du-quinquennat-2018-2022"),
   "corr": src("l-instance-nationale*/indice-de-perception*"),
  }}
+s2 = json.load(open("site_data2.json", encoding="utf-8"))
+for k in ["gdp_growth", "credit", "funds", "pension_ratio", "startup_city", "startup_n", "parl_themes", "parl_total", "parl_n"]:
+    out[k] = s2[k]
+out["credit"] = [[round(x, 3), v] for x, v in out["credit"]]; out["funds"] = [[round(x, 3), v] for x, v in out["funds"]]
+out["src"].update({
+  "gdp": src("haut-commissariat-au-plan/data_i4276"),
+  "credit": src("bank-al-maghrib/creances-sur-l-economie*"),
+  "funds": src("ammc/stat-hebdo-opcvm-2026"),
+  "startups": src("agence-de-developpement-du-digital/donnees-sur-les-startups"),
+  "pensions": src("autorite-de-controle-des-assurances-et-de-la-prevoyance-sociale/rapport-demographique*"),
+  "parliament": src("parlement/liste-des-questions-ecrites-de-la-session-d-avril"),
+})
+os.makedirs("data", exist_ok=True)
+json.dump(out, open("data/morocco_by_the_numbers.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 js = json.dumps(out, ensure_ascii=False, separators=(",", ":"))
 print(len(js))
 open("data.min.json", "w", encoding="utf-8").write(js)
