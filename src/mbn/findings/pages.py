@@ -1,0 +1,100 @@
+"""The site's pages: each one has a data file, a builder, a renderer and claims.
+
+The CLI loops over ``PAGES``; a new project page is one more entry here.
+"""
+
+from __future__ import annotations
+
+from collections.abc import Callable
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+from mbn.config import DATA_DIR
+from mbn.findings import build as findings_build
+from mbn.findings import parliament_page, prices_page, water_page
+from mbn.findings.registry import all_claims, watch_patterns
+from mbn.model.claims import Claim
+from mbn.publish import site
+from mbn.sources.store import DatasetStore
+
+
+@dataclass(frozen=True)
+class Page:
+    name: str
+    label: str
+    """Link text in the page nav."""
+    html: str
+    """Output file at the site root."""
+    data_file: Path
+    build: Callable[[DatasetStore, str | None], dict[str, Any]]
+    render: Callable[[dict[str, Any]], str]
+    claims: Callable[[], list[Claim]]
+    datasets: tuple[str, ...]
+    """CKAN dataset-name patterns this page needs."""
+
+
+def nav(current: str) -> str:
+    return site.nav_html([(p.label, p.html) for p in PAGES], current)
+
+
+FINDINGS_PAGE = Page(
+    name="findings",
+    label="Findings",
+    html="index.html",
+    data_file=DATA_DIR / "morocco_by_the_numbers.json",
+    build=lambda st, updated: findings_build.build(st, updated),
+    render=lambda data: site.render_findings(data, nav=nav("index.html")),
+    claims=lambda: all_claims("index"),
+    datasets=tuple(watch_patterns()),
+)
+
+WATER_PAGE = Page(
+    name="water",
+    label="Water",
+    html="water.html",
+    data_file=water_page.DATA_FILE,
+    build=water_page.build,
+    render=lambda data: water_page.render(data, nav=nav("water.html")),
+    claims=lambda: list(water_page.CLAIMS),
+    datasets=water_page.DATASETS,
+)
+
+PRICES_PAGE = Page(
+    name="prices",
+    label="Prices",
+    html="prices.html",
+    data_file=prices_page.DATA_FILE,
+    build=prices_page.build,
+    render=lambda data: prices_page.render(data, nav=nav("prices.html")),
+    claims=lambda: list(prices_page.CLAIMS),
+    datasets=prices_page.DATASETS,
+)
+
+PARLIAMENT_PAGE = Page(
+    name="parliament",
+    label="Parliament",
+    html="parliament.html",
+    data_file=parliament_page.DATA_FILE,
+    build=parliament_page.build,
+    render=lambda data: parliament_page.render(data, nav=nav("parliament.html")),
+    claims=lambda: list(parliament_page.CLAIMS),
+    datasets=parliament_page.DATASETS,
+)
+
+PAGES: tuple[Page, ...] = (FINDINGS_PAGE, WATER_PAGE, PRICES_PAGE, PARLIAMENT_PAGE)
+
+
+def page(name: str) -> Page:
+    for p in PAGES:
+        if p.name == name:
+            return p
+    raise KeyError(name)
+
+
+def all_watch_patterns() -> list[str]:
+    seen: dict[str, None] = {}
+    for p in PAGES:
+        for d in p.datasets:
+            seen.setdefault(d)
+    return list(seen)

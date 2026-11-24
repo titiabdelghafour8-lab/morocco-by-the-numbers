@@ -1,0 +1,122 @@
+<title>Parliament · Morocco by the Numbers</title>
+<meta name="description" content="What members of the House of Representatives ask the government about, by topic and year, from {{questions}} written and oral questions.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="site/assets/site.css">
+
+<!--NAV-->
+<header class="intro"><div class="wrap">
+  <h1>What parliament asks about</h1>
+  <p class="sub">{{questions}} written and oral questions from the House of Representatives, {{first_year}}–{{last_year}}, grouped into {{topics_n}} topics by what they ask about. By topic and year only: no member is named, and nothing is broken down by member or party.</p>
+</div></header>
+
+<nav class="chapters" aria-label="Sections"><div class="wrap">
+  <a href="#explorer">Topics</a><a href="#change">Rising and falling</a><a href="#method">Method</a>
+  <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" title="Switch to dark mode">
+    <svg class="i-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+    <svg class="i-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </button>
+</div></nav>
+
+<main><div class="wrap">
+
+<div class="group" id="explorer">
+<section class="ch">
+  <span class="topic">Topics</span>
+  <h2>{{top_en}} draws the most questions: {{top_share}} of the total</h2>
+  <p>Some groups are not themes: {{mixed_share}} of questions fall in groups that mix subjects by place, or in series of identically worded questions. They are shown, marked, but not ranked. Each card is a topic, with its number of questions and its share of each year's questions from {{first_year}} to {{last_year}}. Choose a topic to see its trend and five typical question subjects, as MPs wrote them.</p>
+  <div class="detail" id="detail" aria-live="polite">
+    <h3 id="d-title"></h3>
+    <div class="names" id="d-names"></div>
+    <div class="chart-title">Share of the year's questions, %</div>
+    <div class="chart" id="c-topic"></div>
+    <ol class="examples" id="d-examples" dir="rtl" lang="ar"></ol>
+    <div class="words" id="d-words"></div>
+  </div>
+  <div class="cards" id="cards"></div>
+  <span class="source" data-src="parliament,oral"></span>
+</section>
+</div>
+
+<div class="group" id="change">
+<section class="ch">
+  <span class="topic">Rising and falling</span>
+  <h2>{{rise_en}} gained the most ground; {{fall_en}} lost the most</h2>
+  <p>Change in each topic's share of questions between {{early}} and {{late}}, in percentage points. {{rise_en}} rose by {{rise}} points and {{fall_en}} moved by {{fall}}.</p>
+  <div class="chart-title">Change in share of questions, {{early}} to {{late}}, percentage points</div>
+  <div class="chart" id="c-change"></div>
+  <p class="note">A rising share can mean more questions on a topic or fewer on others. Spikes often follow events, such as the COVID-19 pandemic in 2020 or the Al Haouz earthquake in September 2023.</p>
+  <span class="source" data-src="parliament,oral"></span>
+</section>
+</div>
+
+<div class="group" id="method">
+<section class="ch">
+  <div class="method">
+    <h3>Method</h3>
+    <ul>
+      <li><b>Questions.</b> Every written and oral question file on the portal, with questions that appear in more than one file counted once (same number, kind and date). Topics use the subject line, which every question has.</li>
+      <li><b>Arabic preprocessing.</b> Diacritics removed and letter variants normalised (as CAMeL Tools does), opening formulae removed, and common administrative words left out of topic keywords.</li>
+      <li><b>Topics.</b> Each subject is turned into a vector by an Arabic language model (CAMeL-BERT, modern standard Arabic), then grouped with BERTopic (UMAP and HDBSCAN, fixed random seeds) and merged into {{topics_n}} topics. Questions that fit no group are given to the nearest topic.</li>
+      <li><b>Names.</b> Each topic was named in Arabic, French and English after reading its keywords and sample questions. The names are kept in a reviewed file, and the site will not build if the model's topics change until the names are reviewed again.</li>
+      <li><b>Checks.</b> Topic coherence (NPMI) {{coh_main}} and diversity {{div_main}}, against {{coh_base}} and {{div_base}} for a simple word-count baseline. As a check on meaning, a classifier that reads only the subject predicts which of {{clf_areas}} policy areas the question went to {{clf_acc}} of the time in {{clf_test}} (guessing the most common area: {{clf_base}}).</li>
+    </ul>
+    <h3>Limits</h3>
+    <ul>
+      <li>Topics are statistical groups, named by a person. Another seed or model would draw some boundaries differently.</li>
+      <li>Subjects are short, and some mix several issues; each question gets exactly one topic.</li>
+      <li>A count of questions measures attention, not the importance of an issue or the quality of answers.</li>
+      <li>Years at the edges with few questions are left out of the shares.</li>
+    </ul>
+    <h3>Personal data</h3>
+    <p>The question files name the member who asked each question. This page and its data keep no names, no parliamentary groups and no per-member counts. Sample subjects are screened against the portal's lists of members.</p>
+    <h3>Data</h3>
+    <p class="downloads">Under the <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">ODbL</a>: <a href="data/parliament.json">parliament.json</a> (topics, shares, samples) and <a href="data/parliament_topics_by_year.csv">parliament_topics_by_year.csv</a>. Credit the House of Representatives and data.gov.ma.</p>
+    <span class="source" data-src="parliament,oral"></span>
+  </div>
+</section>
+</div>
+
+</div></main>
+<footer><div class="wrap">Part of <a href="index.html" style="color:inherit">Morocco by the Numbers</a>. Data from data.gov.ma (ODbL licence), last updated <span class="updated"></span>. Hover or tap a chart for exact values.</div></footer>
+<div id="tip" hidden></div>
+
+<script src="site/assets/charts.js"></script>
+<script>
+let DATA, current;
+function pick(id) {
+  current = id;
+  const t = DATA.topics.find(x => x.id === id);
+  document.querySelectorAll(".card").forEach(c => c.setAttribute("aria-pressed", String(+c.dataset.id === id)));
+  document.getElementById("d-title").textContent = `${t.en} · ${fmt(t.size)} questions`;
+  document.getElementById("d-names").textContent = `${t.fr} · ${t.ar}` + (t.note ? ` — ${t.note}` : "");
+  document.getElementById("d-examples").innerHTML = t.examples.map(e => `<li>${e.replace(/[<>&]/g, c => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" })[c])}</li>`).join("");
+  document.getElementById("d-words").textContent = "Keywords: " + t.words.join("، ");
+  renderTopic();
+}
+function renderTopic() {
+  const t = DATA.topics.find(x => x.id === current);
+  lineChart("c-topic", { series: [{ name: t.en, color: css("--s1"), data: DATA.years.map((y, j) => [y, t.share[j]]) }], yFmt: (v, e) => fmt(v, e ? 1 : 0) + "%", xFmt: x => String(x), xTicks: DATA.years, yMin: 0, endLabels: true });
+}
+function renderAll() {
+  if (!DATA) return;
+  const c = css("--s1");
+  document.querySelectorAll(".card .spark").forEach(s => sparkline(s, DATA.topics.find(t => t.id === +s.dataset.id).share, c));
+  renderTopic();
+  const ranked = DATA.topics.filter(t => t.kind === "theme").sort((a, b) => b.change - a.change);
+  const rows = [...ranked.slice(0, 6), ...ranked.slice(-6)];
+  divBars("c-change", rows.map(t => [t.en, t.change, [{ n: "Questions", v: fmt(t.size) }]]), { name: "Points", fmt: v => (v > 0 ? "+" : v < 0 ? "−" : "") + fmt(Math.abs(v), 1) });
+}
+loadData("data/parliament.json").then(d => {
+  DATA = d;
+  renderSources(DATA);
+  renderUpdated(DATA.updated);
+  const cards = document.getElementById("cards");
+  cards.innerHTML = DATA.topics.map(t => `<button type="button" class="card" data-id="${t.id}" aria-pressed="false"><span class="t">${t.en}${t.kind !== "theme" ? " ·" : ""}</span>${t.kind !== "theme" ? `<span class="ar">${t.kind === "mixed" ? "Mixed group" : "Standard questions"}</span>` : ""}<span class="ar" lang="ar" dir="rtl">${t.ar}</span><span class="m"><span>${fmt(t.size)}</span><span class="spark" data-id="${t.id}"></span></span></button>`).join("");
+  cards.querySelectorAll(".card").forEach(b => b.addEventListener("click", () => { pick(+b.dataset.id); document.getElementById("detail").scrollIntoView({ block: "nearest", behavior: "smooth" }); }));
+  current = (DATA.topics.find(t => t.kind === "theme") || DATA.topics[0]).id;
+  pick(current);
+  onRedraw(renderAll);
+});
+initThemeSwitch();
+highlightChapters();
+</script>

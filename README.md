@@ -14,87 +14,109 @@ Twenty-one findings about Morocco, drawn from the government's open data portal 
 | Living | Health insurance coverage and finances · Public health centres per resident · Pension contributors per pensioner · Pension schemes paying out more than they collect · Internet subscriptions · Road deaths · Vehicles on the road |
 | State | Appeal court caseload · Corruption Perceptions Index · Parliamentary questions by policy area |
 
+### Project pages
+
+| Page | Question | Data |
+|---|---|---|
+| [Water](https://titiabdelghafour8-lab.github.io/morocco-by-the-numbers/water.html) | How dry is the Souss now compared with the last 57 years, and does less rain explain the river's collapse? Drought index (SPI) since 1969, rainfall trend, rain-only model of the river. | Daily rain and river flow, Souss-Massa river basin agency |
+| [Prices](https://titiabdelghafour8-lab.github.io/morocco-by-the-numbers/prices.html) | What is getting more expensive, where, and is it speeding up? Headline, food and 3-month annualised inflation, what drove it, the biggest movers, a city × spending-group heatmap, and a 3-month forecast shown only if it beats a naive benchmark. Refreshes monthly through the weekly sync. | HCP monthly consumer price index, 18 cities |
+| [Parliament](https://titiabdelghafour8-lab.github.io/morocco-by-the-numbers/parliament.html) | What do MPs ask the government about, and how has that changed? A topic explorer over about 67,000 questions (Arabic topic model, reviewed topic names in Arabic, French and English) and the topics rising and falling. By topic and year only: no names. | House of Representatives written and oral questions |
+
 Every chart links to the dataset it comes from. The About section at the bottom of the site explains sources, licence, personal data and the corrections made during the data audit.
 
 ## How it works
 
 ```
-data.gov.ma  ->  download  ->  extract  ->  build  ->  pack  ->  render  ->  check
- (54 datasets)    raw files     clean       chart      one data    index.html  quoted numbers
-                                tables      series     file                    vs data
+data.gov.ma  ->  check  ->  download  ->  parse  ->  analyse  ->  publish  ->  verify
+ (watched        anything    raw files     one table   chart       data files   quoted numbers
+  datasets)      changed?                  per file    series      and pages    vs data
 ```
 
-For diagrams of how the pieces fit together (C4 model: context, containers, components and the weekly sync), see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+The code is a Python package, `mbn`, in layers: `sources` (the portal and local files), `parsers` (one publisher's file into a table), `analyses` (tables into published figures), `findings` (the registry of what the site shows), `publish` (data files, pages, claims check) and a command line, `mbn`. Parsers and analyses do no input or output, so they are quick to test. For diagrams (C4 model: context, containers, components and the weekly sync), see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-The site is a single static `index.html` with the data embedded and charts drawn as plain SVG. There is no framework and no server: GitHub Pages serves the file from the `main` branch and republishes it within a minute of every push.
+The site is static: one HTML file per page, shared `site/assets/site.css` and `site/assets/charts.js`, and charts drawn as plain SVG. There is no framework and no server: GitHub Pages serves the `main` branch and republishes within a minute of every merge.
 
 ## Project layout
 
 | Path | What it is |
 |---|---|
-| `index.html` | The published site. Generated: edit `scripts/template.html`, not this file. |
-| `scripts/template.html` | Page text, layout and chart code. The data goes in at `/*DATA*/`. |
-| `scripts/datasets.txt` | The data.gov.ma datasets the site uses (patterns on dataset names). |
-| `scripts/00_check_updates.py` | Asks the portal whether any watched dataset changed. |
-| `scripts/01_download.py` | Downloads datasets into `datasets/` (not committed). |
-| `scripts/02_extract.py`, `02b_…`, `02c_…` | Read the original spreadsheets into intermediate tables. |
-| `scripts/03_build.py`, `03b_…` | Turn those tables into chart series. |
-| `scripts/04_pack.py` | Combines everything, with source links, into `data/morocco_by_the_numbers.json`. |
-| `scripts/05_render.py` | Writes `index.html` from the template and the data. |
-| `scripts/06_compare.py` | Lists which figures changed between two data files (used by the sync). |
-| `scripts/07_check_claims.py` | Checks that every number quoted in the text still matches the data. |
-| `data/morocco_by_the_numbers.json` | All processed figures, shared under the ODbL. |
+| `index.html` | The findings page. Generated: edit `site/templates/index.html`, not this file. |
+| `site/templates/` | Page text and layout, one template per page. The data goes in at `/*DATA*/`. |
+| `site/assets/` | `site.css` (colours, light/dark theme, layout) and `charts.js` (chart library), shared by every page. |
+| `src/mbn/sources/` | Portal client (`ckan.py`), downloader (`files.py`), local file store, census population. |
+| `src/mbn/parsers/` | One module per publisher's file layout (HCP, river basin agency, parliament, ...). |
+| `src/mbn/model/` | Shared vocabulary: claims, source links and pandera data contracts. |
+| `src/mbn/analyses/` | Pure functions that turn tables into the published series. |
+| `src/mbn/findings/` | `registry.py`: every finding with its datasets, source links and claims; `pages.py`: every page. |
+| `src/mbn/publish/` | Data export, page rendering, claims check, comparison and the sync's publish-or-review decision. |
+| `src/mbn/cli.py` | The `mbn` command. |
+| `data/morocco_by_the_numbers.json` | All processed figures for the findings page, shared under the ODbL. |
+| `data/datasets.txt` | The datasets the site uses. Generated from the registry with `mbn watchlist`. |
 | `data/sources_state.json` | Last-modified time of each watched dataset, used by the sync. |
+| `tests/` | `unit/`, `properties/` (hypothesis), `contracts/` (pandera), `features/` (Gherkin, pytest-bdd), `golden/`, `e2e/` (Playwright). |
+| `.github/workflows/ci.yml` | Lint, types and every test layer on each pull request. |
 | `.github/workflows/sync.yml` | The weekly automatic data sync. |
 
 ## Rebuild it yourself
 
-You need Python 3.12 or later. Run everything from the repository root:
+You need Python 3.12 and [uv](https://docs.astral.sh/uv/). Run everything from the repository root:
 
 ```bash
-pip install -r requirements.txt
+uv sync                          # create .venv with the locked dependencies
 
-python scripts/01_download.py datasets scripts/datasets.txt   # about 790 files, 90 MB
-python scripts/02_extract.py datasets
-python scripts/02b_extract_more.py datasets
-python scripts/02c_extract_services.py datasets
-python scripts/03_build.py datasets
-python scripts/03b_build_more.py
-python scripts/04_pack.py datasets
-python scripts/05_render.py
-python scripts/07_check_claims.py          # should end with "44/44 claims hold"
+uv run mbn download datasets     # the watched datasets, about 790 files, 90 MB
+uv run mbn build datasets        # data/*.json
+uv run mbn render                # index.html and the other pages
+uv run mbn claims                # should end with "44/44 claims hold"
 ```
 
-Leave out `scripts/datasets.txt` to download the whole portal (about 800 MB). The downloader skips files it already has, so re-running it only fetches what changed. Intermediate files (`raw*.json`, `site_data*.json`, `data.min.json`) are temporary and ignored by git.
+`mbn download --all` fetches the whole portal (about 800 MB). The downloader skips files it already has, so re-running it only fetches what changed. To preview the site, run `python -m http.server` and open http://localhost:8000.
 
-To preview the site, run `python -m http.server` and open http://localhost:8000.
+## Tests
+
+```bash
+uv run pytest --ignore=tests/e2e                 # unit, property, contract, BDD and golden tests
+uv run playwright install chromium               # once
+uv run pytest tests/e2e                          # every page in a browser, desktop and phone
+uv run ruff check src tests && uv run mypy       # lint and types
+```
+
+### The parliament topic model (offline)
+
+The topic model needs an Arabic language model (CAMeL-BERT, about 0.44 GB from Hugging Face) and PyTorch, so it runs offline, not in CI or the weekly sync:
+
+```bash
+uv sync --extra topics
+uv run mbn topics datasets --cache .cache/embeddings.npy   # 20-40 minutes on a laptop CPU
+```
+
+It writes `data/parliament/topic_model.json` and `data/parliament/assignments.csv` (question number, kind, date and topic: no names, no text). Topic names live in `data/parliament/topic_labels.json`. If a rerun changes the topics, `mbn build` stops until someone reads the new topics, updates the names and the file's `fingerprint`, and reviews the change in a pull request.
+
+Set `MBN_DATASETS` to the downloaded `datasets` folder to also run the slow golden test that rebuilds the data file from the original spreadsheets and compares it byte for byte. CI runs everything except that test on every pull request, and requires at least 90% coverage of `parsers` and `analyses`.
 
 ## Automatic data sync
 
-Every Monday at 06:23 UTC, `.github/workflows/sync.yml` checks whether any watched dataset changed on data.gov.ma. If nothing changed, it stops after a few seconds. If something changed, it downloads those datasets, rebuilds every figure and runs the claims check:
+Every Monday at 06:23 UTC, `.github/workflows/sync.yml` runs `mbn check` to see whether any watched dataset changed on data.gov.ma. If nothing changed, it stops after a few seconds. If something changed, it downloads those datasets, rebuilds every page and runs the claims check:
 
-- **Every quoted number still holds:** the new figures are published to the live site automatically.
+- **Every quoted number still holds:** the job opens a pull request labelled `data-sync` with the new figures and starts CI on it. Merge it once CI is green; the site updates within a minute. (Set the repository variable `SYNC_AUTO_MERGE` to `true`, and allow auto-merge in the repository settings, to let these pull requests merge themselves when CI passes.)
 - **A quoted number no longer holds:** the live site is left as it is. The job pushes a `data-review-YYYYMMDD` branch and opens an issue labelled `data-review` that lists what changed.
 
-To pick up an update before Monday, open the **Actions** tab, choose **Data sync** and click **Run workflow**.
+While a `data-sync` pull request or a `data-review` issue is open, the weekly sync skips its rebuild so it doesn't open a second one for the same change. To pick up an update before Monday, open the **Actions** tab, choose **Data sync** and click **Run workflow**.
 
 ### When a `data-review` issue opens
 
 1. Read the issue: it lists the datasets that changed, the figures that moved and the claims that failed.
 2. Check out the review branch named in the issue.
-3. Update the affected sentences in `scripts/template.html`, and the expected values for the same claims in `scripts/07_check_claims.py`.
-4. Run `python scripts/05_render.py` and `python scripts/07_check_claims.py` until every claim holds.
-5. Merge the branch into `main` and close the issue. The site updates within a minute, and the sync resumes the following Monday.
-
-While a `data-review` issue is open, the weekly sync skips its rebuild so it doesn't open a second issue for the same change.
+3. Update the affected sentences in `site/templates/`, and the expected values for the same claims in `src/mbn/findings/`.
+4. Run `uv run mbn render` and `uv run mbn claims` until every claim holds.
+5. Open a pull request from the branch, merge it when CI is green, and close the issue.
 
 ## Adding a finding
 
-1. Add the dataset name to `scripts/datasets.txt`.
-2. Read it in one of the extract scripts and add its series in `scripts/04_pack.py`, with a `src` entry for the source link.
-3. Add a `<section class="ch">` with its text and a chart call in `scripts/template.html`.
-4. Add a claim for every number quoted in the new text to `scripts/07_check_claims.py`.
-5. Rebuild, check, preview, then push.
+1. Add a parser for the file layout in `src/mbn/parsers/` (with a test on a trimmed copy of a real file in `tests/fixtures/`), and its series in `src/mbn/analyses/`.
+2. Add a `Finding` to `src/mbn/findings/registry.py` with its dataset patterns, source links and a `Claim` for every number quoted in the text.
+3. Add a `<section class="ch">` with its text and a chart call in `site/templates/index.html`.
+4. Run `uv run mbn watchlist`, `build`, `render` and `claims`, run the tests, then open a pull request.
 
 ## Data, licence and personal data
 

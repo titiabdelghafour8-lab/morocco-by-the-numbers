@@ -1,0 +1,123 @@
+<title>Water · Morocco by the Numbers</title>
+<meta name="description" content="A drought monitor for the Souss basin: how dry it is compared with the last 57 years, the rainfall trend, and how much of the river's collapse less rain explains.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="site/assets/site.css">
+
+<!--NAV-->
+<header class="intro"><div class="wrap">
+  <h1>Water: a drought monitor for the Souss</h1>
+  <p class="sub">How dry is it now compared with the last half-century, and is the river's collapse caused by less rain or by more water use? Daily records from the Souss-Massa river basin agency, {{first_year}}–{{last_year}}.</p>
+</div></header>
+
+<nav class="chapters" aria-label="Sections"><div class="wrap">
+  <a href="#now">How dry</a><a href="#trend">Rain trend</a><a href="#river">Rain and river</a><a href="#extremes">Dry years</a><a href="#method">Method</a>
+  <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" title="Switch to dark mode">
+    <svg class="i-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+    <svg class="i-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </button>
+</div></nav>
+
+<main><div class="wrap">
+
+<div class="group" id="now">
+<section class="ch">
+  <span class="topic">Drought index</span>
+  <h2>Since {{first_year}}, {{dry_years}} of {{years_with_spi}} complete years ended in drought</h2>
+  <p>The Standardized Precipitation Index (SPI) compares rain over the past months with the same months in every other year at the Youssef Ben Tachfine dam. Below −1 is a drought by the World Meteorological Organization's scale. At the end of the last complete record, in <b>{{latest_month}}</b>, the 12-month index stood at <b>{{spi_latest}}</b> ({{spi_class}}). The driest year to end in August was <b>{{driest_year}}</b> ({{driest_spi}}).</p>
+  <div class="seg" id="spi-scale" role="group" aria-label="Months of rain in the index"><button type="button" data-v="3" aria-pressed="false">3 months</button><button type="button" data-v="6" aria-pressed="false">6 months</button><button type="button" data-v="12" aria-pressed="true">12 months</button></div>
+  <div class="chart-title" id="spi-title">Standardized Precipitation Index, 12 months, Youssef Ben Tachfine dam</div>
+  <div class="swatches" id="spi-key"></div>
+  <div class="chart" id="c-spi"></div>
+  <p class="note">Gaps are months with more than three missing days. Years ending in {{excluded}} are left out because their records are incomplete.</p>
+  <span class="source" data-src="ybt"></span>
+</section>
+</div>
+
+<div class="group" id="trend">
+<section class="ch">
+  <span class="topic">Rainfall</span>
+  <h2>Rainfall at the dam is {{trend_words}}: about {{trend_abs}} mm less each decade</h2>
+  <p>A typical year brings <b>{{rain_mean}} mm</b>. Over {{first_year}}–{{last_year}} the median trend (Sen's slope) is a fall of <b>{{trend_abs}} mm per decade</b>, about {{trend_pct}}% of the average. The standard Mann-Kendall test finds it {{trend_sig}} (p = {{trend_p}}). Versions of the test that allow for wet or dry years following each other give p from {{trend_p_lo}} to {{trend_p_hi}}. {{trend_verdict}} {{pettitt}}</p>
+  <div class="legend"><span><i style="background:var(--s1)"></i>Rain in the hydrological year (September to August)</span><span><i style="background:var(--s2)"></i>Trend (Sen's slope)</span></div>
+  <div class="chart" id="c-rain"></div>
+  <span class="source" data-src="ybt"></span>
+</section>
+</div>
+
+<div class="group" id="river">
+<section class="ch">
+  <span class="topic">Rain and river</span>
+  <h2>Less rain explains only about {{share_ratio}}% of the river's decline</h2>
+  <p>From 1971 to 1999 the Souss at Aït Melloul carried on average <b>{{flow_before}} m³/s</b>. A model that knows only the rain, fitted on those years, says that with the rain that fell in 2000–{{flow_last}} the river should have carried about <b>{{flow_pred}} m³/s</b>. It carried <b>{{flow_after}} m³/s</b>. Less rain accounts for about {{share_ratio}}% of the drop ({{share_linear}}% with a straight-line fit). The rest is consistent with more water being stored or pumped upstream, but these data cannot prove it.</p>
+  <div class="legend"><span><i style="background:var(--s1)"></i>Observed flow</span><span><i style="background:var(--s2)"></i>Expected from rain alone</span></div>
+  <div class="chart" id="c-river"></div>
+  <p class="note">The model is a runoff ratio: the river's average flow per millimetre of rain at the dam in 1971–1999. Rain at one dam stands in for rain over the whole basin, so the split is approximate.</p>
+  <span class="source" data-src="aitmelloul_flow,ybt"></span>
+</section>
+</div>
+
+<div class="group" id="extremes">
+<section class="ch">
+  <span class="topic">Extremes</span>
+  <h2>The {{dry_decade}} had the most drought years</h2>
+  <p>A drought year here is one whose 12-month index ends August at or below −1. The longest run without a day of 1 mm of rain was <b>{{longest_spell}} days</b>, in the {{longest_spell_decade}}. Decades at the edges of the record have fewer complete years, so compare counts with care.</p>
+  <div class="chart-title">Drought years per decade (hover for complete years and the longest dry spell)</div>
+  <div class="chart" id="c-decades"></div>
+  <span class="source" data-src="ybt"></span>
+</section>
+</div>
+
+<div class="group" id="method">
+<section class="ch">
+  <div class="method">
+    <h3>Method</h3>
+    <ul>
+      <li><b>Data quality first.</b> A month counts only if no more than three days are missing; a hydrological year counts only if all twelve months do. {{years_complete}} of {{years_total}} years pass. The latest file stops partway through the year, so the monitor ends in {{latest_month}}.</li>
+      <li><b>Drought index.</b> SPI with a gamma distribution, from the <code>climate-indices</code> reference implementation, fitted on every year of this station's record, at 3, 6 and 12 months.</li>
+      <li><b>Trend.</b> Mann-Kendall test with Sen's slope on yearly totals, plus four versions that correct for persistence; Pettitt test for a single change point.</li>
+      <li><b>Rain and river.</b> Runoff ratio and a straight-line fit of yearly mean flow on yearly rain, both fitted on 1971–1999 and applied to 2000 onwards.</li>
+      <li><b>Cross-checks.</b> In years both stations report, yearly rain at the dam moves with rain at other stations of the basin: <span id="crosscheck"></span>.</li>
+    </ul>
+    <h3>Limits</h3>
+    <ul>
+      <li>One basin, one main rain gauge. This says nothing about drought in the rest of Morocco.</li>
+      <li>The index compares each period with this station's own history; it is not a national or official drought declaration.</li>
+      <li>Daily records reach the portal about a year late.</li>
+      <li>The rain-and-river comparison describes a gap; it does not prove what caused it.</li>
+    </ul>
+    <h3>Data</h3>
+    <p class="downloads">Processed figures under the <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">ODbL</a>: <a href="data/water.json">water.json</a> (all series) and <a href="data/water_annual.csv">water_annual.csv</a> (yearly rain, flow and model). Credit the Souss-Massa river basin agency and data.gov.ma.</p>
+    <span class="source" data-src="ybt,agadir,aitmelloul_rain,talaint_rain,aitmelloul_flow"></span>
+  </div>
+</section>
+</div>
+
+</div></main>
+<footer><div class="wrap">Part of <a href="index.html" style="color:inherit">Morocco by the Numbers</a>. Data from data.gov.ma (ODbL licence), last updated <span class="updated"></span>. Hover or tap a chart for exact values.</div></footer>
+<div id="tip" hidden></div>
+
+<script src="site/assets/charts.js"></script>
+<script>
+let DATA, scale = "12";
+function renderAll() {
+  if (!DATA) return;
+  const s1 = css("--s1"), s2 = css("--s2");
+  spiChart("c-spi", { name: `SPI-${scale}`, data: DATA.spi[scale] });
+  document.getElementById("spi-title").textContent = `Standardized Precipitation Index, ${scale} months, Youssef Ben Tachfine dam`;
+  document.getElementById("spi-key").innerHTML = [["extremely dry", s2, 1], ["severely dry", s2, .72], ["moderately dry", s2, .45], ["near normal", css("--faint"), .25], ["wet", s1, .6]]
+    .map(([n, c, a]) => `<span><i style="background:${c};opacity:${a}"></i>${n}</span>`).join("");
+  lineChart("c-rain", { series: [{ name: "Rain", color: s1, data: DATA.annual }, { name: "Trend", color: s2, data: DATA.trend_line }], yFmt: (v, e) => fmt(v, e ? 1 : 0), unit: " mm", xFmt: x => `${x - 1}–${String(x).slice(2)}`, xTicks: range(1970, 2020, 10), yMin: 0 });
+  lineChart("c-river", { series: [{ name: "Observed", color: s1, data: DATA.river.map(r => [r[0], r[1]]) }, { name: "Rain alone", color: s2, data: DATA.river.map(r => [r[0], r[2]]) }], yFmt: (v, e) => fmt(v, e ? 2 : 0), unit: " m³/s", xFmt: x => { const r = DATA.river.find(d => d[0] === x); return `${x - 1}–${String(x).slice(2)} · rain ${fmt(r[3])} mm`; }, xTicks: range(1975, 2020, 10), endLabels: true, yMin: 0 });
+  columnChart("c-decades", { name: "Drought years", data: DATA.decades.map(d => [`${d[0]}s`, d[1], s2, [{ n: "Complete years", v: fmt(d[2]) }, { n: "Longest dry spell", v: `${fmt(d[3])} days` }]]), yFmt: v => fmt(v), labelValues: true, h: 200 });
+}
+segmented("spi-scale", v => { scale = v; renderAll(); });
+loadData("data/water.json").then(d => {
+  DATA = d;
+  renderSources(DATA);
+  renderUpdated(DATA.updated);
+  document.getElementById("crosscheck").textContent = DATA.crosscheck.map(c => `${c.station} r = ${fmt(c.r, 2)} over ${c.years} years`).join("; ");
+  onRedraw(renderAll);
+});
+initThemeSwitch();
+highlightChapters();
+</script>
