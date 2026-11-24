@@ -7,8 +7,8 @@ from typing import Any
 import pytest
 
 from mbn import cli
-from mbn.config import ROOT
 from mbn.findings import registry
+from mbn.findings.pages import PAGES
 from mbn.model.claims import Claim
 from mbn.publish import claims, compare, data_export, site
 from mbn.sources import ckan, files
@@ -122,9 +122,8 @@ def test_render_and_claims_commands(tmp_path: Path, monkeypatch: pytest.MonkeyPa
 def test_verify_command_writes_outputs(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
     old = tmp_path / "old"
     old.mkdir()
-    data_export.write_json(
-        old / "morocco_by_the_numbers.json", data_export.read_json(ROOT / "data" / "morocco_by_the_numbers.json")
-    )
+    for p in PAGES:
+        data_export.write_json(old / p.data_file.name, data_export.read_json(p.data_file))
     rc = cli.main(["verify", "--old", str(old), "--summary", str(tmp_path / "s.md"), "--claims", str(tmp_path / "c.txt")])
     out = capsys.readouterr().out
     assert rc == 0

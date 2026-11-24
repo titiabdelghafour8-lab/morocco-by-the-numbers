@@ -14,6 +14,12 @@ Twenty-one findings about Morocco, drawn from the government's open data portal 
 | Living | Health insurance coverage and finances · Public health centres per resident · Pension contributors per pensioner · Pension schemes paying out more than they collect · Internet subscriptions · Road deaths · Vehicles on the road |
 | State | Appeal court caseload · Corruption Perceptions Index · Parliamentary questions by policy area |
 
+### Project pages
+
+| Page | Question | Data |
+|---|---|---|
+| [Water](https://titiabdelghafour8-lab.github.io/morocco-by-the-numbers/water.html) | How dry is the Souss now compared with the last 57 years, and does less rain explain the river's collapse? Drought index (SPI) since 1969, rainfall trend, rain-only model of the river. | Daily rain and river flow, Souss-Massa river basin agency |
+
 Every chart links to the dataset it comes from. The About section at the bottom of the site explains sources, licence, personal data and the corrections made during the data audit.
 
 ## How it works

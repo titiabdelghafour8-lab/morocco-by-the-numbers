@@ -10,6 +10,9 @@ dependencies = [
     "openpyxl>=3.1",
     "xlrd>=2.0",
     "pandera>=0.24",
+    "climate-indices==3.2.0",
+    "pymannkendall==1.4.3",
+    "pyhomogeneity==1.1",
 ]
 
 [project.scripts]
@@ -52,7 +55,7 @@ files = ["src/mbn"]
 plugins = ["pandera.mypy"]
 
 [[tool.mypy.overrides]]
-module = ["openpyxl.*", "xlrd.*"]
+module = ["openpyxl.*", "xlrd.*", "pymannkendall.*", "pyhomogeneity.*", "climate_indices.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

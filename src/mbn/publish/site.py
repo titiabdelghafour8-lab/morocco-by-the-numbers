@@ -36,6 +36,23 @@ def render_findings(data: dict[str, Any], template: str | None = None, nav: str 
     return FINDINGS_HEAD + page.replace("<!--NAV-->", nav).replace("/*DATA*/", to_min_json(data))
 
 
+PAGE_HEAD = FINDINGS_HEAD.split('<meta name="description"')[0]
+PLACEHOLDER = re.compile(r"\{\{(\w+)\}\}")
+
+
+def render_page(name: str, data: dict[str, Any], nav: str = "", template: str | None = None) -> str:
+    """A project page: numbers in the text come from ``data["text"]``; charts fetch the data file.
+
+    Every ``{{key}}`` in the template must have a value, so a sentence can never show a blank.
+    """
+    page = template if template is not None else read_template(name)
+    values: dict[str, str] = data.get("text", {})
+    missing = sorted({k for k in PLACEHOLDER.findall(page) if k not in values})
+    if missing:
+        raise KeyError(f"{name}: no value for {missing}")
+    return PAGE_HEAD + PLACEHOLDER.sub(lambda m: values[m.group(1)], page).replace("<!--NAV-->", nav)
+
+
 def chart_ids(html: str) -> list[str]:
     return CHART_ID.findall(html)
 

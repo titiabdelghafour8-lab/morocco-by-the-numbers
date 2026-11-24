@@ -206,3 +206,45 @@ async function loadData(url) {
   if (!r.ok) throw new Error(`${url}: ${r.status}`);
   return r.json();
 }
+
+/* Diverging bars for a standardised index (SPI): o.data [[x, value|null]], coloured by WMO class.
+   Wet months in --s1, dry months in --s2; the stronger the class, the more opaque. */
+const SPI_CLASSES = [[-2, "extremely dry", 1], [-1.5, "severely dry", .72], [-1, "moderately dry", .45], [1, "near normal", .25], [1.5, "moderately wet", .45], [2, "very wet", .72], [Infinity, "extremely wet", 1]];
+function spiClass(v) { if (v <= -2) return SPI_CLASSES[0]; if (v <= -1.5) return SPI_CLASSES[1]; if (v <= -1) return SPI_CLASSES[2]; if (v < 1) return SPI_CLASSES[3]; if (v < 1.5) return SPI_CLASSES[4]; if (v < 2) return SPI_CLASSES[5]; return SPI_CLASSES[6]; }
+function spiChart(id, o) {
+  const narrow = document.getElementById(id).clientWidth < 520;
+  const f = frame(id, narrow ? 220 : 260, { l: 34, r: 8, t: 10, b: 24 });
+  const pts = o.data.filter(d => d[1] !== null);
+  const xmin = o.data[0][0], xmax = o.data.at(-1)[0] + 1 / 12, lim = Math.max(3, ...pts.map(d => Math.abs(d[1])));
+  const xs = x => f.x0 + (x - xmin) / (xmax - xmin) * (f.x1 - f.x0), ys = y => f.y0 - (y + lim) / (2 * lim) * (f.y0 - f.y1);
+  yAxis(f, [-3, -2, -1, 0, 1, 2, 3].filter(t => Math.abs(t) <= lim), ys, v => (v > 0 ? "+" : "") + v);
+  [-1, -2].forEach(t => el("line", { x1: f.x0, x2: f.x1, y1: ys(t), y2: ys(t), stroke: css("--s2"), "stroke-dasharray": "2 3", "stroke-opacity": .6 }, f.svg));
+  const w = Math.max(1, (f.x1 - f.x0) / o.data.length), dry = css("--s2"), wet = css("--s1"), mid = css("--faint");
+  pts.forEach(d => {
+    const c = spiClass(d[1]), y = ys(d[1]), y0 = ys(0);
+    el("rect", { x: xs(d[0]), y: Math.min(y, y0), width: w + .3, height: Math.max(.5, Math.abs(y - y0)), fill: d[1] < 0 ? (c[1] === "near normal" ? mid : dry) : (c[1] === "near normal" ? mid : wet), "fill-opacity": c[2] }, f.svg);
+  });
+  const step = narrow ? 20 : 10;
+  for (let t = Math.ceil(xmin / step) * step; t <= xmax; t += step) el("text", { x: xs(t), y: f.H - 6, "text-anchor": "middle" }, f.svg).textContent = t;
+  const cross = el("line", { y1: f.y1, y2: f.y0, stroke: css("--faint"), visibility: "hidden" }, f.svg);
+  const hit = el("rect", { x: f.x0, y: f.y1, width: f.x1 - f.x0, height: f.y0 - f.y1, fill: "transparent" }, f.svg);
+  const move = evt => {
+    const r = f.svg.getBoundingClientRect(), p = evt.touches ? evt.touches[0] : evt;
+    const x = xmin + ((p.clientX - r.left) * f.W / r.width - f.x0) / (f.x1 - f.x0) * (xmax - xmin);
+    let best = o.data[0]; o.data.forEach(d => { if (Math.abs(d[0] - x) < Math.abs(best[0] - x)) best = d; });
+    cross.setAttribute("x1", xs(best[0]) + w / 2); cross.setAttribute("x2", xs(best[0]) + w / 2); cross.setAttribute("visibility", "visible");
+    showTip(evt, mLabel(best[0]), best[1] === null ? [{ n: o.name, v: "no data" }] : [{ c: best[1] < 0 ? dry : wet, n: o.name, v: fmt(best[1], 2) }, { n: "Class", v: spiClass(best[1])[1] }]);
+  };
+  const leave = () => { cross.setAttribute("visibility", "hidden"); hideTip(); };
+  hit.addEventListener("mousemove", move); hit.addEventListener("touchstart", move, { passive: true }); hit.addEventListener("touchmove", move, { passive: true });
+  hit.addEventListener("mouseleave", leave); hit.addEventListener("touchend", leave);
+}
+
+/* Small segmented control: buttons with data-v; calls onChange(value) and marks the pressed one. */
+function segmented(id, onChange) {
+  const box = document.getElementById(id);
+  box.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+    box.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    onChange(b.dataset.v);
+  }));
+}

@@ -32,3 +32,7 @@ statistiques-des-immatriculations-et-permis-de-conduire-delivres*
 evolution-des-affaires-au-cours-du-quinquennat*
 indice-de-perception-de-la-corruption*
 liste-des-questions-*
+pluie-journaliere-de-la-station-abhsmd*
+pluie-journaliere-de-la-station-talaint*
+pluie-journaliere-de-la-station-ait-melloul*
+debit-moyen-journalier-de-la-station-talaint*

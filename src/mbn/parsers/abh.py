@@ -85,3 +85,26 @@ def daily(grid: pd.DataFrame, year: int) -> pd.DataFrame:
                 continue
             rows.append((date, value))
     return pd.DataFrame(rows, columns=["date", "value"]).sort_values("date").reset_index(drop=True)
+
+
+def station_daily(paths: list[str], kind: str) -> pd.DataFrame:
+    """All yearly files of one station -> one row per day (date, value). ``kind`` is "rain" or "flow".
+
+    Blank template files (no year label) are skipped; when two files cover the same day, the
+    later file wins.
+    """
+    parts = []
+    for p in paths:
+        df = pd.read_excel(p, header=None)
+        if kind == "rain":
+            label = rain_year_label(df)
+            if label is None:
+                continue
+            parts.append(daily(rain_grid(df), label))
+        else:
+            parts.append(daily(flow_grid(df), flow_year_from_name(p)))
+    if not parts:
+        return pd.DataFrame({"date": pd.Series(dtype="datetime64[ns]"), "value": pd.Series(dtype=float)})
+    out = pd.concat(parts).drop_duplicates("date", keep="last").sort_values("date").reset_index(drop=True)
+    out["value"] = out["value"].astype(float)
+    return out
