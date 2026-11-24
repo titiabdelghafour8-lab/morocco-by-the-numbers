@@ -1,6 +1,6 @@
 name: Data sync
 
-# Every hour, ask data.gov.ma whether any dataset this site uses has changed.
+# Every Monday, ask data.gov.ma whether any dataset this site uses has changed.
 # If one has: download just those datasets, rebuild every figure and check the
 # numbers quoted in the text.
 #   - all quoted numbers still hold -> publish straight to the live site
@@ -8,7 +8,7 @@ name: Data sync
 #     the live site keeps the reviewed version until the text is updated
 on:
   schedule:
-    - cron: "23 * * * *"
+    - cron: "23 6 * * 1"   # Mondays 06:23 UTC
   workflow_dispatch:
     inputs:
       force:

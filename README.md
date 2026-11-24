@@ -37,7 +37,7 @@ Run the steps from the repository root. The downloader skips files it already ha
 
 ## Automatic data sync
 
-`.github/workflows/sync.yml` runs every hour (and on demand from the Actions tab):
+`.github/workflows/sync.yml` runs every Monday at 06:23 UTC (and on demand from the Actions tab):
 
 1. `scripts/00_check_updates.py` asks data.gov.ma for the last-modified time of the datasets listed in `scripts/datasets.txt`. This takes a few API calls and stops here if nothing changed.
 2. If something changed, it downloads only those datasets, rebuilds every figure and checks that every chart is on the page.
@@ -45,7 +45,7 @@ Run the steps from the repository root. The downloader skips files it already ha
    - All quoted numbers still hold: the new figures are published straight to the live site.
    - A quoted number no longer holds: the job pushes a `data-review-YYYYMMDD` branch and opens an issue labelled `data-review` listing what changed. The live site keeps the reviewed version until the text is updated and the branch merged.
 
-The portal has no notification feed, so changes reach the site within about an hour of being published there.
+The portal has no notification feed, so changes reach the site within a week of being published there. To pick them up sooner, run the workflow from the Actions tab.
 
 ## Known caveats
 
