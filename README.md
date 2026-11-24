@@ -24,6 +24,8 @@ data.gov.ma  ->  download  ->  extract  ->  build  ->  pack  ->  render  ->  che
                                 tables      series     file                    vs data
 ```
 
+For diagrams of how the pieces fit together (C4 model: context, containers, components and the weekly sync), see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
 The site is a single static `index.html` with the data embedded and charts drawn as plain SVG. There is no framework and no server: GitHub Pages serves the file from the `main` branch and republishes it within a minute of every push.
 
 ## Project layout
