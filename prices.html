@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Prices · Morocco by the Numbers</title>
+<meta name="description" content="A monthly price monitor from HCP's consumer price index: what is getting more expensive, where, and whether it is speeding up.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="site/assets/site.css">
+
+<nav class="site" aria-label="Pages"><div class="wrap"><a href="index.html">Findings</a><a href="water.html">Water</a><a href="prices.html" aria-current="page">Prices</a></div></nav>
+<header class="intro"><div class="wrap">
+  <h1>Prices: what is getting more expensive, and where</h1>
+  <p class="sub">A monthly monitor of HCP's consumer price index (base 100 = 2017), nationally and in 18 cities. Latest month: <b>August 2026</b>. It updates when HCP publishes a new month.</p>
+</div></header>
+
+<nav class="chapters" aria-label="Sections"><div class="wrap">
+  <a href="#now">Now</a><a href="#drivers">Drivers</a><a href="#movers">Movers</a><a href="#cities">Cities</a><a href="#forecast">Forecast</a><a href="#method">Method</a>
+  <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" title="Switch to dark mode">
+    <svg class="i-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+    <svg class="i-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </button>
+</div></nav>
+
+<main><div class="wrap">
+
+<div class="group" id="now">
+<section class="ch">
+  <span class="topic">Inflation</span>
+  <h2>Prices are lower than a year ago</h2>
+  <p>In August 2026, consumer prices were <b>0.3% lower</b> than a year earlier, and food prices <b>4.2% lower</b>. Over the last three months, with the usual seasonal pattern removed, prices moved at an annual rate of <b>−2.8%</b>. Inflation peaked at 10.1% in February 2023.</p>
+  <div class="legend"><span><i style="background:var(--s2)"></i>Food and soft drinks</span><span><i style="background:var(--s1)"></i>All items</span><span><i style="background:var(--s3)"></i>All items, last 3 months, annual rate</span></div>
+  <div class="chart" id="c-headline"></div>
+  <p class="note">HCP revises its index. For February 2023 it announced food inflation of 20.1%; the index on the portal now gives 20.8%. All rates here are computed from today's index.</p>
+  <span class="source" data-src="cpi"></span>
+</section>
+</div>
+
+<div class="group" id="drivers">
+<section class="ch">
+  <span class="topic">Drivers</span>
+  <h2>What drove inflation in August 2026</h2>
+  <p>Each bar is a group's share of the headline rate: its weight in the basket times its price change over the year. <b>Transport</b> added the most (+0.72 points). Food and soft drinks, 38% of the basket, contributed <b>−1.74</b> points.</p>
+  <div class="chart-title">Contribution to year-on-year inflation, percentage points</div>
+  <div class="chart" id="c-contrib"></div>
+  <p class="note">HCP does not publish the basket weights on the portal, so they are estimated here from its own indices. They rebuild the headline index to within 0.07 index points, but fits on each half of the period differ by up to 3.8 points, so read individual weights as approximate.</p>
+  <span class="source" data-src="cpi"></span>
+</section>
+</div>
+
+<div class="group" id="movers">
+<section class="ch">
+  <span class="topic">Biggest movers</span>
+  <h2>What moved most this month</h2>
+  <p>Each product's monthly change is compared with its own history, using the median and median absolute deviation so that one past spike does not hide another. The biggest move in August 2026 was <b>Bière</b>: +3.6% in the month, 12 times its usual spread.</p>
+  <table class="mini" id="t-movers"><thead><tr><th>Product (HCP name)</th><th class="n">Month</th><th class="n">Year</th><th class="n">Unusual</th></tr></thead><tbody></tbody></table>
+  <p class="note">"Unusual" is the robust z-score: how many typical spreads away from its normal monthly change. Small product groups move more, so a large score is a reason to look, not a verdict.</p>
+  <span class="source" data-src="cpi"></span>
+</section>
+</div>
+
+<div class="group" id="cities">
+<section class="ch">
+  <span class="topic">Cities</span>
+  <h2>Inflation ran from −2.1% in Al Hoceima to +1.9% in Oujda</h2>
+  <p>Year-on-year change in August 2026 by city and spending group. 16 of 18 cities' prices move together month to month; Kénitra and Guelmim move differently and are listed last.</p>
+  <div class="swatches"><span><i style="background:var(--s2)"></i>Prices up</span><span><i style="background:var(--s1)"></i>Prices down</span><span>Darker = larger change</span></div>
+  <div class="chart" id="c-heat"></div>
+  <span class="source" data-src="cpi"></span>
+</section>
+</div>
+
+<div class="group" id="forecast">
+<section class="ch">
+  <span class="topic">Forecast</span>
+  <h2>The next three months</h2>
+  <p>The ETS model beat the simple rule "same monthly changes as last year" in back-tests: its three-month-ahead error was 22% smaller (0.90 against 1.16 points). The test made a forecast from each of 36 months, June 2023 to May 2026, using only the data available at the time.</p>
+  <div class="legend" id="fc-legend"><span><i style="background:var(--s1)"></i>All items, year on year</span><span><i style="background:var(--s2)"></i>Forecast</span></div>
+  <div class="chart" id="c-forecast"></div>
+  <table class="mini" id="t-mae"><thead><tr><th>Model</th><th class="n">Average miss, points</th></tr></thead><tbody></tbody></table>
+  <p class="note">A forecast is shown only if a model beats the benchmark of repeating last year's monthly changes. Forecasts are uncertain: the average miss is a guide to how far off they can be.</p>
+  <span class="source" data-src="cpi"></span>
+</section>
+</div>
+
+<div class="group" id="method">
+<section class="ch">
+  <div class="method">
+    <h3>Method</h3>
+    <ul>
+      <li><b>Rates</b> are computed from HCP's monthly index: year on year, month on month, and a three-month annualised rate on the seasonally adjusted index (robust STL decomposition).</li>
+      <li><b>Contributions</b> are weight × price change ÷ last year's headline index, so they add up to the headline rate. The weights come from a non-negative least-squares fit of the headline index on its twelve groups.</li>
+      <li><b>Movers</b> use a robust z-score of each product's monthly change against all its earlier months.</li>
+      <li><b>City groups</b> come from hierarchical clustering on the correlation of seasonally adjusted monthly changes.</li>
+      <li><b>Forecasts</b>: three models on the log index (repeat last year's monthly changes; exponential smoothing with a damped trend and seasonality; a seasonal ARIMA), tested from rolling origins three months ahead.</li>
+    </ul>
+    <h3>Limits</h3>
+    <ul>
+      <li>The index covers the cities HCP surveys; rural prices are not included.</li>
+      <li>HCP revises past months, so earlier figures here can differ from those announced at the time.</li>
+      <li>Weights are estimates, not HCP's official figures.</li>
+      <li>A model that beat the benchmark in the past can still miss, especially when prices turn quickly.</li>
+    </ul>
+    <h3>Data</h3>
+    <p class="downloads">Processed figures under the <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">ODbL</a>: <a href="data/prices.json">prices.json</a> (all series) and <a href="data/prices_latest.csv">prices_latest.csv</a> (latest month, every city and product). Credit HCP and data.gov.ma.</p>
+    <span class="source" data-src="cpi"></span>
+  </div>
+</section>
+</div>
+
+</div></main>
+<footer><div class="wrap">Part of <a href="index.html" style="color:inherit">Morocco by the Numbers</a>. Data from data.gov.ma (ODbL licence), last updated <span class="updated"></span>. Hover or tap a chart for exact values.</div></footer>
+<div id="tip" hidden></div>
+
+<script src="site/assets/charts.js"></script>
+<script>
+let DATA;
+const signed = (v, d = 1) => (v > 0 ? "+" : v < 0 ? "−" : "") + fmt(Math.abs(v), d);
+function renderAll() {
+  if (!DATA) return;
+  const s1 = css("--s1"), s2 = css("--s2"), s3 = css("--s3");
+  const since = 2019;
+  lineChart("c-headline", { series: [{ name: "Food and soft drinks", color: s2, data: DATA.headline.filter(r => r[0] >= since).map(r => [r[0], r[2]]) }, { name: "All items", color: s1, data: DATA.headline.filter(r => r[0] >= since).map(r => [r[0], r[1]]) }, { name: "3 months, annual rate", color: s3, data: DATA.sa3m.filter(r => r[0] >= since) }], yFmt: (v, e) => signed(v, e ? 1 : 0) + "%", xFmt: mLabel, xTicks: range(2019, 2026, 1), endLabels: true });
+  divBars("c-contrib", DATA.contributions.map(r => [r[1], r[2], [{ n: "Weight", v: fmt(DATA.weights.find(w => w[0] === r[0])[2], 1) + "%" }]]), { name: "Points", fmt: v => signed(v, 2) });
+  heatmap("c-heat", { rows: DATA.heatmap.map(r => r[0]), cols: DATA.divisions.map(d => d[1].split(/[ ,]/)[0]), fullCols: DATA.divisions.map(d => d[1]), values: DATA.heatmap.map(r => r[3]), limit: 8, name: "Year on year", fmt: v => signed(v) + "%" });
+  const recent = DATA.headline.filter(r => r[0] >= DATA.headline.at(-1)[0] - 2).map(r => [r[0], r[1]]);
+  const series = [{ name: "All items", color: s1, data: recent }];
+  if (DATA.forecast.model) { const last = recent.at(-1); series.push({ name: `Forecast (${DATA.forecast.model})`, color: s2, data: [last, ...DATA.forecast.path.map((v, j) => [+(last[0] + (j + 1) / 12).toFixed(3), v])] }); }
+  else document.getElementById("fc-legend").lastElementChild.remove();
+  lineChart("c-forecast", { series, yFmt: (v, e) => signed(v, e ? 1 : 0) + "%", xFmt: mLabel, xTicks: range(Math.ceil(recent[0][0]), Math.floor(recent.at(-1)[0]) + 1, 1), endLabels: true });
+}
+loadData("data/prices.json").then(d => {
+  DATA = d;
+  renderSources(DATA);
+  renderUpdated(DATA.updated);
+  document.querySelector("#t-movers tbody").innerHTML = DATA.movers.map(m => `<tr><td>${m[1]}</td><td class="n">${signed(m[2])}%</td><td class="n">${signed(m[3])}%</td><td class="n">${fmt(m[4], 1)}</td></tr>`).join("");
+  document.querySelector("#t-mae tbody").innerHTML = Object.entries(DATA.forecast.mae).map(([k, v]) => `<tr><td>${k === "seasonal naive" ? "Same changes as last year (benchmark)" : k}${k === DATA.forecast.model ? " · shown" : ""}</td><td class="n">${fmt(v, 2)}</td></tr>`).join("");
+  onRedraw(renderAll);
+});
+initThemeSwitch();
+highlightChapters();
+</script>

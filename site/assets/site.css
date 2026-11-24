@@ -1,0 +1,97 @@
+/* Morocco by the Numbers: shared tokens, light/dark theme, layout and chart styles.
+   Layout: single 760px reading column; sticky chapter bar; one finding + one chart per chapter */
+:root {
+  --bg: #fcfcfb; --fg: #0b0b0b; --muted: #52514e; --faint: #8a8984; --line: #e6e5e1; --grid: #efeeea;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --tip: #ffffff;
+  --display: "Archivo", "Segoe UI", system-ui, sans-serif;
+  --body: "Inter", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1a1a19; --fg: #f0efec; --muted: #c3c2b7; --faint: #8f8e87; --line: #33332f; --grid: #262624;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --tip: #242422; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #1a1a19; --fg: #f0efec; --muted: #c3c2b7; --faint: #8f8e87; --line: #33332f; --grid: #262624;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --tip: #242422; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body) }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg) }
+.wrap { max-width: 760px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+
+nav.site { border-bottom: 1px solid var(--line) }
+nav.site .wrap { display: flex; flex-wrap: wrap; gap: 2px 4px; padding-block: 8px; font-size: 13px }
+nav.site a { color: var(--muted); text-decoration: none; font-weight: 500; padding: 4px 8px; border-radius: 6px }
+nav.site a:first-child { margin-left: -8px }
+nav.site a:hover { color: var(--fg); background: var(--grid) }
+nav.site a[aria-current="page"] { color: var(--fg); background: var(--grid) }
+
+header.intro .wrap { padding-block: 48px 28px; display: grid; gap: 10px }
+h1 { font: 700 clamp(30px, 6vw, 44px)/1.05 var(--display); letter-spacing: -.01em; margin: 0; text-wrap: balance }
+.sub { color: var(--muted); font-size: 16px; margin: 0; max-width: 60ch }
+
+nav.chapters { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-block: 1px solid var(--line) }
+nav.chapters .wrap { display: flex; gap: 2px; overflow-x: auto; padding-block: 8px; scrollbar-width: none }
+nav.chapters a { flex: none; color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; padding: 5px 10px; border-radius: 6px }
+nav.chapters a:hover { color: var(--fg); background: var(--grid) }
+nav.chapters a.on { color: var(--fg); background: var(--grid) }
+.theme-toggle { margin-left: auto; flex: none; position: sticky; right: 0; z-index: 1; box-shadow: -10px 0 8px var(--bg); display: inline-grid; place-items: center; width: 34px; height: 30px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--muted); cursor: pointer }
+.theme-toggle:hover { color: var(--fg); background: var(--grid) }
+.theme-toggle:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px }
+.theme-toggle .i-sun { display: none }
+.theme-toggle.is-dark .i-sun { display: block }
+.theme-toggle.is-dark .i-moon { display: none }
+a:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px }
+
+main .wrap { display: grid; gap: 0 }
+section.ch { padding-block: 44px; border-bottom: 1px solid var(--line); display: grid; gap: 14px; scroll-margin-top: 56px }
+section.ch:last-child { border-bottom: 0 }
+.group { scroll-margin-top: 48px }
+.group-head { padding-block: 40px 0 }
+.gh { font: 700 13px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--s1); margin: 0; padding-bottom: 10px; border-bottom: 2px solid var(--s1) }
+.about h3 { font: 600 16px var(--display); margin: 10px 0 0 }
+.about ul { margin: 0; padding-left: 20px; color: var(--muted); display: grid; gap: 6px; max-width: 62ch }
+.about a, .about code { color: var(--fg) }
+.topic { font: 500 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--faint) }
+h2 { font: 600 clamp(21px, 3.4vw, 26px)/1.2 var(--display); margin: 0; text-wrap: balance }
+.ch p { margin: 0; max-width: 62ch; color: var(--muted) }
+.ch p b { color: var(--fg); font-weight: 600 }
+.chart-title { font: 600 14px var(--body); margin: 10px 0 0 }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--muted) }
+.legend span { display: inline-flex; align-items: center; gap: 6px }
+.legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block }
+.chart { width: 100%; min-width: 0; position: relative }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible }
+.chart text { font-family: var(--mono); font-size: 11px; fill: var(--faint) }
+.chart text.lbl { fill: var(--muted); font-family: var(--body); font-size: 12px }
+.chart text.val { fill: var(--fg); font-size: 11px }
+.source { font-size: 12px; color: var(--faint) }
+.source a { color: var(--muted) }
+.note { font-size: 13px; color: var(--muted); max-width: 62ch }
+
+#tip { position: fixed; pointer-events: none; z-index: 20; background: var(--tip); color: var(--fg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12px; line-height: 1.5; box-shadow: 0 4px 14px rgb(0 0 0 / .12); min-width: 120px }
+#tip b { font: 600 12px var(--body); display: block; margin-bottom: 2px }
+#tip .r { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-variant-numeric: tabular-nums }
+#tip .r i { width: 8px; height: 8px; border-radius: 2px }
+#tip .r em { font-style: normal; color: var(--muted); font-family: var(--body); margin-right: auto; padding-right: 10px }
+footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth } }
+
+/* Project pages: segmented controls, method boxes, small tables, data downloads */
+.seg { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--line); border-radius: 8px; width: fit-content }
+.seg button { font: 500 12px var(--body); color: var(--muted); background: none; border: 0; border-radius: 6px; padding: 4px 10px; cursor: pointer }
+.seg button[aria-pressed="true"] { color: var(--fg); background: var(--grid) }
+.seg button:focus-visible { outline: 2px solid var(--s1); outline-offset: 1px }
+.method { border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 10px; max-width: 62ch }
+.method h3 { font: 600 15px var(--display); margin: 0 }
+.method ul { margin: 0; padding-left: 20px; color: var(--muted); display: grid; gap: 6px; font-size: 14px }
+.method p { font-size: 14px }
+table.mini { border-collapse: collapse; font-size: 13px; color: var(--muted); width: 100%; max-width: 62ch }
+table.mini th, table.mini td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums }
+table.mini th { color: var(--fg); font-weight: 600 }
+table.mini td.n { text-align: right; font-family: var(--mono) }
+.downloads a { color: var(--fg) }
+.swatches { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--muted) }
+.swatches span { display: inline-flex; align-items: center; gap: 6px }
+.swatches i { width: 10px; height: 10px; border-radius: 2px; display: inline-block }
+.sub b { color: var(--fg); font-weight: 600 }

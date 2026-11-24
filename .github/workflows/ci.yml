@@ -1,0 +1,58 @@
+name: CI
+
+# Every pull request (and every push to main) runs lint, types and all test layers.
+# The weekly sync starts this workflow on its own pull request with workflow_dispatch,
+# because pull requests opened with the default GITHUB_TOKEN do not trigger workflows.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+          enable-cache: true
+
+      - name: Install
+        run: uv sync --frozen
+
+      - name: Lint and format
+        run: |
+          uv run ruff check src tests
+          uv run ruff format --check src tests
+
+      - name: Types
+        run: uv run mypy
+
+      - name: Watch list is generated from the registry
+        run: uv run mbn watchlist --check
+
+      - name: Claims hold on the committed data
+        run: uv run mbn claims
+
+      - name: Unit, property, contract, BDD and golden tests
+        run: uv run pytest --ignore=tests/e2e --cov=mbn --cov-report=term --cov-report=xml
+
+      - name: Coverage of parsers and analyses is at least 90%
+        run: uv run coverage report --include="*/mbn/analyses/*,*/mbn/parsers/*" --fail-under=90
+
+      - name: Install the browser
+        run: uv run playwright install --with-deps chromium
+
+      - name: Pages in a browser (desktop and phone, light and dark)
+        run: uv run pytest tests/e2e

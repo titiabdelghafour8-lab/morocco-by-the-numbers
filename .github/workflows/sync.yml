@@ -1,11 +1,14 @@
 name: Data sync
 
 # Every Monday, ask data.gov.ma whether any dataset this site uses has changed.
-# If one has: download just those datasets, rebuild every figure and check the
+# If one has: download just those datasets, rebuild every page and check the
 # numbers quoted in the text.
-#   - all quoted numbers still hold -> publish straight to the live site
-#   - a quoted number no longer holds -> push a review branch and open an issue;
-#     the live site keeps the reviewed version until the text is updated
+#   - all quoted numbers still hold -> open a pull request; CI checks it and the
+#     maintainer merges it (or it merges itself if the repository variable
+#     SYNC_AUTO_MERGE is "true" and auto-merge is allowed in the repository)
+#   - a quoted number no longer holds -> push a review branch and open a
+#     data-review issue; the live site keeps the reviewed version until the
+#     text is updated
 on:
   schedule:
     - cron: "23 6 * * 1"   # Mondays 06:23 UTC
@@ -19,7 +22,8 @@ on:
 permissions:
   contents: write
   issues: write
-  pages: write
+  pull-requests: write
+  actions: write
 
 concurrency:
   group: data-sync
@@ -31,76 +35,72 @@ jobs:
     timeout-minutes: 90
     env:
       GH_TOKEN: ${{ github.token }}
+      PYTHONUTF8: "1"
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v6
         with:
           python-version: "3.12"
+          enable-cache: true
+
+      - name: Install
+        run: uv sync --frozen --no-dev
 
       - name: Look for changes on data.gov.ma
         id: check
         run: |
-          python scripts/00_check_updates.py >> "$GITHUB_OUTPUT"
+          uv run mbn check >> "$GITHUB_OUTPUT"
           echo "review_open=$(gh issue list --label data-review --state open --json number --jq length 2>/dev/null || echo 0)" >> "$GITHUB_OUTPUT"
+          echo "sync_open=$(gh pr list --label data-sync --state open --json number --jq length 2>/dev/null || echo 0)" >> "$GITHUB_OUTPUT"
           cat changes.md
 
       - name: Decide whether to rebuild
         id: go
         run: |
           if [ "${{ inputs.force }}" = "true" ]; then run=true
-          elif [ "${{ steps.check.outputs.changed }}" = "true" ] && [ "${{ steps.check.outputs.review_open }}" = "0" ]; then run=true
+          elif [ "${{ steps.check.outputs.changed }}" = "true" ] && [ "${{ steps.check.outputs.review_open }}" = "0" ] && [ "${{ steps.check.outputs.sync_open }}" = "0" ]; then run=true
           else run=false; fi
           echo "run=$run" >> "$GITHUB_OUTPUT"
-          echo "Rebuild: $run (changed=${{ steps.check.outputs.changed }}, open reviews=${{ steps.check.outputs.review_open }})"
-
-      - name: Install dependencies
-        if: steps.go.outputs.run == 'true'
-        run: pip install -r requirements.txt
+          echo "Rebuild: $run (changed=${{ steps.check.outputs.changed }}, open reviews=${{ steps.check.outputs.review_open }}, open sync PRs=${{ steps.check.outputs.sync_open }})"
 
       - name: Download the watched datasets
         if: steps.go.outputs.run == 'true'
-        run: python scripts/01_download.py datasets scripts/datasets.txt
+        run: uv run mbn download datasets
 
-      - name: Rebuild figures and page
+      - name: Rebuild data files and pages
         if: steps.go.outputs.run == 'true'
         run: |
-          cp data/morocco_by_the_numbers.json /tmp/old.json
-          python scripts/02_extract.py datasets
-          python scripts/02b_extract_more.py datasets
-          python scripts/02c_extract_services.py datasets
-          python scripts/03_build.py datasets
-          python scripts/03b_build_more.py
-          python scripts/04_pack.py datasets
-          python scripts/05_render.py
-
-      - name: Check the page still has every chart
-        if: steps.go.outputs.run == 'true'
-        run: |
-          expected=$(grep -o 'class="chart" id="c-[a-z-]*"' scripts/template.html | wc -l)
-          found=$(grep -o 'class="chart" id="c-[a-z-]*"' index.html | wc -l)
-          test "$expected" -eq "$found"
+          mkdir -p /tmp/old && cp data/*.json /tmp/old/
+          uv run mbn build datasets
+          uv run mbn render
+          uv run mbn charts
 
       - name: Compare figures and check quoted numbers
         if: steps.go.outputs.run == 'true'
         id: verify
         run: |
-          python scripts/06_compare.py /tmp/old.json data/morocco_by_the_numbers.json summary.md >> "$GITHUB_OUTPUT"
-          if python scripts/07_check_claims.py > claims.txt; then echo "claims_ok=true" >> "$GITHUB_OUTPUT"; else echo "claims_ok=false" >> "$GITHUB_OUTPUT"; fi
+          uv run mbn verify --old /tmp/old --summary summary.md --claims claims.txt >> "$GITHUB_OUTPUT"
           cat claims.txt
-          mv data/sources_state.new.json data/sources_state.json
+          if [ -f data/sources_state.new.json ]; then mv data/sources_state.new.json data/sources_state.json; fi
 
-      - name: Publish to the live site
+      - name: Open a pull request to publish
         if: steps.go.outputs.run == 'true' && (steps.verify.outputs.changed != 'true' || steps.verify.outputs.claims_ok == 'true')
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html data/morocco_by_the_numbers.json data/sources_state.json
+          git add index.html *.html data/
           if git diff --cached --quiet; then echo "Nothing to publish"; exit 0; fi
+          branch="data-sync-$(date -u +%Y%m%d)"
+          git checkout -b "$branch"
           git commit -m "Sync data from data.gov.ma ($(date -u +%F))"
-          git pull --rebase origin main   # main may have moved while the job ran
-          git push origin HEAD:main
-          gh api -X POST "repos/${{ github.repository }}/pages/builds" > /dev/null || true
+          git push -f origin "$branch"
+          { cat changes.md; echo; cat summary.md; echo; echo "### Claims check"; echo; echo '```'; cat claims.txt; echo '```'; } > pr.md
+          gh label create data-sync --color 0E8A16 --description "Weekly data sync, every claim holds" 2>/dev/null || true
+          gh pr create --base main --head "$branch" --label data-sync --title "Sync data from data.gov.ma ($(date -u +%F))" --body-file pr.md
+          # Pull requests opened with GITHUB_TOKEN do not trigger workflows: start CI on the branch explicitly.
+          gh workflow run ci.yml --ref "$branch"
+          if [ "${{ vars.SYNC_AUTO_MERGE }}" = "true" ]; then gh pr merge "$branch" --auto --squash || true; fi
 
       - name: Ask for a text review
         if: steps.go.outputs.run == 'true' && steps.verify.outputs.changed == 'true' && steps.verify.outputs.claims_ok != 'true'
@@ -109,13 +109,13 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add index.html data/morocco_by_the_numbers.json data/sources_state.json
+          git add index.html *.html data/
           git commit -m "New data from data.gov.ma ($(date -u +%F)), awaiting text review"
           git push -f origin "$branch"
           {
             cat changes.md; echo; cat summary.md; echo
             echo "### Claims check"; echo; echo '```'; cat claims.txt; echo '```'; echo
-            echo "Review branch: \`$branch\`. Update the sentences in \`scripts/template.html\` and the expected values in \`scripts/07_check_claims.py\`, re-run \`scripts/05_render.py\`, then merge into \`main\`."
+            echo "Review branch: \`$branch\`. Update the sentences in \`site/templates/\` and the expected values in \`src/mbn/findings/\`, run \`uv run mbn render\` and \`uv run mbn claims\`, then open a pull request from the branch."
           } > issue.md
           gh label create data-review --color D93F0B --description "New data waiting for a text review" 2>/dev/null || true
           gh issue create --title "New data needs a text review ($(date -u +%F))" --label data-review --body-file issue.md

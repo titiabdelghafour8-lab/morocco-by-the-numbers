@@ -6,79 +6,9 @@
 <title>Morocco by the Numbers</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
-<style>
-/* Layout: single 760px reading column; sticky chapter bar; one finding + one chart per chapter */
-:root {
-  --bg: #fcfcfb; --fg: #0b0b0b; --muted: #52514e; --faint: #8a8984; --line: #e6e5e1; --grid: #efeeea;
-  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --tip: #ffffff;
-  --display: "Archivo", "Segoe UI", system-ui, sans-serif;
-  --body: "Inter", "Segoe UI", system-ui, sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
-}
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #1a1a19; --fg: #f0efec; --muted: #c3c2b7; --faint: #8f8e87; --line: #33332f; --grid: #262624;
-  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --tip: #242422; color-scheme: dark } }
-:root[data-theme="dark"] {
-  --bg: #1a1a19; --fg: #f0efec; --muted: #c3c2b7; --faint: #8f8e87; --line: #33332f; --grid: #262624;
-  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --tip: #242422; color-scheme: dark }
+<link rel="stylesheet" href="site/assets/site.css">
 
-* { box-sizing: border-box }
-body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body) }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg) }
-.wrap { max-width: 760px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
-
-header.intro .wrap { padding-block: 48px 28px; display: grid; gap: 10px }
-h1 { font: 700 clamp(30px, 6vw, 44px)/1.05 var(--display); letter-spacing: -.01em; margin: 0; text-wrap: balance }
-.sub { color: var(--muted); font-size: 16px; margin: 0; max-width: 60ch }
-
-nav.chapters { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-block: 1px solid var(--line) }
-nav.chapters .wrap { display: flex; gap: 2px; overflow-x: auto; padding-block: 8px; scrollbar-width: none }
-nav.chapters a { flex: none; color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500; padding: 5px 10px; border-radius: 6px }
-nav.chapters a:hover { color: var(--fg); background: var(--grid) }
-nav.chapters a.on { color: var(--fg); background: var(--grid) }
-.theme-toggle { margin-left: auto; flex: none; position: sticky; right: 0; z-index: 1; box-shadow: -10px 0 8px var(--bg); display: inline-grid; place-items: center; width: 34px; height: 30px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--muted); cursor: pointer }
-.theme-toggle:hover { color: var(--fg); background: var(--grid) }
-.theme-toggle:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px }
-.theme-toggle .i-sun { display: none }
-.theme-toggle.is-dark .i-sun { display: block }
-.theme-toggle.is-dark .i-moon { display: none }
-a:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px }
-
-main .wrap { display: grid; gap: 0 }
-section.ch { padding-block: 44px; border-bottom: 1px solid var(--line); display: grid; gap: 14px; scroll-margin-top: 56px }
-section.ch:last-child { border-bottom: 0 }
-.group { scroll-margin-top: 48px }
-.group-head { padding-block: 40px 0 }
-.gh { font: 700 13px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--s1); margin: 0; padding-bottom: 10px; border-bottom: 2px solid var(--s1) }
-.about h3 { font: 600 16px var(--display); margin: 10px 0 0 }
-.about ul { margin: 0; padding-left: 20px; color: var(--muted); display: grid; gap: 6px; max-width: 62ch }
-.about a, .about code { color: var(--fg) }
-.topic { font: 500 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--faint) }
-h2 { font: 600 clamp(21px, 3.4vw, 26px)/1.2 var(--display); margin: 0; text-wrap: balance }
-.ch p { margin: 0; max-width: 62ch; color: var(--muted) }
-.ch p b { color: var(--fg); font-weight: 600 }
-.chart-title { font: 600 14px var(--body); margin: 10px 0 0 }
-.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--muted) }
-.legend span { display: inline-flex; align-items: center; gap: 6px }
-.legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block }
-.chart { width: 100%; min-width: 0; position: relative }
-.chart svg { display: block; width: 100%; height: auto; overflow: visible }
-.chart text { font-family: var(--mono); font-size: 11px; fill: var(--faint) }
-.chart text.lbl { fill: var(--muted); font-family: var(--body); font-size: 12px }
-.chart text.val { fill: var(--fg); font-size: 11px }
-.source { font-size: 12px; color: var(--faint) }
-.source a { color: var(--muted) }
-.note { font-size: 13px; color: var(--muted); max-width: 62ch }
-
-#tip { position: fixed; pointer-events: none; z-index: 20; background: var(--tip); color: var(--fg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-size: 12px; line-height: 1.5; box-shadow: 0 4px 14px rgb(0 0 0 / .12); min-width: 120px }
-#tip b { font: 600 12px var(--body); display: block; margin-bottom: 2px }
-#tip .r { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-variant-numeric: tabular-nums }
-#tip .r i { width: 8px; height: 8px; border-radius: 2px }
-#tip .r em { font-style: normal; color: var(--muted); font-family: var(--body); margin-right: auto; padding-right: 10px }
-footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
-@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth } }
-</style>
-
+<nav class="site" aria-label="Pages"><div class="wrap"><a href="index.html" aria-current="page">Findings</a><a href="water.html">Water</a><a href="prices.html">Prices</a></div></nav>
 <header class="intro"><div class="wrap">
   <h1>Morocco by the Numbers</h1>
   <p class="sub">Twenty-one findings from the government's own open data, grouped into land and water, work, the economy, daily life and the state.</p>
@@ -324,155 +254,9 @@ footer .wrap { padding-block: 28px 56px; font-size: 13px; color: var(--faint) }
 <footer><div class="wrap">Built by <a href="https://github.com/titiabdelghafour8-lab" style="color:inherit">titiabdelghafour8-lab</a>. All figures come from data.gov.ma open data (ODbL licence), last updated <span class="updated">23 November 2026</span>. Hover or tap a chart for exact values.</div></footer>
 <div id="tip" hidden></div>
 
+<script src="site/assets/charts.js"></script>
 <script>
 const DATA = {"flow":[[1971,23.18],[1972,34.38],[1973,3.44],[1974,21.66],[1975,13.92],[1976,2.18],[1977,0.25],[1978,4.81],[1979,11.57],[1980,3.04],[1981,0.0],[1982,2.2],[1983,0.0],[1984,1.33],[1985,4.32],[1986,1.65],[1987,0.18],[1988,18.37],[1989,6.95],[1990,4.53],[1991,2.54],[1992,0.06],[1993,0.0],[1994,1.06],[1995,0.37],[1996,18.3],[1997,6.93],[1998,4.93],[1999,0.08],[2000,0.0],[2001,1.51],[2002,0.47],[2003,1.28],[2004,1.02],[2005,1.65],[2006,0.86],[2007,0.0],[2008,0.42],[2009,1.77],[2010,19.56],[2011,7.79],[2012,0.0],[2013,3.69],[2014,0.0],[2015,5.4],[2016,0.38],[2017,1.62],[2018,1.46],[2019,1.04],[2020,0.02],[2021,3.95],[2022,0.02],[2023,0.0],[2024,0.0]],"rain":[[1969,361.0],[1971,269.0],[1972,192.0],[1973,238.0],[1974,187.0],[1975,23.0],[1976,74.0],[1977,110.0],[1978,234.0],[1979,102.0],[1980,196.0],[1981,67.0],[1982,176.0],[1983,94.0],[1984,117.0],[1985,148.0],[1986,172.0],[1987,56.0],[1988,220.0],[1989,212.0],[1990,174.0],[1991,186.0],[1992,63.0],[1993,58.0],[1994,102.0],[1995,70.0],[1996,375.0],[1997,166.0],[1998,150.0],[1999,154.0],[2000,60.0],[2001,60.0],[2002,184.0],[2003,125.0],[2004,183.0],[2005,192.0],[2006,175.0],[2007,55.0],[2008,66.0],[2009,223.0],[2011,216.0],[2012,48.0],[2013,148.0],[2014,74.0],[2015,258.0],[2016,72.0],[2017,131.0],[2018,135.0],[2019,125.0],[2020,56.0],[2021,174.0],[2022,94.0],[2023,119.0],[2024,97.0]],"cereals":[[2011,8.62],[2012,5.13],[2013,9.86],[2014,6.93],[2015,11.69],[2016,3.55],[2017,9.78],[2018,10.38],[2019,5.3],[2020,3.25],[2021,10.45],[2022,3.53]],"u_total":[[2006.0,9.6],[2006.25,7.8],[2006.5,10.1],[2006.75,10.9],[2007.0,10.1],[2007.25,9.3],[2007.5,9.9],[2007.75,9.7],[2008.0,9.6],[2008.25,9.1],[2008.5,9.9],[2008.75,9.5],[2009.0,9.6],[2009.25,8.0],[2009.5,9.8],[2009.75,9.0],[2010.0,10.0],[2010.25,8.2],[2010.5,9.0],[2010.75,9.2],[2011.0,9.1],[2011.25,8.7],[2011.5,9.1],[2011.75,8.5],[2012.0,9.9],[2012.25,8.1],[2012.5,9.4],[2012.75,8.7],[2013.0,9.4],[2013.25,8.8],[2013.5,9.1],[2013.75,9.5],[2014.0,10.2],[2014.25,9.3],[2014.5,9.6],[2014.75,9.7],[2015.0,9.9],[2015.25,8.7],[2015.5,10.1],[2015.75,9.2],[2016.0,10.0],[2016.25,8.6],[2016.5,9.6],[2016.75,9.0],[2017.0,10.7],[2017.25,9.3],[2017.5,10.6],[2017.75,10.6],[2018.0,10.5],[2018.25,9.3],[2018.5,9.3],[2018.75,9.4],[2019.0,9.1],[2019.25,8.1],[2019.5,9.4],[2019.75,10.2],[2020.0,10.5],[2020.25,12.3],[2020.5,12.7],[2020.75,12.2],[2021.0,12.5],[2021.25,12.8],[2021.5,11.8],[2021.75,11.9],[2022.0,12.1],[2022.25,11.2],[2022.5,11.4],[2022.75,12.9],[2023.0,12.9],[2023.25,12.4],[2023.5,13.5],[2023.75,13.3],[2024.0,13.7],[2024.25,13.1],[2024.5,13.6],[2024.75,12.9],[2025.0,13.3],[2025.25,12.8],[2025.5,13.1],[2025.75,12.9]],"u_youth":[[2006.0,16.2],[2006.25,13.1],[2006.5,17.5],[2006.75,19.4],[2007.0,17.6],[2007.25,15.5],[2007.5,16.7],[2007.75,18.6],[2008.0,17.9],[2008.25,17.3],[2008.5,18.8],[2008.75,18.3],[2009.0,19.3],[2009.25,15.7],[2009.5,18.5],[2009.75,17.9],[2010.0,18.5],[2010.25,16.3],[2010.5,16.8],[2010.75,18.8],[2011.0,17.3],[2011.25,17.4],[2011.5,18.2],[2011.75,18.2],[2012.0,19.2],[2012.25,17.1],[2012.5,20.2],[2012.75,18.1],[2013.0,19.5],[2013.25,18.4],[2013.5,19.1],[2013.75,19.6],[2014.0,20.2],[2014.25,19.2],[2014.5,20.6],[2014.75,19.7],[2015.0,21.3],[2015.25,20.5],[2015.5,21.4],[2015.75,20.0],[2016.0,23.0],[2016.25,21.5],[2016.5,21.8],[2016.75,22.8],[2017.0,25.5],[2017.25,23.5],[2017.5,29.3],[2017.75,28.2],[2018.0,25.7],[2018.25,24.3],[2018.5,26.2],[2018.75,25.6],[2019.0,22.9],[2019.25,22.2],[2019.5,26.7],[2019.75,28.0],[2020.0,26.8],[2020.25,33.4],[2020.5,32.3],[2020.75,32.6],[2021.0,32.5],[2021.25,30.8],[2021.5,31.0],[2021.75,32.7],[2022.0,33.4],[2022.25,30.2],[2022.5,31.7],[2022.75,35.7],[2023.0,35.3],[2023.25,33.6],[2023.5,38.2],[2023.75,36.5],[2024.0,35.9],[2024.25,36.1],[2024.5,39.5],[2024.75,35.7],[2025.0,37.7],[2025.25,35.8],[2025.5,38.4],[2025.75,37.2]],"u_youth_w":[[2006.0,13.2],[2006.25,9.3],[2006.5,15.7],[2006.75,17.7],[2007.0,16.3],[2007.25,11.8],[2007.5,14.7],[2007.75,19.0],[2008.0,15.7],[2008.25,13.7],[2008.5,18.4],[2008.75,15.8],[2009.0,17.2],[2009.25,13.2],[2009.5,19.7],[2009.75,15.1],[2010.0,16.3],[2010.25,13.6],[2010.5,15.9],[2010.75,18.6],[2011.0,17.7],[2011.25,15.5],[2011.5,18.7],[2011.75,18.3],[2012.0,18.7],[2012.25,17.3],[2012.5,20.9],[2012.75,18.3],[2013.0,20.0],[2013.25,14.6],[2013.5,20.0],[2013.75,18.0],[2014.0,20.7],[2014.25,18.7],[2014.5,18.6],[2014.75,16.8],[2015.0,24.3],[2015.25,18.0],[2015.5,21.7],[2015.75,22.1],[2016.0,22.8],[2016.25,22.7],[2016.5,20.2],[2016.75,25.4],[2017.0,31.5],[2017.25,29.2],[2017.5,39.4],[2017.75,38.6],[2018.0,34.3],[2018.25,27.5],[2018.5,37.0],[2018.75,38.8],[2019.0,31.3],[2019.25,27.7],[2019.5,36.8],[2019.75,37.7],[2020.0,35.8],[2020.25,41.5],[2020.5,42.4],[2020.75,46.3],[2021.0,43.2],[2021.25,36.9],[2021.5,41.0],[2021.75,47.2],[2022.0,43.5],[2022.25,39.5],[2022.5,47.2],[2022.75,47.3],[2023.0,47.5],[2023.25,42.1],[2023.5,54.4],[2023.75,46.5],[2024.0,48.5],[2024.25,46.7],[2024.5,56.5],[2024.75,49.8],[2025.0,49.4],[2025.25,52.4],[2025.5,55.2],[2025.75,53.4]],"u_none":[[2006.0,5.1],[2006.25,3.8],[2006.5,5.0],[2006.75,5.5],[2007.0,5.2],[2007.25,4.7],[2007.5,5.1],[2007.75,4.6],[2008.0,4.7],[2008.25,4.7],[2008.5,4.8],[2008.75,4.6],[2009.0,5.0],[2009.25,3.9],[2009.5,4.6],[2009.75,4.2],[2010.0,5.4],[2010.25,3.9],[2010.5,4.1],[2010.75,4.6],[2011.0,4.4],[2011.25,4.1],[2011.5,4.1],[2011.75,3.4],[2012.0,5.0],[2012.25,3.5],[2012.5,4.1],[2012.75,3.7],[2013.0,4.7],[2013.25,4.3],[2013.5,4.2],[2013.75,4.6],[2014.0,5.2],[2014.25,4.1],[2014.5,4.6],[2014.75,4.5],[2015.0,4.7],[2015.25,3.6],[2015.5,4.3],[2015.75,3.4],[2016.0,4.3],[2016.25,3.7],[2016.5,3.8],[2016.75,3.2],[2017.0,4.3],[2017.25,3.2],[2017.5,4.2],[2017.75,3.8],[2018.0,4.0],[2018.25,3.1],[2018.5,3.4],[2018.75,2.9],[2019.0,2.9],[2019.25,2.4],[2019.5,3.7],[2019.75,3.4],[2020.0,3.6],[2020.25,6.6],[2020.5,6.9],[2020.75,5.1],[2021.0,5.0],[2021.25,5.0],[2021.5,4.4],[2021.75,3.7],[2022.0,4.6],[2022.25,3.6],[2022.5,4.1],[2022.75,4.6],[2023.0,4.9],[2023.25,4.5],[2023.5,5.5],[2023.75,4.9],[2024.0,5.5],[2024.25,5.3],[2024.5,5.5],[2024.75,4.6],[2025.0,5.2],[2025.25,4.6],[2025.5,4.7],[2025.75,4.2]],"u_mid":[[2006.0,18.5],[2006.25,15.5],[2006.5,19.4],[2006.75,20.9],[2007.0,19.5],[2007.25,17.2],[2007.5,18.0],[2007.75,17.7],[2008.0,18.0],[2008.25,16.8],[2008.5,18.7],[2008.75,18.4],[2009.0,17.3],[2009.25,15.0],[2009.5,17.6],[2009.75,16.8],[2010.0,17.5],[2010.25,15.1],[2010.5,16.4],[2010.75,15.6],[2011.0,16.3],[2011.25,15.0],[2011.5,15.6],[2011.75,14.8],[2012.0,16.7],[2012.25,14.5],[2012.5,15.7],[2012.75,15.0],[2013.0,15.0],[2013.25,14.6],[2013.5,15.7],[2013.75,15.0],[2014.0,16.1],[2014.25,15.5],[2014.5,15.2],[2014.75,14.8],[2015.0,16.0],[2015.25,13.8],[2015.5,16.6],[2015.75,14.5],[2016.0,15.3],[2016.25,12.9],[2016.5,14.7],[2016.75,13.2],[2017.0,15.5],[2017.25,14.3],[2017.5,15.4],[2017.75,15.2],[2018.0,14.5],[2018.25,13.5],[2018.5,13.0],[2018.75,13.4],[2019.0,11.8],[2019.25,11.3],[2019.5,12.7],[2019.75,13.9],[2020.0,14.5],[2020.25,15.9],[2020.5,16.1],[2020.75,15.7],[2021.0,16.1],[2021.25,17.6],[2021.5,14.7],[2021.75,15.1],[2022.0,14.4],[2022.25,14.1],[2022.5,12.9],[2022.75,15.2],[2023.0,16.2],[2023.25,15.3],[2023.5,15.7],[2023.75,16.1],[2024.0,16.9],[2024.25,15.6],[2024.5,15.5],[2024.75,14.9],[2025.0,16.1],[2025.25,15.2],[2025.5,14.5],[2025.75,14.6]],"u_high":[[2006.0,18.9],[2006.25,17.1],[2006.5,20.7],[2006.75,21.4],[2007.0,20.2],[2007.25,20.6],[2007.5,21.7],[2007.75,20.9],[2008.0,20.8],[2008.25,18.6],[2008.5,21.1],[2008.75,18.4],[2009.0,18.8],[2009.25,16.0],[2009.5,21.5],[2009.75,17.9],[2010.0,18.2],[2010.25,16.0],[2010.5,19.4],[2010.75,19.0],[2011.0,18.1],[2011.25,18.9],[2011.5,19.7],[2011.75,20.8],[2012.0,18.7],[2012.25,17.6],[2012.5,20.3],[2012.75,19.0],[2013.0,19.6],[2013.25,18.6],[2013.5,18.1],[2013.75,19.8],[2014.0,20.9],[2014.25,20.3],[2014.5,20.0],[2014.75,21.5],[2015.0,19.9],[2015.25,20.8],[2015.5,21.0],[2015.75,22.6],[2016.0,21.8],[2016.25,20.4],[2016.5,22.3],[2016.75,23.4],[2017.0,24.4],[2017.25,21.8],[2017.5,23.5],[2017.75,24.5],[2018.0,25.4],[2018.25,22.2],[2018.5,22.1],[2018.75,22.4],[2019.0,23.5],[2019.25,20.0],[2019.5,20.6],[2019.75,23.4],[2020.0,23.8],[2020.25,22.3],[2020.5,23.5],[2020.75,26.2],[2021.0,26.2],[2021.25,25.3],[2021.5,25.7],[2021.75,26.8],[2022.0,26.7],[2022.25,23.9],[2022.5,25.5],[2022.75,27.6],[2023.0,25.8],[2023.25,25.0],[2023.5,26.2],[2023.75,26.8],[2024.0,25.7],[2024.25,25.0],[2024.5,26.2],[2024.75,25.9],[2025.0,24.4],[2025.25,24.6],[2025.5,25.7],[2025.75,25.7]],"region":[["Tanger-Tétouan-Al Hoceïma",9.4,10.7,13.3],["Oriental",22.1,15.0,39.5],["Fès-Meknès",15.1,8.6,22.5],["Rabat-Salé-Kénitra",12.7,10.0,20.9],["Béni Mellal-Khénifra",11.2,6.6,17.6],["Casablanca-settat",14.6,10.0,19.4],["Marrakech-safi",8.1,7.4,15.9],["Drâa-Tafilalet",8.4,7.2,12.5],["Souss-Massa",11.1,10.1,21.8],["Régions du Sud",22.8,16.5,53.5]],"prov_top":[["Laâyoune",35.5],["Es-Semara",32.9],["Oujda-Angad",26.1],["Jerada",25.8],["Guelmim",24.9],["Taourirt",22.7],["Tan-Tan",21.8],["Nador",21.7]],"prov_bottom":[["Al Hoceima",6.7],["Midelt",6.7],["Taroudannt",6.7],["Al Haouz",6.0],["Chichaoua",5.7],["Rehamna",5.1],["Chefchaouen",4.6],["Essaouira",3.6]],"infl":[[2018.0,2.0],[2018.083,1.4],[2018.167,1.7],[2018.25,2.2],[2018.333,2.4],[2018.417,2.4],[2018.5,1.9],[2018.583,1.6],[2018.667,1.2],[2018.75,1.1],[2018.833,1.1],[2018.917,0.2],[2019.0,-0.5],[2019.083,0.0],[2019.167,-0.1],[2019.25,0.0],[2019.333,0.3],[2019.417,0.2],[2019.5,0.3],[2019.583,0.7],[2019.667,0.1],[2019.75,0.5],[2019.833,0.4],[2019.917,1.1],[2020.0,1.4],[2020.083,1.2],[2020.167,1.6],[2020.25,0.9],[2020.333,-0.2],[2020.417,-0.7],[2020.5,-0.1],[2020.583,0.9],[2020.667,1.4],[2020.75,1.3],[2020.833,0.2],[2020.917,-0.3],[2021.0,0.0],[2021.083,0.3],[2021.167,0.1],[2021.25,1.4],[2021.333,1.9],[2021.417,1.5],[2021.5,2.2],[2021.583,0.8],[2021.667,1.2],[2021.75,1.7],[2021.833,2.6],[2021.917,3.2],[2022.0,3.1],[2022.083,3.6],[2022.167,5.3],[2022.25,5.9],[2022.333,5.9],[2022.417,7.2],[2022.5,7.7],[2022.583,8.0],[2022.667,8.3],[2022.75,8.1],[2022.833,8.3],[2022.917,8.3],[2023.0,8.9],[2023.083,10.1],[2023.167,8.2],[2023.25,7.8],[2023.333,7.1],[2023.417,5.5],[2023.5,4.9],[2023.583,5.0],[2023.667,4.9],[2023.75,4.3],[2023.833,3.6],[2023.917,3.4],[2024.0,2.3],[2024.083,0.3],[2024.167,0.9],[2024.25,0.2],[2024.333,0.4],[2024.417,1.8],[2024.5,1.3],[2024.583,1.7],[2024.667,0.8],[2024.75,0.7],[2024.833,0.8],[2024.917,0.7],[2025.0,2.0],[2025.083,2.6],[2025.167,1.6],[2025.25,0.7],[2025.333,0.4],[2025.417,0.4],[2025.5,0.5],[2025.583,0.3],[2025.667,0.4],[2025.75,0.1],[2025.833,-0.3],[2025.917,-0.3],[2026.0,-0.8],[2026.083,-0.6],[2026.167,0.9],[2026.25,1.7],[2026.333,1.2],[2026.417,0.3],[2026.5,-0.6],[2026.583,-0.3]],"infl_food":[[2018.0,3.8],[2018.083,2.3],[2018.167,3.5],[2018.25,4.1],[2018.333,4.2],[2018.417,3.7],[2018.5,2.3],[2018.583,2.0],[2018.667,0.5],[2018.75,-0.2],[2018.833,0.0],[2018.917,-1.8],[2019.0,-2.7],[2019.083,-1.9],[2019.167,-2.7],[2019.25,-2.3],[2019.333,-1.4],[2019.417,-1.5],[2019.5,-1.3],[2019.583,-0.5],[2019.667,-1.7],[2019.75,-0.2],[2019.833,-0.7],[2019.917,0.6],[2020.0,1.3],[2020.083,1.4],[2020.167,3.3],[2020.25,2.9],[2020.333,0.1],[2020.417,-1.8],[2020.5,-1.1],[2020.583,1.4],[2020.667,2.9],[2020.75,2.7],[2020.833,-0.1],[2020.917,-1.7],[2021.0,-1.0],[2021.083,-1.0],[2021.167,-2.1],[2021.25,0.1],[2021.333,1.3],[2021.417,0.6],[2021.5,2.7],[2021.583,-1.1],[2021.667,-0.3],[2021.75,1.0],[2021.833,2.9],[2021.917,4.5],[2022.0,4.2],[2022.083,5.5],[2022.167,9.4],[2022.25,9.4],[2022.333,8.6],[2022.417,11.0],[2022.5,12.4],[2022.583,14.6],[2022.667,15.1],[2022.75,14.3],[2022.833,14.9],[2022.917,15.5],[2023.0,17.4],[2023.083,20.8],[2023.167,16.5],[2023.25,16.9],[2023.333,16.1],[2023.417,13.1],[2023.5,12.1],[2023.583,10.6],[2023.667,10.1],[2023.75,9.0],[2023.833,7.7],[2023.917,6.8],[2024.0,4.3],[2024.083,-0.5],[2024.167,0.9],[2024.25,-1.4],[2024.333,-1.3],[2024.417,1.6],[2024.5,0.3],[2024.583,1.9],[2024.667,0.5],[2024.75,0.3],[2024.833,0.7],[2024.917,0.6],[2025.0,3.4],[2025.083,4.7],[2025.167,2.3],[2025.25,0.5],[2025.333,0.4],[2025.417,0.8],[2025.5,0.9],[2025.583,0.2],[2025.667,0.4],[2025.75,-0.5],[2025.833,-1.5],[2025.917,-1.5],[2026.0,-2.4],[2026.083,-2.2],[2026.167,0.5],[2026.25,0.5],[2026.333,-0.9],[2026.417,-2.5],[2026.5,-4.0],[2026.583,-4.2]],"amo":[[2012,19.7],[2013,22.8],[2014,23.5],[2015,24.2],[2016,25.0],[2017,26.0],[2018,27.1],[2019,28.7],[2020,29.4],[2021,31.2],[2022,32.1],[2023,44.3],[2024,77.1]],"internet":[[2010,5.9],[2011,9.9],[2012,12.2],[2013,17.6],[2014,30.0],[2015,42.8],[2016,50.4],[2017,63.7],[2018,64.7],[2019,71.3],[2020,82.9],[2021,90.5],[2022,97.0],[2023,103.4],[2024,109.2],[2025,112.6]],"mobile":[[2006,53.5],[2007,65.7],[2008,74.0],[2009,81.2],[2010,101.5],[2011,113.6],[2012,120.0],[2013,129.1],[2014,133.0],[2015,127.3],[2016,122.7],[2017,126.0],[2018,127.0],[2019,131.1],[2020,137.5],[2021,141.4],[2022,144.2],[2023,150.9],[2024,158.3],[2025,160.7]],"roads":[[2021,3685,114626,1634,2051],[2022,3499,113625,1629,1870],[2023,3819,123274,1678,2141],[2024,4024,143272,1890,2134]],"appeal":[[2017,265350.0],[2018,262140.0],[2019,258943.0],[2020,205022.0],[2021,268757.0],[2022,287234.0],[2023,407815.0],[2024,395550.0],[2025,436788.0]],"registered":[[2017,2663038.0],[2018,2902443.0],[2019,3182606.0],[2020,2782048.0],[2021,3873640.0],[2022,4412765.0],[2023,4658870.0],[2024,4331339.0],[2025,4106554.0]],"judged":[[2017,2728534.0],[2018,2967047.0],[2019,3221143.0],[2020,2649452.0],[2021,3875011.0],[2022,4403226.0],[2023,4697249.0],[2024,4474924.0],[2025,4166949.0]],"corr":[[2012,37,88],[2013,37,91],[2014,39,80],[2015,36,88],[2016,37,90],[2017,40,81],[2018,43,73],[2019,41,80],[2020,40,86],[2021,39,87],[2022,38,94],[2023,38,97],[2024,37,99]],"src":{"flow":{"title":"Débit moyen journalier de la station Aït Melloul (1970-2024)","org":"Agence du Bassin Hydraulique de Souss Massa","url":"https://data.gov.ma/data/fr/dataset/debit-moyen-journalier-de-la-station-ait-melloul-1970-2024"},"rain":{"title":"Pluie journalière du barrage Y.B. TACHFINE  (1967-2024)","org":"Agence du Bassin Hydraulique de Souss Massa","url":"https://data.gov.ma/data/fr/dataset/pluie-journaliere-du-barrage-y-b-tachfine-1967-2024"},"cereals":{"title":"Production végétale 2010-2022","org":"Département de l'Agriculture","url":"https://data.gov.ma/data/fr/dataset/production-vegetale-2010-2022"},"u_age":{"title":"Taux de chômage selon les tranches d'âge et le sexe (Trimestriel)","org":"HCP","url":"https://data.gov.ma/data/fr/dataset/data_i4252"},"u_dip":{"title":"Taux de chômage selon le diplôme et le sexe (Trimestriel)","org":"HCP","url":"https://data.gov.ma/data/fr/dataset/data_i4248"},"region":{"title":"Taux de chômage par sexe et région","org":"HCP","url":"https://data.gov.ma/data/fr/dataset/data_i3287"},"prov":{"title":"Taux de chômage selon les Provinces/Préfectures et le Milieu","org":"HCP","url":"https://data.gov.ma/data/fr/dataset/data_imt_txch_02"},"cpi":{"title":"Indice des prix à la consommation (Mensuel) (Base 100 2017)","org":"HCP","url":"https://data.gov.ma/data/fr/dataset/data_i4166"},"amo":{"title":"Taux de couverture de la population marocaine par l’AMO","org":"Autorité de Contrôle des Assurances et de la Prévoyance Sociale (ACAPS)","url":"https://data.gov.ma/data/fr/dataset/taux-de-couverture-de-la-population-marocaine-par-l-amo"},"internet":{"title":"Parc de l'Internet","org":"ANRT","url":"https://data.gov.ma/data/fr/dataset/parc-de-l-internet-2006-2022"},"mobile":{"title":"Parc de la téléphonie mobile","org":"ANRT","url":"https://data.gov.ma/data/fr/dataset/parc-de-la-telephonie-mobile-2006-2022"},"roads":{"title":"Statistiques des accidents de la circulation routière - 2024","org":"NARSA","url":"https://data.gov.ma/data/fr/dataset/statistiques-des-accidents-de-la-circulation-routiere-2024"},"courts":{"title":"Evolution des affaires au cours du quinquennat","org":"MJ","url":"https://data.gov.ma/data/fr/dataset/evolution-des-affaires-au-cours-du-quinquennat-2018-2022"},"corr":{"title":"Indice de Perception de la Corruption (IPC) (2012- 2024)","org":"INPPLC","url":"https://data.gov.ma/data/fr/dataset/indice-de-perception-de-la-corruption-ipc-2012-2024"},"gdp":{"title":"Décomposition du PIB (CVS) aux prix de l'année precedente chainés (Trimestrielle Base 2014)","org":"HCP","url":"https://data.gov.ma/data/fr/dataset/data_i4276"},"credit":{"title":"Créances sur l'économie","org":"Bank Al-Maghrib","url":"https://data.gov.ma/data/fr/dataset/creances-sur-l-economie-dec-2001-a-sept-2023"},"funds":{"title":"Statistiques hebdomadaires des Organismes de Placement Collectif en Valeurs Mobilières (OPCVM) pour l'année 2026","org":"AMMC","url":"https://data.gov.ma/data/fr/dataset/stat-hebdo-opcvm-2026"},"startups":{"title":"Base de données des startups marocaines répertoriée chez l’ADD","org":"ADD","url":"https://data.gov.ma/data/fr/dataset/donnees-sur-les-startups"},"pensions":{"title":"Rapport démographique des régimes de base","org":"Autorité de Contrôle des Assurances et de la Prévoyance Sociale (ACAPS)","url":"https://data.gov.ma/data/fr/dataset/rapport-demographique-des-regimes-de-base"},"parliament":{"title":"Liste des questions écrites de la session d'Avril pour les années de 2017 à 2023","org":"Parlement","url":"https://data.gov.ma/data/fr/dataset/liste-des-questions-ecrites-de-la-session-d-avril"},"amo_in":{"title":"Ressources des régimes AMO","org":"Autorité de Contrôle des Assurances et de la Prévoyance Sociale (ACAPS)","url":"https://data.gov.ma/data/fr/dataset/ressources-des-regimes-amo"},"amo_out":{"title":"Dépenses des régimes AMO","org":"Autorité de Contrôle des Assurances et de la Prévoyance Sociale (ACAPS)","url":"https://data.gov.ma/data/fr/dataset/depenses-des-regimes-amo"},"pen_in":{"title":"Cotisations des régimes de retraite","org":"Autorité de Contrôle des Assurances et de la Prévoyance Sociale (ACAPS)","url":"https://data.gov.ma/data/fr/dataset/cotisations-des-regimes-de-retraite"},"pen_out":{"title":"Prestations des régimes de retraite","org":"Autorité de Contrôle des Assurances et de la Prévoyance Sociale (ACAPS)","url":"https://data.gov.ma/data/fr/dataset/prestations-des-regimes-de-retraite"},"pen_res":{"title":"Réserves des régimes de retraite","org":"Autorité de Contrôle des Assurances et de la Prévoyance Sociale (ACAPS)","url":"https://data.gov.ma/data/fr/dataset/reserves-des-regimes-de-retraite"},"vehicles":{"title":"Statistiques des immatriculations et permis de conduire délivrés - 2023","org":"NARSA","url":"https://data.gov.ma/data/fr/dataset/statistiques-des-immatriculations-et-permis-de-conduire-delivres-2023"},"primary_care":{"title":"Répartition des établissements de soins de santé primaire par catégorie","org":"MSPS","url":"https://data.gov.ma/data/fr/dataset/repartition-des-etablissements-de-soins-de-sante-primaire-par-categorie-2020"},"hospitals":{"title":"Liste des hôpitaux","org":"MSPS","url":"https://data.gov.ma/data/fr/dataset/la-liste-des-hopitaux"},"schools":{"title":"Liste des établissements publics de l'enseignement primaires","org":"MENPS","url":"https://data.gov.ma/data/fr/dataset/liste-des-etablissements-publics-primaire"}},"gdp_growth":[[2015.0,3.9],[2015.25,3.6],[2015.5,4.1],[2015.75,5.7],[2016.0,0.8],[2016.25,-0.5],[2016.5,0.9],[2016.75,0.9],[2017.0,5.1],[2017.25,6.4],[2017.5,4.5],[2017.75,4.3],[2018.0,3.3],[2018.25,2.9],[2018.5,3.1],[2018.75,3.0],[2019.0,2.8],[2019.25,4.0],[2019.5,2.9],[2019.75,1.9],[2020.0,-1.2],[2020.25,-14.1],[2020.5,-7.6],[2020.75,-5.7],[2021.0,1.8],[2021.25,14.5],[2021.5,8.9],[2021.75,8.1],[2022.0,1.1],[2022.25,3.0],[2022.5,2.0],[2022.75,1.1],[2023.0,3.9],[2023.25,2.7],[2023.5,3.3],[2023.75,5.2],[2024.0,3.6],[2024.25,3.6],[2024.5,5.5],[2024.75,4.7],[2025.0,5.0],[2025.25,5.8],[2025.5,4.2],[2025.75,4.4],[2026.0,4.6],[2026.25,4.0]],"credit":[[2010.0,13.8],[2010.083,11.9],[2010.167,12.9],[2010.25,11.3],[2010.333,13.8],[2010.417,13.0],[2010.5,10.8],[2010.583,11.5],[2010.667,10.9],[2010.75,12.2],[2010.833,12.2],[2010.917,7.5],[2011.0,4.7],[2011.083,5.8],[2011.167,5.3],[2011.25,5.7],[2011.333,5.1],[2011.417,5.0],[2011.5,5.8],[2011.583,6.2],[2011.667,6.3],[2011.75,5.6],[2011.833,5.6],[2011.917,9.8],[2012.0,9.9],[2012.083,7.6],[2012.167,7.8],[2012.25,6.4],[2012.333,6.2],[2012.417,7.0],[2012.5,6.8],[2012.583,6.1],[2012.667,5.3],[2012.75,5.0],[2012.833,5.3],[2012.917,4.8],[2013.0,3.2],[2013.083,3.7],[2013.167,1.8],[2013.25,3.8],[2013.333,2.9],[2013.417,2.9],[2013.5,2.5],[2013.583,2.8],[2013.667,3.1],[2013.75,3.4],[2013.833,2.5],[2013.917,3.8],[2014.0,2.9],[2014.083,3.1],[2014.167,5.7],[2014.25,4.1],[2014.333,4.7],[2014.417,3.7],[2014.5,4.3],[2014.583,3.6],[2014.667,4.4],[2014.75,4.8],[2014.833,4.3],[2014.917,2.5],[2015.0,4.6],[2015.083,4.5],[2015.167,3.3],[2015.25,2.5],[2015.333,1.8],[2015.417,2.9],[2015.5,2.2],[2015.583,1.8],[2015.667,1.1],[2015.75,0.7],[2015.833,1.4],[2015.917,2.0],[2016.0,0.6],[2016.083,1.3],[2016.167,1.0],[2016.25,2.7],[2016.333,3.2],[2016.417,3.0],[2016.5,2.5],[2016.583,3.9],[2016.667,4.4],[2016.75,4.0],[2016.833,4.7],[2016.917,4.4],[2017.0,5.2],[2017.083,3.8],[2017.167,5.0],[2017.25,4.5],[2017.333,4.6],[2017.417,5.1],[2017.5,5.1],[2017.583,4.5],[2017.667,4.1],[2017.75,4.9],[2017.833,4.4],[2017.917,3.0],[2018.0,3.2],[2018.083,3.1],[2018.167,2.4],[2018.25,2.6],[2018.333,2.4],[2018.417,1.3],[2018.5,2.1],[2018.583,2.6],[2018.667,2.6],[2018.75,1.7],[2018.833,1.4],[2018.917,3.0],[2019.0,3.1],[2019.083,4.2],[2019.167,4.8],[2019.25,4.0],[2019.333,4.2],[2019.417,5.2],[2019.5,5.0],[2019.583,4.6],[2019.667,4.7],[2019.75,5.7],[2019.833,4.9],[2019.917,5.5],[2020.0,4.9],[2020.083,4.1],[2020.167,5.4],[2020.25,6.6],[2020.333,6.9],[2020.417,5.9],[2020.5,5.9],[2020.583,5.1],[2020.667,5.4],[2020.75,4.7],[2020.833,5.3],[2020.917,4.8],[2021.0,4.3],[2021.083,4.3],[2021.167,3.3],[2021.25,2.7],[2021.333,2.6],[2021.417,4.2],[2021.5,1.9],[2021.583,3.1],[2021.667,4.2],[2021.75,3.3],[2021.833,3.5],[2021.917,2.6],[2022.0,3.3],[2022.083,3.5],[2022.167,4.8],[2022.25,3.8],[2022.333,3.7],[2022.417,4.3],[2022.5,4.7],[2022.583,5.5],[2022.667,5.3],[2022.75,6.9],[2022.833,6.2],[2022.917,7.6],[2023.0,7.1],[2023.083,6.8],[2023.167,4.9],[2023.25,5.3],[2023.333,6.6],[2023.417,4.2],[2023.5,5.4],[2023.583,4.4],[2023.667,5.0],[2023.75,4.5],[2023.833,4.6],[2023.917,4.8],[2024.0,5.0],[2024.083,5.3],[2024.167,5.6],[2024.25,5.8],[2024.333,3.8],[2024.417,2.8],[2024.5,4.2],[2024.583,3.7],[2024.667,4.3],[2024.75,3.7],[2024.833,4.2],[2024.917,4.7],[2025.0,4.1],[2025.083,4.1],[2025.167,5.6],[2025.25,5.4],[2025.333,4.9],[2025.417,6.0],[2025.5,5.0],[2025.583,5.6],[2025.667,4.7],[2025.75,5.9],[2025.833,6.2],[2025.917,7.9],[2026.0,8.6],[2026.083,8.2],[2026.167,7.2],[2026.25,8.2],[2026.333,9.8],[2026.417,11.0],[2026.5,10.3],[2026.583,11.0]],"funds":[[2020.0,469.3],[2020.25,477.9],[2020.333,471.0],[2020.417,499.9],[2020.583,499.6],[2020.667,501.5],[2020.75,499.6],[2020.833,506.1],[2020.917,523.2],[2021.0,525.3],[2021.083,546.5],[2021.167,567.4],[2021.25,572.6],[2021.333,575.5],[2021.417,578.4],[2021.5,580.0],[2021.583,587.2],[2021.667,580.3],[2021.75,600.5],[2021.833,606.5],[2021.917,606.0],[2022.0,590.5],[2022.083,613.6],[2022.167,597.2],[2022.25,583.5],[2022.333,585.8],[2022.417,585.4],[2022.5,559.7],[2022.583,576.8],[2022.667,519.8],[2022.75,533.3],[2022.833,540.3],[2022.917,521.1],[2023.0,495.6],[2023.083,514.3],[2023.167,488.7],[2023.25,514.4],[2023.333,525.4],[2023.417,529.2],[2023.5,548.6],[2023.583,554.3],[2023.667,557.5],[2023.75,569.7],[2023.833,581.0],[2023.917,581.0],[2024.0,580.1],[2024.083,583.1],[2024.167,576.7],[2024.25,590.2],[2024.333,616.5],[2024.5,625.7],[2024.667,636.6],[2024.833,665.6],[2025.0,694.6],[2025.167,709.8],[2025.25,750.1],[2025.333,772.7],[2025.417,791.9],[2025.5,804.3],[2025.583,800.6],[2025.667,790.0],[2025.75,786.6],[2025.833,801.1],[2025.917,810.8],[2026.0,799.2],[2026.083,799.4],[2026.167,772.1],[2026.25,846.7],[2026.333,826.7],[2026.417,819.6],[2026.5,826.7],[2026.583,845.4],[2026.667,820.2],[2026.75,817.9],[2026.833,832.9]],"pension_ratio":[[2012,6.58],[2013,6.53],[2014,6.31],[2015,6.04],[2016,5.9],[2017,5.77],[2018,5.57],[2019,5.44],[2020,4.89],[2021,4.89],[2022,5.01],[2023,4.95],[2024,4.82]],"startup_city":[["casablanca",421],["rabat",127],["marrakech",46],["tanger",38],["agadir",26],["paris",15]],"startup_n":802,"parl_themes":[["Education and research",9295],["Infrastructure, transport and water",9091],["Economy and finance",7667],["Health and social protection",7352],["Interior",7180],["Agriculture, fisheries, water and forests",5377],["Youth, culture and sport",3778],["Energy and environment",2748],["Head of government",2392],["Housing and planning",2195],["Social affairs and family",2105],["Foreign affairs and Moroccans abroad",1613],["Justice",1377],["Employment and skills",1373],["Islamic affairs",1232],["Industry and trade",751],["Tourism and crafts",45]],"parl_total":67114,"parl_n":{"written":40226,"oral":26888},"amo_finance":{"resources":[[2012,10.17],[2013,11.14],[2014,11.79],[2015,12.79],[2016,15.23],[2017,16.02],[2018,17.54],[2019,18.34],[2020,19.14],[2021,20.93],[2022,26.37],[2023,38.34],[2024,46.11]],"expenses":[[2012,7.43],[2013,8.03],[2014,8.87],[2015,10.05],[2016,11.99],[2017,13.16],[2018,13.72],[2019,14.29],[2020,14.29],[2021,21.07],[2022,23.57],[2023,35.46],[2024,40.89]],"contributions":[[2012,8.0],[2013,8.57],[2014,9.07],[2015,9.55],[2016,11.02],[2017,11.44],[2018,12.41],[2019,13.4],[2020,13.29],[2021,14.9],[2022,18.71],[2023,28.94],[2024,31.74]],"benefits_paid":[[2012,5.11],[2013,5.25],[2014,6.44],[2015,6.59],[2016,7.79],[2017,8.39],[2018,9.0],[2019,9.41],[2020,9.54],[2021,12.25],[2022,12.57],[2023,21.93],[2024,27.18]]},"pension_money":{"contributions":[[2012,36.47],[2013,35.87],[2014,37.92],[2015,38.76],[2016,42.63],[2017,45.11],[2018,48.7],[2019,53.42],[2020,54.37],[2021,58.14],[2022,64.26],[2023,67.29],[2024,72.98]],"benefits":[[2012,29.0],[2013,32.32],[2014,35.56],[2015,38.79],[2016,41.9],[2017,46.46],[2018,50.63],[2019,56.15],[2020,63.57],[2021,65.66],[2022,71.88],[2023,74.57],[2024,78.66]],"reserves":[[2012,203.43],[2013,211.52],[2014,230.51],[2015,235.55],[2016,243.34],[2017,250.81],[2018,261.6],[2019,265.99],[2020,268.54],[2021,270.93],[2022,259.93],[2023,262.18],[2024,264.92]]},"vehicles":{"Motocyclettes":[[2012,36141],[2019,211722],[2020,241492],[2021,267314],[2022,288087],[2023,312148]],"Voitures de tourisme":[[2012,2202743],[2019,2415315],[2020,2521523],[2021,2663078],[2022,2802830],[2023,2965738]],"Véhicules utilitaires":[[2012,885518],[2019,1026240],[2020,1072329],[2021,1134143],[2022,1183421],[2023,1240229]],"Total":[[2012,3124402],[2019,3653276],[2020,3835343],[2021,4064534],[2022,4274337],[2023,4518116]]},"services":[["Guelmim-Oued Noun",22.3,11.1,39.4,448685],["Drâa-Tafilalet",15.9,7.2,36.4,1655623],["Béni Mellal-Khénifra",11.4,4.8,23.4,2525801],["Souss-Massa",10.5,4.3,23.5,3020431],["Oriental",10.4,8.7,27.5,2294665],["Laâyoune-Sakia El Hamra",9.8,13.3,20.4,451028],["Fès-Meknès",9.6,4.9,23.2,4467911],["Marrakech-Safi",9.3,4.3,24.0,4892393],["Dakhla-Oued Ed-Dahab",7.3,4.5,11.8,219965],["Tanger-Tétouan-Al Hoceïma",7.0,6.0,22.1,4030222],["Rabat-Salé-Kénitra",5.3,4.1,16.2,5132639],["Casablanca-Settat",4.9,3.5,15.7,7688967]],"services_totals":{"hospitals":184,"primary_care":3086,"schools_primary":7963,"schools_middle":2401,"schools_high":1653},"updated":"2026-11-24"};
-const NS = "http://www.w3.org/2000/svg";
-const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-const fmt = (n, d = 0) => n.toLocaleString("en", { minimumFractionDigits: d, maximumFractionDigits: d });
-const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-const tip = document.getElementById("tip");
-
-function el(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
-function showTip(evt, title, rows) {
-  tip.innerHTML = `<b>${title}</b>` + rows.map(r => `<div class="r">${r.c ? `<i style="background:${r.c}"></i>` : ""}<em>${r.n}</em>${r.v}</div>`).join("");
-  tip.hidden = false;
-  const p = evt.touches ? evt.touches[0] : evt, w = tip.offsetWidth, h = tip.offsetHeight;
-  let x = p.clientX + 14, y = p.clientY - h - 10;
-  if (x + w > innerWidth - 8) x = p.clientX - w - 14;
-  if (y < 8) y = p.clientY + 16;
-  tip.style.left = x + "px"; tip.style.top = y + "px";
-}
-const hideTip = () => { tip.hidden = true; };
-function niceTicks(min, max, n = 4) {
-  const span = max - min, step0 = span / n, mag = 10 ** Math.floor(Math.log10(step0));
-  const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= step0);
-  const ticks = [], hi = Math.ceil(max / step - 1e-9) * step; for (let v = Math.floor(min / step + 1e-9) * step; v <= hi + 1e-9; v += step) ticks.push(+v.toFixed(6));
-  return ticks;
-}
-function frame(id, h, m) {
-  const box = document.getElementById(id); box.innerHTML = "";
-  const W = Math.max(280, box.clientWidth), H = h;
-  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img" }, box);
-  return { box, svg, W, H, x0: m.l, x1: W - m.r, y0: H - m.b, y1: m.t };
-}
-function yAxis(f, ticks, ys, yFmt) {
-  ticks.forEach(t => {
-    el("line", { x1: f.x0, x2: f.x1, y1: ys(t), y2: ys(t), stroke: t === 0 ? css("--faint") : css("--grid"), "stroke-width": 1 }, f.svg);
-    el("text", { x: f.x0 - 8, y: ys(t) + 4, "text-anchor": "end" }, f.svg).textContent = yFmt(t);
-  });
-}
-
-/* Line chart: o.series [{name, color, data:[[x,y]]}] */
-function lineChart(id, o) {
-  const narrow = document.getElementById(id).clientWidth < 520;
-  const f = frame(id, narrow ? 230 : 270, { l: 40, r: o.endLabels && !narrow ? 70 : 14, t: 12, b: 26 });
-  const all = o.series.flatMap(s => s.data);
-  const xmin = Math.min(...all.map(d => d[0])), xmax = Math.max(...all.map(d => d[0]));
-  let ymin = o.yMin ?? Math.min(0, ...all.map(d => d[1])), ymax = o.yMax ?? Math.max(...all.map(d => d[1]));
-  const ticks = niceTicks(ymin, ymax); ymin = Math.min(ymin, ticks[0]); ymax = Math.max(ymax, ticks[ticks.length - 1]);
-  const xs = x => f.x0 + (x - xmin) / (xmax - xmin) * (f.x1 - f.x0), ys = y => f.y0 - (y - ymin) / (ymax - ymin) * (f.y0 - f.y1);
-  yAxis(f, ticks, ys, o.yFmt);
-  o.xTicks.filter((t, i) => !narrow || i % 2 === 0).forEach(t => { el("text", { x: xs(t), y: f.H - 6, "text-anchor": "middle" }, f.svg).textContent = Math.floor(t); });
-  o.series.forEach(s => {
-    const d = s.data.map((p, i) => (i ? "L" : "M") + xs(p[0]).toFixed(1) + "," + ys(p[1]).toFixed(1)).join("");
-    if (o.area) el("path", { d: d + `L${xs(s.data.at(-1)[0])},${ys(Math.max(ymin, 0))}L${xs(s.data[0][0])},${ys(Math.max(ymin, 0))}Z`, fill: s.color, "fill-opacity": .12 }, f.svg);
-    el("path", { d, fill: "none", stroke: s.color, "stroke-width": 2, "stroke-linejoin": "round" }, f.svg);
-    const last = s.data.at(-1);
-    el("circle", { cx: xs(last[0]), cy: ys(last[1]), r: 4, fill: s.color, stroke: css("--bg"), "stroke-width": 2 }, f.svg);
-    if (o.endLabels && !narrow) el("text", { x: xs(last[0]) + 8, y: ys(last[1]) + 4 + (s.dy || 0), class: "val" }, f.svg).textContent = o.yFmt(last[1]) + (o.unit || "");
-  });
-  if (o.breakAt) { el("line", { x1: xs(o.breakAt), x2: xs(o.breakAt), y1: f.y1, y2: f.y0, stroke: css("--faint"), "stroke-dasharray": "3 4" }, f.svg); el("text", { x: xs(o.breakAt) - 6, y: f.y1 + 10, "text-anchor": "end" }, f.svg).textContent = "new survey method →"; }
-  const cross = el("line", { y1: f.y1, y2: f.y0, stroke: css("--faint"), "stroke-width": 1, visibility: "hidden" }, f.svg);
-  const dots = o.series.map(s => el("circle", { r: 4.5, fill: s.color, stroke: css("--bg"), "stroke-width": 2, visibility: "hidden" }, f.svg));
-  const hit = el("rect", { x: f.x0, y: f.y1, width: f.x1 - f.x0, height: f.y0 - f.y1, fill: "transparent" }, f.svg);
-  const move = evt => {
-    const r = f.svg.getBoundingClientRect(), p = evt.touches ? evt.touches[0] : evt;
-    const x = xmin + ((p.clientX - r.left) * f.W / r.width - f.x0) / (f.x1 - f.x0) * (xmax - xmin);
-    const base = o.series[0].data; let best = base[0];
-    base.forEach(d => { if (Math.abs(d[0] - x) < Math.abs(best[0] - x)) best = d; });
-    cross.setAttribute("x1", xs(best[0])); cross.setAttribute("x2", xs(best[0])); cross.setAttribute("visibility", "visible");
-    const rows = o.series.map((s, i) => {
-      const pt = s.data.find(d => Math.abs(d[0] - best[0]) < 1e-6);
-      if (pt) { dots[i].setAttribute("cx", xs(pt[0])); dots[i].setAttribute("cy", ys(pt[1])); dots[i].setAttribute("visibility", "visible"); }
-      else dots[i].setAttribute("visibility", "hidden");
-      return { c: s.color, n: s.name, v: pt ? o.yFmt(pt[1], true) + (o.unit || "") : "–" };
-    });
-    showTip(evt, o.xFmt(best[0]), rows);
-  };
-  const leave = () => { cross.setAttribute("visibility", "hidden"); dots.forEach(d => d.setAttribute("visibility", "hidden")); hideTip(); };
-  hit.addEventListener("mousemove", move); hit.addEventListener("touchstart", move, { passive: true }); hit.addEventListener("touchmove", move, { passive: true });
-  hit.addEventListener("mouseleave", leave); hit.addEventListener("touchend", leave);
-}
-
-/* Column chart: o.data [[label, value, color, extraRows]] */
-function columnChart(id, o) {
-  const narrow = document.getElementById(id).clientWidth < 520;
-  const f = frame(id, o.h || (narrow ? 210 : 240), { l: 44, r: 8, t: 18, b: 24 });
-  const vals = o.data.map(d => d[1]); const ticks = niceTicks(0, Math.max(...vals)); const ymax = ticks.at(-1);
-  const ys = y => f.y0 - y / ymax * (f.y0 - f.y1);
-  yAxis(f, ticks, ys, o.yFmt);
-  const n = o.data.length, slot = (f.x1 - f.x0) / n, gap = Math.max(2, Math.min(slot * .3, 14)), bw = slot - gap;
-  const labelEvery = Math.ceil(n / (narrow ? 7 : 14));
-  const iMax = vals.indexOf(Math.max(...vals));
-  o.data.forEach((d, i) => {
-    const x = f.x0 + i * slot + gap / 2, y = ys(d[1]), h = Math.max(f.y0 - y, d[1] > 0 ? 1 : 0), r = Math.min(4, bw / 2, h);
-    el("path", { d: `M${x},${f.y0}V${y + r}Q${x},${y} ${x + r},${y}H${x + bw - r}Q${x + bw},${y} ${x + bw},${y + r}V${f.y0}Z`, fill: d[2] }, f.svg);
-    if ((n - 1 - i) % labelEvery === 0) el("text", { x: x + bw / 2, y: f.H - 6, "text-anchor": "middle" }, f.svg).textContent = d[0];
-    if (o.labelValues && (i === iMax || i === n - 1 || i === 0)) el("text", { x: x + bw / 2, y: y - 6, "text-anchor": "middle", class: "val" }, f.svg).textContent = o.yFmt(d[1], true) + (o.unit || "");
-    const hit = el("rect", { x: f.x0 + i * slot, y: f.y1, width: slot, height: f.y0 - f.y1, fill: "transparent" }, f.svg);
-    const show = evt => showTip(evt, o.tipTitle ? o.tipTitle(d) : d[0], [{ c: d[2], n: o.name, v: o.yFmt(d[1], true) + (o.unit || "") }, ...(d[3] || [])]);
-    hit.addEventListener("mousemove", show); hit.addEventListener("touchstart", show, { passive: true });
-    hit.addEventListener("mouseleave", hideTip); hit.addEventListener("touchend", hideTip);
-  });
-}
-
-/* Dot plot for regions: rows [name, total, women] */
-function dotPlot(id, rows) {
-  const narrow = document.getElementById(id).clientWidth < 520;
-  const rowH = 30, lw = narrow ? 128 : 190;
-  const f = frame(id, rows.length * rowH + 30, { l: lw, r: 16, t: 6, b: 24 });
-  const xmax = 60, xs = v => f.x0 + v / xmax * (f.x1 - f.x0);
-  [0, 10, 20, 30, 40, 50, 60].forEach(t => {
-    el("line", { x1: xs(t), x2: xs(t), y1: f.y1, y2: f.y0, stroke: t ? css("--grid") : css("--faint") }, f.svg);
-    el("text", { x: xs(t), y: f.H - 6, "text-anchor": "middle" }, f.svg).textContent = t + "%";
-  });
-  const c1 = css("--s1"), c2 = css("--s2");
-  rows.forEach((r, i) => {
-    const y = f.y1 + i * rowH + rowH / 2;
-    el("text", { x: f.x0 - 10, y: y + 4, "text-anchor": "end", class: "lbl" }, f.svg).textContent = r[0];
-    el("line", { x1: xs(r[1]), x2: xs(r[2]), y1: y, y2: y, stroke: css("--line"), "stroke-width": 3, "stroke-linecap": "round" }, f.svg);
-    el("circle", { cx: xs(r[1]), cy: y, r: 5.5, fill: c1, stroke: css("--bg"), "stroke-width": 2 }, f.svg);
-    el("circle", { cx: xs(r[2]), cy: y, r: 5.5, fill: c2, stroke: css("--bg"), "stroke-width": 2 }, f.svg);
-    const hit = el("rect", { x: 0, y: y - rowH / 2, width: f.W, height: rowH, fill: "transparent" }, f.svg);
-    const show = evt => showTip(evt, r[0] + " · 2025", [{ c: c1, n: "Everyone", v: fmt(r[1], 1) + "%" }, { c: c2, n: "Women", v: fmt(r[2], 1) + "%" }, { n: "Everyone, 2015", v: fmt(r[3], 1) + "%" }]);
-    hit.addEventListener("mousemove", show); hit.addEventListener("touchstart", show, { passive: true });
-    hit.addEventListener("mouseleave", hideTip); hit.addEventListener("touchend", hideTip);
-  });
-}
-
-
-/* Horizontal bars: rows [label, value] */
-function hbar(id, rows, o) {
-  const narrow = document.getElementById(id).clientWidth < 520;
-  const rowH = 28, lw = narrow ? 150 : 250;
-  const f = frame(id, rows.length * rowH + 8, { l: lw, r: 64, t: 4, b: 4 });
-  const max = Math.max(...rows.map(r => r[1])), xs = v => f.x0 + v / max * (f.x1 - f.x0), c = css("--s1");
-  rows.forEach((r, i) => {
-    const y = f.y1 + i * rowH, h = rowH - 10, w = Math.max(2, xs(r[1]) - f.x0), rr = Math.min(4, w / 2);
-    const maxc = narrow ? 19 : 42; el("text", { x: f.x0 - 10, y: y + h / 2 + 4, "text-anchor": "end", class: "lbl" }, f.svg).textContent = r[0].length > maxc ? r[0].slice(0, maxc - 1) + "…" : r[0];
-    el("path", { d: `M${f.x0},${y}H${f.x0 + w - rr}Q${f.x0 + w},${y} ${f.x0 + w},${y + rr}V${y + h - rr}Q${f.x0 + w},${y + h} ${f.x0 + w - rr},${y + h}H${f.x0}Z`, fill: c }, f.svg);
-    el("text", { x: f.x0 + w + 6, y: y + h / 2 + 4, class: "val" }, f.svg).textContent = o.fmt(r[1]);
-    const hit = el("rect", { x: 0, y, width: f.W, height: rowH, fill: "transparent" }, f.svg);
-    const show = evt => showTip(evt, r[0], [{ c, n: o.name, v: o.fmt(r[1], true) }]);
-    hit.addEventListener("mousemove", show); hit.addEventListener("touchstart", show, { passive: true });
-    hit.addEventListener("mouseleave", hideTip); hit.addEventListener("touchend", hideTip);
-  });
-}
-
-const qLabel = x => `Q${Math.round((x % 1) * 4) + 1} ${Math.floor(x)}`;
-const mLabel = x => `${MONTHS[Math.round((x % 1) * 12)]} ${Math.floor(x)}`;
-const pct = (v, exact) => fmt(v, exact ? 1 : 0) + "%";
-const range = (a, b, s) => { const r = []; for (let v = a; v <= b; v += s) r.push(v); return r; };
 const REGION_SHORT = {};
 const REGION_NAMES = { "Casablanca-settat": "Casablanca-Settat", "Marrakech-safi": "Marrakech-Safi", "Régions du Sud": "Southern regions" };
 
@@ -503,41 +287,12 @@ function renderAll() {
 }
 
 // Sources and province note
-document.querySelectorAll(".source[data-src]").forEach(s => {
-  s.innerHTML = "Source: " + s.dataset.src.split(",").map(k => { const m = DATA.src[k]; return `<a href="${m.url}" target="_blank" rel="noopener">${m.title}</a> (${m.org})`; }).join(" · ");
-});
+renderSources(DATA);
 const pTop = DATA.prov_top[0], pBot = DATA.prov_bottom.at(-1);
 document.getElementById("prov-note").innerHTML = `By province, the spread is wider still: <b>${pTop[0]}</b> ${fmt(pTop[1], 1)}% against <b>${pBot[0]}</b> ${fmt(pBot[1], 1)}% in 2025. Provincial rates come from a sample survey, so they can move a lot from one year to the next.`;
 
-if (DATA.updated) { const u = new Date(DATA.updated + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }); document.querySelectorAll(".updated").forEach(e => e.textContent = u); }
-renderAll();
-let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(renderAll, 150); });
-matchMedia("(prefers-color-scheme: dark)").addEventListener("change", renderAll);
-new MutationObserver(renderAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-
-// Light/dark switch: follows the device setting until the reader picks one
-const themeBtn = document.getElementById("theme-toggle");
-const isDark = () => { const s = document.documentElement.dataset.theme; return s ? s === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; };
-function syncThemeButton() {
-  const dark = isDark(), label = dark ? "Switch to light mode" : "Switch to dark mode";
-  themeBtn.classList.toggle("is-dark", dark);
-  themeBtn.setAttribute("aria-label", label); themeBtn.title = label;
-}
-try { const saved = localStorage.getItem("theme"); if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved; } catch (e) {}
-themeBtn.addEventListener("click", () => {
-  const next = isDark() ? "light" : "dark";
-  document.documentElement.dataset.theme = next;
-  try { localStorage.setItem("theme", next); } catch (e) {}
-  syncThemeButton();
-});
-matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncThemeButton);
-new MutationObserver(syncThemeButton).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-syncThemeButton();
-
-// Highlight the chapter in view
-const links = [...document.querySelectorAll("nav.chapters a")];
-const io = new IntersectionObserver(es => es.forEach(e => {
-  if (e.isIntersecting) links.forEach(a => { const on = a.getAttribute("href") === "#" + e.target.id; a.classList.toggle("on", on); if (on) a.parentElement.scrollTo({ left: a.offsetLeft - 24, behavior: "smooth" }); });
-}), { rootMargin: "-30% 0px -65% 0px" });
-document.querySelectorAll(".group").forEach(s => io.observe(s));
+renderUpdated(DATA.updated);
+onRedraw(renderAll);
+initThemeSwitch();
+highlightChapters();
 </script>
